@@ -6,7 +6,7 @@
   <title>ECO-FAST | Rowan University</title>
   <meta name="description" content="ECO-FAST: submit a food waste stream and receive an optimized treatment pathway.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 44 44'%3E%3Crect width='44' height='44' rx='10' fill='%231F5A3A'/%3E%3Cpath d='M13 30c0-9 6-16 18-17-1 11-7 18-15 18-1 0-2 0-3-1z' fill='%23fff'/%3E%3C/svg%3E">
 </head>
@@ -75,23 +75,56 @@
 
   <!-- ============ APP ============ -->
   <section id="app" class="hidden">
-    <div class="appbar">
-      <div class="appname">
-        <svg width="28" height="28" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="10" fill="#1F5A3A"/><path d="M13 30c0-9 6-16 18-17-1 11-7 18-15 18-1 0-2 0-3-1z" fill="#fff"/></svg>
-        ECO-FAST
-      </div>
-      <nav class="nav">
-        <button type="button" data-page="new" class="active">New job</button>
-        <button type="button" data-page="jobs">My jobs</button>
-      </nav>
-      <div class="user"><span id="user-name"></span><button class="btn" id="btn-signout" type="button">Sign out</button></div>
-    </div>
+    <div class="layout">
+      <aside class="sidebar">
+        <h1 class="side-title">Food Waste Treatment Explorer</h1>
+        <nav class="sidenav">
+          <button type="button" data-page="instructions" class="active"><span class="radio"></span>Instructions</button>
+          <button type="button" data-page="new"><span class="radio"></span>Feed Inputs</button>
+          <button type="button" data-page="tech"><span class="radio"></span>Technology Specifications</button>
+          <button type="button" data-page="cost"><span class="radio"></span>Cost Specifications</button>
+          <button type="button" data-page="jobs"><span class="radio"></span>Results</button>
+          <button type="button" data-page="ej"><span class="radio"></span>Environmental Justice</button>
+        </nav>
+        <div class="side-user"><span id="user-name"></span><button class="btn" id="btn-signout" type="button">Sign out</button></div>
+      </aside>
 
     <main>
+      <!-- Instructions -->
+      <div id="page-instructions">
+        <div class="page-head"><h2>Instructions</h2></div>
+        <p class="lead">This app helps you figure out the best way to treat a food-waste stream: the option that costs the least, pollutes the least, or strikes a balance between the two. Behind the scenes, it runs an optimization model that tests every combination of treatment technologies in the processing pipeline and works out exactly how much of your waste stream should go through each one to hit your goal on any of these objectives.</p>
+
+        <h3 class="sec-title">The processing pipeline</h3>
+        <figure class="pipeline"><img src="assets/superstructure.png" alt="Superstructure of the food waste processing pipeline: Stage I pretreatment, Stage II conversion, Stage III recovery and upgrading"></figure>
+
+        <div class="tech-cols">
+          <div><h4 class="c-pre">Pretreatment</h4><ul>
+            <li><b>Mechanical:</b> Shredding (SHR), Maceration (MCR)</li>
+            <li><b>Biological:</b> Aerobic biodigestion (AER), Enzymatic hydrolysis (ENZ)</li></ul></div>
+          <div><h4 class="c-conv">Conversion</h4><ul>
+            <li>Hydrothermal liquefaction (HTL)</li><li>Anaerobic digestion (AND)</li><li>Composting (CMP)</li>
+            <li>Sanitary landfill (SLF)</li><li>Wastewater treatment (WWT)</li><li>Incineration (INC)</li></ul></div>
+          <div><h4 class="c-rec">Recovery &amp; Upgrading</h4><ul>
+            <li>Centrifugation (CEN), Filtration (FLT)</li><li>Amine scrubbing (ABS), PSA gas upgrading (PSA)</li><li>Steam turbine (STB)</li></ul></div>
+        </div>
+
+        <h3 class="sec-title">What the model balances</h3>
+        <div class="obj-cards">
+          <div class="obj o-cost"><h4>Cost</h4><p>Net Annualized Cost (NAC): capital and operating expense, minus revenue from recovered products, in M$/yr.</p></div>
+          <div class="obj o-ghg"><h4>GHG emissions</h4><p>The route's greenhouse-gas footprint, in tCO2e/yr.</p></div>
+          <div class="obj o-ep"><h4>Marine eutrophication</h4><p>Potential for excess nitrogen loading (to air, water, and soil) to reach coastal waters and drive algal overgrowth and oxygen depletion, in tN-eq/yr.</p></div>
+        </div>
+      </div>
+
+      <div id="page-tech" class="hidden"><div class="page-head"><h2>Technology Specifications</h2></div><p class="lead">This page is being set up.</p></div>
+      <div id="page-cost" class="hidden"><div class="page-head"><h2>Cost Specifications</h2></div><p class="lead">This page is being set up.</p></div>
+      <div id="page-ej" class="hidden"><div class="page-head"><h2>Environmental Justice</h2></div><p class="lead">This page is being set up.</p></div>
+
       <!-- New job -->
-      <div id="page-new">
+      <div id="page-new" class="hidden">
         <div class="page-head">
-          <h2>Submit a new job</h2>
+          <h2>Feed Inputs</h2>
           <p>Choose the waste source closest to yours. Every value starts at the model default, and you can change any value that is not locked.</p>
         </div>
         <form id="form-job" novalidate>
@@ -124,7 +157,7 @@
       <div id="page-jobs" class="hidden">
         <div class="page-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap">
           <div>
-            <h2>My jobs</h2>
+            <h2>Results</h2>
             <p>Each job is solved by our team. Results appear here when they are ready.</p>
           </div>
           <button class="btn" type="button" id="btn-refresh" style="margin-bottom:22px">Refresh</button>
@@ -132,6 +165,7 @@
         <div class="card"><div class="table-wrap" id="jobs-table"></div></div>
       </div>
     </main>
+    </div>
   </section>
 
   <script src="config.js"></script>

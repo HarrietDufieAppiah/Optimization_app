@@ -69,7 +69,7 @@
     show($("auth"), false); show($("app"), true);
     const meta = session.user.user_metadata || {};
     $("user-name").textContent = meta.full_name || session.user.email;
-    goPage("new");
+    goPage("instructions");
   }
   let shownUser = null;
   function render(session) {
@@ -139,8 +139,8 @@
 
   // ---------- pages ----------
   function goPage(page) {
-    document.querySelectorAll(".nav button").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
-    show($("page-new"), page === "new"); show($("page-jobs"), page === "jobs");
+    document.querySelectorAll(".sidenav button").forEach((b) => b.classList.toggle("active", b.dataset.page === page));
+    ["instructions", "new", "tech", "cost", "jobs", "ej"].forEach((p) => show($("page-" + p), page === p));
     stopJobsTimer();
     if (page === "jobs") { loadJobs(); jobsTimer = setInterval(loadJobs, 60000); }
     window.scrollTo(0, 0);
@@ -310,7 +310,7 @@
       sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_KEY);
     }
     wireAuth(); wireJobForm();
-    document.querySelectorAll(".nav button").forEach((b) => b.addEventListener("click", () => goPage(b.dataset.page)));
+    document.querySelectorAll(".sidenav button, [data-goto-page]").forEach((b) => b.addEventListener("click", () => goPage(b.dataset.page || b.dataset.gotoPage)));
     $("btn-refresh").addEventListener("click", loadJobs);
 
     try { await loadDefaults(); buildForm(); const first = scenarioList()[0]; if (first) pickScenario(first, true); }
