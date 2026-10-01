@@ -78,14 +78,7 @@
     <div class="layout">
       <aside class="sidebar">
         <h1 class="side-title">Food Waste Treatment Explorer</h1>
-        <nav class="sidenav">
-          <button type="button" data-page="instructions" class="active"><span class="radio"></span>Instructions</button>
-          <button type="button" data-page="new"><span class="radio"></span>Feed Inputs</button>
-          <button type="button" data-page="tech"><span class="radio"></span>Technology Specifications</button>
-          <button type="button" data-page="cost"><span class="radio"></span>Cost Specifications</button>
-          <button type="button" data-page="jobs"><span class="radio"></span>Results</button>
-          <button type="button" data-page="ej"><span class="radio"></span>Environmental Justice</button>
-        </nav>
+        <nav class="sidenav" id="sidenav"></nav>
         <div class="side-user"><span id="user-name"></span><button class="btn" id="btn-signout" type="button">Sign out</button></div>
       </aside>
 
@@ -117,59 +110,18 @@
         </div>
       </div>
 
-      <div id="page-tech" class="hidden"><div class="page-head"><h2>Technology Specifications</h2></div><p class="lead">This page is being set up.</p></div>
-      <div id="page-cost" class="hidden"><div class="page-head"><h2>Cost Specifications</h2></div><p class="lead">This page is being set up.</p></div>
-      <div id="page-ej" class="hidden"><div class="page-head"><h2>Environmental Justice</h2></div><p class="lead">This page is being set up.</p></div>
-
-      <!-- New job -->
-      <div id="page-new" class="hidden">
-        <div class="page-head">
-          <h2>Feed Inputs</h2>
-          <p>Choose the waste source closest to yours. Every value starts at the model default, and you can change any value that is not locked.</p>
-        </div>
-        <form id="form-job" novalidate>
-          <div class="card section">
-            <h3>Job details</h3>
-            <p class="hint">A name helps you find this job later.</p>
-            <div class="field"><label for="job-title">Job name</label><input id="job-title" class="input" maxlength="120" required placeholder="e.g. Campus dining hall, fall semester"></div>
-          </div>
-          <div class="card section">
-            <h3>Waste source</h3>
-            <p class="hint">Selecting a source fills in its default composition below.</p>
-            <div class="presets" id="presets"></div>
-          </div>
-          <div id="param-sections"></div>
-          <div class="card section">
-            <h3>Notes (optional)</h3>
-            <p class="hint">Anything we should know about your waste stream or what you want to compare.</p>
-            <textarea id="job-notes" class="input" maxlength="2000"></textarea>
-          </div>
-          <div class="row-actions">
-            <span class="changed-count" id="changed-count"></span>
-            <button class="btn" type="button" id="btn-reset">Reset to defaults</button>
-            <button class="btn btn-primary" type="submit" id="btn-submit">Submit job</button>
-          </div>
-          <div id="job-msg" class="msg hidden" role="alert"></div>
-        </form>
-      </div>
-
-      <!-- My jobs -->
-      <div id="page-jobs" class="hidden">
-        <div class="page-head" style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap">
-          <div>
-            <h2>Results</h2>
-            <p>Each job is solved by our team. Results appear here when they are ready.</p>
-          </div>
-          <button class="btn" type="button" id="btn-refresh" style="margin-bottom:22px">Refresh</button>
-        </div>
-        <div class="card"><div class="table-wrap" id="jobs-table"></div></div>
-      </div>
+      <div id="page-feed" class="hidden"></div>
+      <div id="page-tech" class="hidden"></div>
+      <div id="page-cost" class="hidden"></div>
+      <div id="page-results" class="hidden"></div>
+      <div id="page-sub" class="hidden"></div>
+      <div id="page-ej" class="hidden"></div>
     </main>
     </div>
   </section>
 
   <script src="config.js"></script>
-  <script src="parameters.js"></script>
+  <script src="data.js"></script>
   <script src="demo.js"></script>
   <script src="app.js"></script>
 </body>
