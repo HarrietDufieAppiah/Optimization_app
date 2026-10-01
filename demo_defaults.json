@@ -1,0 +1,8 @@
+{
+  "_note": "PLACEHOLDER NUMBERS FOR DEMO MODE ONLY. Not model values. The live site uses scenario_defaults.json exported from the notebook.",
+  "Household":     { "Moisture": 0, "VM": 0, "Ash": 0, "FC": 0, "CBH": 0, "PRT": 0, "Lipid": 0, "CHNOS": { "C": 0, "H": 0, "N": 0, "O": 0, "S": 0 }, "HHV": 0 },
+  "Restaurant":    { "Moisture": 0, "VM": 0, "Ash": 0, "FC": 0, "CBH": 0, "PRT": 0, "Lipid": 0, "CHNOS": { "C": 0, "H": 0, "N": 0, "O": 0, "S": 0 }, "HHV": 0 },
+  "Institutional": { "Moisture": 0, "VM": 0, "Ash": 0, "FC": 0, "CBH": 0, "PRT": 0, "Lipid": 0, "CHNOS": { "C": 0, "H": 0, "N": 0, "O": 0, "S": 0 }, "HHV": 0 },
+  "Retail":        { "Moisture": 0, "VM": 0, "Ash": 0, "FC": 0, "CBH": 0, "PRT": 0, "Lipid": 0, "CHNOS": { "C": 0, "H": 0, "N": 0, "O": 0, "S": 0 }, "HHV": 0 },
+  "Market":        { "Moisture": 0, "VM": 0, "Ash": 0, "FC": 0, "CBH": 0, "PRT": 0, "Lipid": 0, "CHNOS": { "C": 0, "H": 0, "N": 0, "O": 0, "S": 0 }, "HHV": 0 }
+}
