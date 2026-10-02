@@ -144,8 +144,8 @@
   // ---------- auth screens ----------
   function setAuthView(view) {
     ["login", "signup", "forgot", "newpw"].forEach((v) => show($("form-" + v), v === view));
-    show($("auth-tabs"), view === "login" || view === "signup");
-    document.querySelectorAll("#auth-tabs .tab").forEach((t) => t.classList.toggle("active", t.dataset.view === view));
+    $("auth-h").textContent = { login: "Welcome Back", signup: "Create an account", forgot: "Reset your password", newpw: "Set a new password" }[view];
+    $("auth-sub").textContent = { login: "Sign in to access ECO-FAST.", signup: "It takes a minute. We will email you a link to confirm.", forgot: "Enter your email and we will send you a link to set a new password.", newpw: "Choose a new password for your account." }[view];
     msg($("auth-msg"), "", "");
   }
   function showAuth(view) { show($("app"), false); show($("auth"), true); setAuthView(view || "login"); stopJobsTimer(); }
@@ -165,14 +165,13 @@
   }
 
   function wireAuth() {
-    document.querySelectorAll("#auth-tabs .tab").forEach((t) => t.addEventListener("click", () => setAuthView(t.dataset.view)));
     document.querySelectorAll("[data-goto]").forEach((b) => b.addEventListener("click", () => setAuthView(b.dataset.goto)));
 
     $("form-login").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = $("li-email").value.trim(), pw = $("li-pw").value, btn = e.target.querySelector("button[type=submit]");
       if (!email || !pw) return msg($("auth-msg"), "error", "Please enter your email and password.");
-      busy(btn, true, "Logging in...");
+      busy(btn, true, "Signing in...");
       const { error } = await sb.auth.signInWithPassword({ email, password: pw });
       busy(btn, false);
       if (error) msg($("auth-msg"), "error", friendly(error));
