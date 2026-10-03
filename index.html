@@ -4,138 +4,219 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ECO-FAST | Rowan University</title>
-  <meta name="description" content="ECO-FAST: submit a food waste stream and receive an optimized treatment pathway.">
+  <meta name="description" content="ECO-FAST: find the best treatment pathway for a food waste stream.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M10 24 C 22 24, 22 10, 38 10' fill='none' stroke='%231F5A3A' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M10 24 L 38 24 M10 24 C 22 24, 22 38, 38 38' fill='none' stroke='%23A9AFAB' stroke-width='3.4' stroke-linecap='round'/%3E%3Ccircle cx='9' cy='24' r='5.5' fill='%231d1d1f'/%3E%3Ccircle cx='39' cy='10' r='5' fill='%231F5A3A'/%3E%3C/svg%3E">
+  <link rel="icon" href="assets/rowan_torch.png">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #fff; color: #1B2420; font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Top bar */
+    .topbar { display: flex; align-items: center; gap: 50px; height: 84px; padding: 0 27px; background: #561B29; }
+    .rowan-logo { width: 66px; height: 66px; display: block; }
+    .top-name { color: #fff; font-weight: 700; font-size: 24.5px; letter-spacing: -0.01em; }
+
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 244px minmax(0, 1fr); min-height: calc(100vh - 84px);
+      background: linear-gradient(to right, #F5F7F7 243px, #E3E8E6 243px, #E3E8E6 244px, #fff 244px); }
+    .sidebar { position: sticky; top: 0; align-self: start; padding: 14px 12px; }
+    .nav-item { display: flex; align-items: center; gap: 20px; height: 54px; padding: 0 15px; border-radius: 6px;
+      font-size: 15.5px; font-weight: 500; color: #28373D; }
+    .nav-item svg { width: 23px; height: 23px; flex: none; color: #1D2D3F; }
+    .nav-item:hover { background: #ECF2EF; }
+    .nav-item.active { background: #D8E5E0; color: #023335; font-weight: 600; }
+    .nav-item.active svg { color: #0E4A42; }
+
+    /* Hero */
+    .home-hero { position: relative; height: 326px; background: #F4F7F6; border-bottom: 1px solid #E3E8E6; overflow: hidden; }
+    .hh-text { position: relative; z-index: 1; padding: 61px 0 0 41px; max-width: 640px; }
+    .eyebrow { font-size: 13.4px; font-weight: 600; letter-spacing: .19em; color: #0F5145; }
+    .hh-title { margin: 2px 0 14px; font-size: 53.5px; line-height: 1.05; font-weight: 800; letter-spacing: -0.025em; color: #0B2E2D; }
+    .hh-lead { margin: 0; font-size: 21.3px; line-height: 32px; color: #0F3B3A; max-width: 570px; }
+    .hh-photo { position: absolute; top: 0; right: 0; bottom: 0; width: 54%;
+      background: url('assets/home_hero.jpg') center / cover no-repeat;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 26%); mask-image: linear-gradient(to right, transparent 0%, #000 26%); }
+
+    /* Body */
+    .home-body { display: grid; grid-template-columns: minmax(0, 1fr) 392px; gap: 33px; padding: 22px 30px 48px 38px; align-items: start; }
+    .home-main { padding-top: 11px; }
+    .hb-title { margin: 0; font-size: 25.3px; font-weight: 800; letter-spacing: -0.01em; color: #052E2C; }
+    .hb-sub { margin: -2px 0 30px; font-size: 17.1px; color: #25585C; }
+    .goal-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .goal { position: relative; display: flex; flex-direction: column; align-items: flex-start; height: 270px; padding: 20px 10px 26px 22px;
+      background: linear-gradient(160deg, #F8FBFA 0%, #EEF5F2 100%); border: 1px solid #DBEAE5; border-radius: 10px; }
+    .goal:hover { border-color: #9FC3B7; box-shadow: 0 6px 18px rgba(14,74,66,.08); }
+    .g-ico { width: 66px; height: 66px; border-radius: 50%; background: #0E4A42; display: grid; place-items: center; }
+    .g-ico svg { width: 40px; height: 40px; }
+    .g-title { margin-top: 15px; font-size: 18.5px; font-weight: 700; line-height: 1.3; color: #0B2E2D; }
+    .g-desc { margin-top: 7px; font-size: 14.6px; line-height: 20.5px; color: #375652; white-space: nowrap; }
+    .goal .arr { position: absolute; left: 24px; bottom: 25px; width: 22px; height: 22px; color: #003333; }
+    .wide-card { display: flex; align-items: center; gap: 20px; margin-top: 24px; height: 92px; padding: 0 26px 0 28px; background: #fff;
+      border: 1px solid #D9E3E0; border-radius: 8px; }
+    .wide-card:hover { border-color: #9FC3B7; }
+    .wc-ico { width: 50px; height: 50px; margin-left: -8px; color: #034339; flex: none; }
+    .wc-text { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+    .wc-title { font-size: 16px; font-weight: 700; color: #00322A; }
+    .wc-sub { font-size: 14.5px; color: #6C7485; }
+    .wide-card .arr { width: 24px; height: 24px; color: #003333; }
+
+    /* About panel */
+    .about { background: #F5F8F7; border-radius: 10px; padding: 15px 28px 28px 30px; }
+    .ab-title { margin: 0 0 3px; font-size: 17px; font-weight: 700; color: #00332D; }
+    .ab-text { margin: 0; font-size: 15.2px; line-height: 20.5px; color: #365963; max-width: 268px; }
+    .about hr { border: none; border-top: 1px solid #E1E8EC; margin: 18px -12px 20px; }
+    .ab-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+    .ab-list li { display: flex; align-items: center; gap: 18px; font-size: 14.8px; color: #2E5A5E; }
+    .ab-list svg { width: 25px; height: 25px; color: #064542; flex: none; }
+
+    @media (max-width: 1500px) { .g-desc { white-space: normal; } .home-body { grid-template-columns: 1fr; } .about { max-width: 720px; } .ab-text { max-width: none; } }
+    @media (max-width: 1100px) { .g-desc { white-space: normal; } .g-desc br { display: none; } .goal-cards { grid-template-columns: 1fr; } .goal { min-height: 0; } .hh-photo { width: 45%; } }
+    @media (max-width: 860px) {
+      .layout { grid-template-columns: 1fr; background: #fff; }
+      .sidebar { position: static; display: flex; flex-wrap: wrap; background: #F5F7F7; border-bottom: 1px solid #E3E8E6; padding: 8px; }
+      .sidebar nav { display: flex; flex-wrap: wrap; }
+      .nav-item { height: 42px; gap: 10px; padding: 0 12px; font-size: 14px; }
+      .home-hero { height: auto; } .hh-photo { display: none; }
+      .hh-text { padding: 32px 20px; } .hh-title { font-size: 40px; } .hh-lead { font-size: 18px; line-height: 27px; }
+      .home-body { padding-left: 20px; padding-right: 20px; }
+    }
+    @media (max-width: 640px) { .topbar { height: 64px; gap: 18px; padding: 0 14px; } .rowan-logo { width: 48px; height: 48px; } .top-name { font-size: 20px; } }
+
+
+    /* ---------- Placeholder pages ---------- */
+    .hidden { display: none !important; }
+    .page-wrap { padding: 61px 30px 72px 41px; max-width: 1100px; }
+    .pg-eyebrow { font-size: 13.4px; font-weight: 600; letter-spacing: .19em; color: #0F5145; }
+    .pg-title { margin: 2px 0 10px; font-size: 44px; line-height: 1.05; font-weight: 800; letter-spacing: -0.025em; color: #0B2E2D; }
+    .pg-sub { margin: 0 0 30px; font-size: 17.1px; color: #25585C; max-width: 720px; }
+    .soon { display: flex; align-items: center; gap: 20px; max-width: 720px; padding: 26px 28px; border-radius: 10px;
+      background: linear-gradient(160deg, #F8FBFA 0%, #EEF5F2 100%); border: 1px solid #DBEAE5; }
+    .soon .g-ico { flex: none; }
+    .soon-t { font-size: 18.5px; font-weight: 700; color: #0B2E2D; }
+    .soon-d { margin-top: 4px; font-size: 14.8px; line-height: 21px; color: #375652; }
+    .back { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-size: 15.5px; font-weight: 700; color: #0E4A42; }
+    .back svg { width: 20px; height: 20px; }
+    @media (max-width: 640px) { .page-wrap { padding: 28px 16px 56px; } .pg-title { font-size: 32px; } }
+  </style>
 </head>
 <body>
-  <div id="demo-banner" class="demo-banner hidden">Demo mode: nothing is saved and all numbers are placeholders. Add your Supabase keys in config.js to go live.</div>
-
   <header class="topbar">
     <img src="assets/rowan_torch.png" alt="Rowan University" class="rowan-logo">
+    <span class="top-name">ECO-FAST</span>
   </header>
 
-  <!-- ============ SIGN IN ============ -->
-  <section id="auth" class="hidden">
-    <div class="auth-split">
-      <div class="auth-hero">
-        <div class="hero-inner">
-          <div class="hero-wm">ECO-FAST</div>
-          <p class="hero-lead">Describe your food waste stream and let our optimization model find the best treatment pathway — lowest cost, lowest environmental impact, or the best balance of both.</p>
-          <ul class="hero-steps">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="2.5" width="15" height="19" rx="2.2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h7"/></g></svg><span>Input your waste stream</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M19.15 10.10 L21.46 10.38 L21.46 13.62 L19.15 13.90 L18.40 15.71 L19.84 17.54 L17.54 19.84 L15.71 18.40 L13.90 19.15 L13.62 21.46 L10.38 21.46 L10.10 19.15 L8.29 18.40 L6.46 19.84 L4.16 17.54 L5.60 15.71 L4.85 13.90 L2.54 13.62 L2.54 10.38 L4.85 10.10 L5.60 8.29 L4.16 6.46 L6.46 4.16 L8.29 5.60 L10.10 4.85 L10.38 2.54 L13.62 2.54 L13.90 4.85 L15.71 5.60 L17.54 4.16 L19.84 6.46 L18.40 8.29Z"/><circle cx="12" cy="12" r="3"/></g></svg><span>Optimization model runs on a university computing cluster</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><circle cx="4.5" cy="19.5" r="2"/><circle cx="19.5" cy="19.5" r="2"/><path d="M12 6v5M4.5 17.5V11h15v6.5"/></g></svg><span>Find the best treatment pathway</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><rect x="4" y="12" width="3.4" height="7"/><rect x="10.3" y="8" width="3.4" height="11"/><rect x="16.6" y="3.5" width="3.4" height="15.5"/><rect x="3" y="20" width="18" height="1.8"/></g></svg><span>Make informed decisions</span></li>
-          </ul>
-        </div>
-        <div class="hero-foot">A research tool from the Department of Chemical Engineering<br>at Rowan University</div>
-      </div>
-
-      <div class="auth-panel">
-        <div class="auth-box">
-          <h1 class="auth-h" id="auth-h">Welcome Back</h1>
-          <p class="auth-sub" id="auth-sub">Sign in to access ECO-FAST.</p>
-
-          <form id="form-login" class="auth-view" novalidate>
-            <div class="field"><label for="li-email">Email address</label>
-              <div class="input-wrap"><svg class="in-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></g></svg><input id="li-email" class="input" type="email" autocomplete="email" placeholder="you@example.com" required></div></div>
-            <div class="field"><label for="li-pw">Password</label>
-              <div class="input-wrap"><svg class="in-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></g></svg><input id="li-pw" class="input" type="password" autocomplete="current-password" placeholder="Enter your password" required><button type="button" class="pw-toggle" id="pw-toggle" aria-label="Show password"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></g></svg></button></div></div>
-            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
-            <div class="auth-foot"><button class="linkbtn" type="button" data-goto="forgot">Forgot password?</button></div>
-            <div class="auth-or"><span>OR</span></div>
-            <button class="btn btn-outline btn-block" type="button" data-goto="signup"><svg class="btn-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4.5-6.5 8-6.5s7 2 8 6.5"/></g></svg>Create an account</button>
-            <p class="auth-fine">New users can sign up with their name, organization, email and password.</p>
-          </form>
-
-          <form id="form-signup" class="auth-view hidden" novalidate>
-            <div class="field"><label for="su-name">Full name</label><input id="su-name" class="input" autocomplete="name" required></div>
-            <div class="field"><label for="su-org">Organization (optional)</label><input id="su-org" class="input" autocomplete="organization"></div>
-            <div class="field"><label for="su-email">Email address</label><input id="su-email" class="input" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-            <div class="field"><label for="su-pw">Password (at least 8 characters)</label><input id="su-pw" class="input" type="password" autocomplete="new-password" required></div>
-            <div class="field"><label for="su-pw2">Confirm password</label><input id="su-pw2" class="input" type="password" autocomplete="new-password" required></div>
-            <button class="btn btn-primary btn-block" type="submit">Create account</button>
-            <p class="auth-switch">Already have an account? <button class="linkbtn" type="button" data-goto="login">Sign in</button></p>
-          </form>
-
-          <form id="form-forgot" class="auth-view hidden" novalidate>
-            <div class="field"><label for="fp-email">Email address</label><input id="fp-email" class="input" type="email" autocomplete="email" placeholder="you@example.com" required></div>
-            <button class="btn btn-primary btn-block" type="submit">Send reset link</button>
-            <p class="auth-switch"><button class="linkbtn" type="button" data-goto="login">Back to sign in</button></p>
-          </form>
-
-          <form id="form-newpw" class="auth-view hidden" novalidate>
-            <div class="field"><label for="np-pw">New password (at least 8 characters)</label><input id="np-pw" class="input" type="password" autocomplete="new-password" required></div>
-            <div class="field"><label for="np-pw2">Confirm new password</label><input id="np-pw2" class="input" type="password" autocomplete="new-password" required></div>
-            <button class="btn btn-primary btn-block" type="submit">Save password</button>
-          </form>
-
-          <div id="auth-msg" class="msg hidden" role="alert"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ APP ============ -->
-  <section id="app" class="hidden">
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="lockup side"><svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 24 C 22 24, 22 10, 38 10" fill="none" stroke="#1F5A3A" stroke-width="3.6" stroke-linecap="round"/><path d="M10 24 L 38 24" fill="none" stroke="#C5CAC7" stroke-width="3" stroke-linecap="round"/><path d="M10 24 C 22 24, 22 38, 38 38" fill="none" stroke="#C5CAC7" stroke-width="3" stroke-linecap="round"/><circle cx="9" cy="24" r="5" fill="#1d1d1f"/><circle cx="39" cy="10" r="4.5" fill="#1F5A3A"/><circle cx="39" cy="24" r="3.4" fill="#C5CAC7"/><circle cx="39" cy="38" r="3.4" fill="#C5CAC7"/></svg><div><div class="wm">ECO-FAST</div><div class="wm-sub">Food Waste Treatment Explorer</div></div></div>
-        <nav class="sidenav" id="sidenav"></nav>
-        <div class="side-user"><span id="user-name"></span><button class="btn" id="btn-signout" type="button">Sign out</button></div>
-      </aside>
+  <div class="layout">
+    <aside class="sidebar">
+      <nav>
+        <a href="#home" class="nav-item active" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h4.5v-6h4v6h4.5V9"/></g></svg><span>Home</span></a>
+        <a href="#new" class="nav-item" data-page="new"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></g></svg><span>New Analysis</span></a>
+        <a href="#projects" class="nav-item" data-page="projects"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/><path d="M3 10h18"/></g></svg><span>My Projects</span></a>
+        <a href="#results" class="nav-item" data-page="results"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5h16"/><path d="M6.5 20v-6M11 20V9M15.5 20v-8M20 20V5" stroke-width="2.2"/></g></svg><span>Results</span></a>
+        <a href="#resources" class="nav-item" data-page="resources"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3.5 4.8v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.7V4.8C17 4.5 14 5 12 6.5z"/><path d="M12 6.5V20"/></g></svg><span>Resources</span></a>
+        <a href="#settings" class="nav-item" data-page="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></g></svg><span>Settings</span></a>
+      </nav>
+    </aside>
 
     <main>
-      <!-- Instructions -->
-      <div id="page-instructions">
-        <div class="page-head"><h2>Instructions</h2></div>
-        <p class="lead">This app helps you figure out the best way to treat a food-waste stream: the option that costs the least, pollutes the least, or strikes a balance between the two. Behind the scenes, it runs an optimization model that tests every combination of treatment technologies in the processing pipeline and works out exactly how much of your waste stream should go through each one to hit your goal on any of these objectives.</p>
+      <div id="page-home" class="page">
+      <section class="home-hero">
+        <div class="hh-text">
+          <div class="eyebrow">FOOD WASTE OPTIMIZATION TOOL</div>
+          <h1 class="hh-title">Welcome to ECO-FAST</h1>
+          <p class="hh-lead">Describe your food waste stream and let our optimization model find the best treatment pathway — lowest cost, lowest environmental impact, or the best balance of both.</p>
+        </div>
+        <div class="hh-photo" aria-hidden="true"></div>
+      </section>
 
-        <h3 class="sec-title">The processing pipeline</h3>
-        <figure class="pipeline"><img src="assets/superstructure.png" alt="Superstructure of the food waste processing pipeline: Stage I pretreatment, Stage II conversion, Stage III recovery and upgrading"></figure>
-
-        <div class="tech-cols">
-          <div><h4 class="c-pre">Pretreatment</h4><ul>
-            <li><b>Mechanical:</b> Shredding (SHR), Maceration (MCR)</li>
-            <li><b>Biological:</b> Aerobic biodigestion (AER), Enzymatic hydrolysis (ENZ)</li></ul></div>
-          <div><h4 class="c-conv">Conversion</h4><ul>
-            <li>Hydrothermal liquefaction (HTL)</li><li>Anaerobic digestion (AND)</li><li>Composting (CMP)</li>
-            <li>Sanitary landfill (SLF)</li><li>Wastewater treatment (WWT)</li><li>Incineration (INC)</li></ul></div>
-          <div><h4 class="c-rec">Recovery &amp; Upgrading</h4><ul>
-            <li>Centrifugation (CEN), Filtration (FLT)</li><li>Amine scrubbing (ABS), PSA gas upgrading (PSA)</li><li>Steam turbine (STB)</li></ul></div>
+      <section class="home-body">
+        <div class="home-main">
+          <h2 class="hb-title">Start a New Analysis</h2>
+          <p class="hb-sub">Provide details about your food waste stream and choose your optimization goal.</p>
+          <div class="goal-cards">
+              <a href="#new" class="goal" data-page="new"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><ellipse cx="12" cy="6.5" rx="6.5" ry="2.6"/><path d="M5.5 6.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 10.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 14.5v3c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-3"/></g></svg></span><span class="g-title">Lowest Cost</span><span class="g-desc">Find the treatment pathway<br>with the lowest net annualized<br>cost.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5C10 4.5 5 9 5 15.5c0 1.4.3 2.6.8 3.6 1 .3 2 .4 3 .4 6.5 0 10.7-5 10.7-15z"/><path d="M5.6 19.4 14 11"/></g></svg></span><span class="g-title">Lowest Environmental Impact</span><span class="g-desc">Find the pathway with the lowest<br>overall environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v16M7.5 20.5h9M4.5 7h15"/><circle cx="12" cy="4" r=".6"/><path d="M6.5 7 3.5 13.5h6z"/><path d="M17.5 7l-3 6.5h6z"/><path d="M3.5 13.5a3 2 0 0 0 6 0M14.5 13.5a3 2 0 0 0 6 0"/></g></svg></span><span class="g-title">Best Balance</span><span class="g-desc">Find the pathway that balances<br>cost and environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+            </div>
+          <a class="wide-card" href="#projects" data-page="projects"><svg class="wc-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="2.5" width="15" height="19" rx="2.2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h7"/></g></svg><span class="wc-text"><span class="wc-title">View My Projects</span><span class="wc-sub">Check the status of your past analyses and view results.</span></span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
         </div>
 
-        <h3 class="sec-title">What the model balances</h3>
-        <div class="obj-cards">
-          <div class="obj o-cost"><h4>Cost</h4><p>Net Annualized Cost (NAC): capital and operating expense, minus revenue from recovered products, in M$/yr.</p></div>
-          <div class="obj o-ghg"><h4>GHG emissions</h4><p>The route's greenhouse-gas footprint, in tCO2e/yr.</p></div>
-          <div class="obj o-ep"><h4>Marine eutrophication</h4><p>Potential for excess nitrogen loading (to air, water, and soil) to reach coastal waters and drive algal overgrowth and oxygen depletion, in tN-eq/yr.</p></div>
+        <aside class="about">
+          <h3 class="ab-title">About ECO-FAST</h3>
+          <p class="ab-text">ECO-FAST is a research tool from the Department of Chemical Engineering at Rowan University. It uses an optimization model to help users make data-driven decisions for food waste treatment.</p>
+          <hr>
+          <h3 class="ab-title">Who Uses It?</h3>
+          <ul class="ab-list"><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6.5L5 19a1.5 1.5 0 0 0 1.3 2h11.4A1.5 1.5 0 0 0 19 19l-5-9.5V3"/><path d="M7.5 15h9"/></g></svg><span>Researchers</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/><circle cx="12" cy="12" r="6.3"/></g></svg><span>Engineers</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5"/><path d="M4 21h16M5 18h14"/><path d="M6.5 10.5v7M10 10.5v7M14 10.5v7M17.5 10.5v7"/><path d="M4 9.5h16"/></g></svg><span>Municipal planners</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v9.5h-11z"/><path d="M13.5 9.5h4l3 3.5v3h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></g></svg><span>Waste management companies</span></li></ul>
+        </aside>
+      </section>
+      </div>
+
+      <div id="page-new" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">NEW ANALYSIS</div>
+          <h1 class="pg-title">New Analysis</h1>
+          <p class="pg-sub">Describe your food waste stream and choose your optimization goal.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">This is where you will enter your waste type, feed rate, operating hours, and composition.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
         </div>
       </div>
 
-      <div id="page-feed" class="hidden"></div>
-      <div id="page-tech" class="hidden"></div>
-      <div id="page-cost" class="hidden"></div>
-      <div id="page-results" class="hidden"></div>
-      <div id="page-sub" class="hidden"></div>
-      <div id="page-ej" class="hidden"></div>
-    </main>
-    </div>
-  </section>
+      <div id="page-projects" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">MY PROJECTS</div>
+          <h1 class="pg-title">My Projects</h1>
+          <p class="pg-sub">Your saved analyses in one place.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">Your past analyses and their results will be listed here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
 
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="demo.js"></script>
-  <script src="app.js"></script>
+      <div id="page-results" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">RESULTS</div>
+          <h1 class="pg-title">Results</h1>
+          <p class="pg-sub">See the best treatment pathway for your analysis.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4.5 20h15"/><path d="M7 19v-5M11 19V9M15 19v-7M19 19V5"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">The recommended pathway, cost, and environmental impact will be shown here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+
+      <div id="page-resources" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">RESOURCES</div>
+          <h1 class="pg-title">Resources</h1>
+          <p class="pg-sub">Learn how ECO-FAST works.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3.5 4.8v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.7V4.8C17 4.5 14 5 12 6.5z"/><path d="M12 6.5V20"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">The processing pipeline, the treatment technologies, and what the model balances will be explained here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+
+      <div id="page-settings" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">SETTINGS</div>
+          <h1 class="pg-title">Settings</h1>
+          <p class="pg-sub">Adjust the model assumptions.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">Cost data, product prices, and disposal fees you can change will be here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+    </main>
+  </div>
   <script>
-    document.getElementById("pw-toggle").addEventListener("click", function () {
-      var pw = document.getElementById("li-pw"), showing = pw.type === "text";
-      pw.type = showing ? "password" : "text";
-      this.setAttribute("aria-label", showing ? "Show password" : "Hide password");
-    });
+    // Switch pages using the link after # (for example #results)
+    (function () {
+      var pages = ["home", "new", "projects", "results", "resources", "settings"];
+      function show() {
+        var id = (location.hash || "#home").slice(1);
+        if (pages.indexOf(id) < 0) id = "home";
+        pages.forEach(function (p) { document.getElementById("page-" + p).classList.toggle("hidden", p !== id); });
+        document.querySelectorAll(".nav-item").forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-page") === id); });
+        window.scrollTo(0, 0);
+      }
+      window.addEventListener("hashchange", show);
+      show();
+    })();
   </script>
 </body>
 </html>
