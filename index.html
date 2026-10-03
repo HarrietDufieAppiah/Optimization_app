@@ -19,7 +19,7 @@
     .top-name { color: #fff; font-weight: 700; font-size: 24.5px; letter-spacing: -0.01em; }
 
     /* Layout */
-    .layout { display: grid; grid-template-columns: 244px minmax(0, 1fr); min-height: calc(100vh - 84px);
+    .layout { display: grid; grid-template-columns: 244px minmax(0, 1fr); min-height: 908px;
       background: linear-gradient(to right, #F5F7F7 243px, #E3E8E6 243px, #E3E8E6 244px, #fff 244px); }
     .sidebar { position: sticky; top: 0; align-self: start; padding: 14px 12px; }
     .nav-item { display: flex; align-items: center; gap: 20px; height: 54px; padding: 0 15px; border-radius: 6px;
@@ -71,9 +71,11 @@
     .ab-list li { display: flex; align-items: center; gap: 18px; font-size: 14.8px; color: #2E5A5E; }
     .ab-list svg { width: 25px; height: 25px; color: #064542; flex: none; }
 
-    @media (max-width: 1500px) { .g-desc { white-space: normal; } .home-body { grid-template-columns: 1fr; } .about { max-width: 720px; } .ab-text { max-width: none; } }
-    @media (max-width: 1100px) { .g-desc { white-space: normal; } .g-desc br { display: none; } .goal-cards { grid-template-columns: 1fr; } .goal { min-height: 0; } .hh-photo { width: 45%; } }
-    @media (max-width: 860px) {
+    /* Below 900px wide (phones, small tablets) the layout stacks instead of scaling */
+    @media (max-width: 899px) {
+      .g-desc { white-space: normal; } .g-desc br { display: none; }
+      .home-body { grid-template-columns: 1fr; } .about { max-width: 720px; } .ab-text { max-width: none; }
+      .goal-cards { grid-template-columns: 1fr; } .goal { height: auto; min-height: 0; padding-bottom: 60px; }
       .layout { grid-template-columns: 1fr; background: #fff; }
       .sidebar { position: static; display: flex; flex-wrap: wrap; background: #F5F7F7; border-bottom: 1px solid #E3E8E6; padding: 8px; }
       .sidebar nav { display: flex; flex-wrap: wrap; }
@@ -216,6 +218,19 @@
       }
       window.addEventListener("hashchange", show);
       show();
+
+      // Fit the whole page to the screen (no scrolling) on laptops and desktops.
+      // The design is 1585 x 992; it is scaled up or down to fill the window.
+      var root = document.documentElement, layout = document.querySelector(".layout");
+      function fit() {
+        var w = window.innerWidth, h = window.innerHeight;
+        if (w < 900) { root.style.zoom = ""; layout.style.minHeight = ""; return; }
+        var s = Math.min(w / 1585, h / 992);
+        root.style.zoom = s;
+        layout.style.minHeight = (h / s - 84) + "px";
+      }
+      window.addEventListener("resize", fit);
+      fit();
     })();
   </script>
 </body>
