@@ -103,6 +103,30 @@
     .back { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-size: 15.5px; font-weight: 700; color: #0E4A42; }
     .back svg { width: 20px; height: 20px; }
     @media (max-width: 640px) { .page-wrap { padding: 28px 16px 56px; } .pg-title { font-size: 32px; } }
+
+    /* ---------- New Analysis: step tabs ---------- */
+    .na-wrap { padding: 36px 30px 48px 41px; max-width: 1200px; }
+    .na-title { margin: 2px 0 4px; font-size: 40px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #0B2E2D; }
+    .na-sub { margin: 4px 0 22px; font-size: 17.1px; color: #25585C; }
+    .steps { display: flex; align-items: center; padding: 14px 18px; background: #F5F8F7; border: 1px solid #E3E8E6; border-radius: 10px; margin-bottom: 22px; overflow-x: auto; }
+    .step { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border: none; background: none; font: inherit; cursor: pointer; border-radius: 8px; white-space: nowrap; color: #4B6B6E; }
+    .step:hover { background: #EAF1EE; }
+    .step .num { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 700; border: 1.5px solid #AFC3BC; color: #4B6B6E; background: #fff; flex: none; }
+    .step .lbl { font-size: 15px; font-weight: 600; }
+    .step.active .num { background: #0E4A42; border-color: #0E4A42; color: #fff; }
+    .step.active .lbl { color: #0B2E2D; font-weight: 700; }
+    .step.done .num { background: #D8E5E0; border-color: #D8E5E0; color: #0E4A42; }
+    .step-line { flex: 1; min-width: 18px; height: 2px; background: #D3DEDA; margin: 0 6px; }
+    .step-panel { background: #fff; border: 1px solid #DBEAE5; border-radius: 10px; padding: 24px 26px 26px; }
+    .step-panel h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; color: #052E2C; letter-spacing: -0.01em; }
+    .step-panel .p-sub { margin: 0 0 18px; font-size: 15.5px; color: #4B6B6E; }
+    .step-empty { padding: 34px 22px; border-radius: 10px; background: #F5F8F7; border: 1px dashed #B9CCC5; color: #4B6B6E; font-size: 15px; text-align: center; }
+    .nav-btns { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; }
+    .btn-back { height: 48px; padding: 0 20px; border-radius: 6px; border: 1px solid #CCD2E0; background: #fff; font: inherit; font-size: 15.5px; font-weight: 600; color: #0E3A3A; cursor: pointer; }
+    .btn-next { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 22px; border: none; border-radius: 6px; background: #114D47; color: #fff; font: inherit; font-size: 15.5px; font-weight: 700; cursor: pointer; }
+    .btn-next:hover { background: #0C3D38; }
+    .btn-next svg { width: 20px; height: 20px; }
+    @media (max-width: 899px) { .na-wrap { padding: 24px 16px 48px; } .na-title { font-size: 30px; } }
   </style>
 </head>
 <body>
@@ -158,12 +182,60 @@
       </div>
 
       <div id="page-new" class="page hidden">
-        <div class="page-wrap">
+        <div class="na-wrap">
           <div class="pg-eyebrow">NEW ANALYSIS</div>
-          <h1 class="pg-title">New Analysis</h1>
-          <p class="pg-sub">Describe your food waste stream and choose your optimization goal.</p>
-          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">This is where you will enter your waste type, feed rate, operating hours, and composition.</div></div></div>
-          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+          <p class="na-sub">Set up your food waste stream and assumptions, then run the optimization.</p>
+          <div class="steps">
+            <button type="button" class="step active" data-step="0"><span class="num">1</span><span class="lbl">Feedstock</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="1"><span class="num">2</span><span class="lbl">Pathways</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="2"><span class="num">3</span><span class="lbl">Cost Assumptions</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="3"><span class="num">4</span><span class="lbl">Environmental Assumptions</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="4"><span class="num">5</span><span class="lbl">Review &amp; Run</span></button>
+          </div>
+          <div class="step-body" data-body="0">
+            <section class="step-panel">
+              <h2>1. Feedstock</h2>
+              <p class="p-sub">Your food waste stream.</p>
+              <div class="step-empty">Content for this step will go here.</div>
+            </section>
+            <div class="nav-btns"><span></span><button type="button" class="btn-next" data-go="1">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+          <div class="step-body hidden" data-body="1">
+            <section class="step-panel">
+              <h2>2. Pathways</h2>
+              <p class="p-sub">The treatment pathways to consider.</p>
+              <div class="step-empty">Content for this step will go here.</div>
+            </section>
+            <div class="nav-btns"><button type="button" class="btn-back" data-go="0">Back</button><button type="button" class="btn-next" data-go="2">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+          <div class="step-body hidden" data-body="2">
+            <section class="step-panel">
+              <h2>3. Cost Assumptions</h2>
+              <p class="p-sub">The cost values used by the model.</p>
+              <div class="step-empty">Content for this step will go here.</div>
+            </section>
+            <div class="nav-btns"><button type="button" class="btn-back" data-go="1">Back</button><button type="button" class="btn-next" data-go="3">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+          <div class="step-body hidden" data-body="3">
+            <section class="step-panel">
+              <h2>4. Environmental Assumptions</h2>
+              <p class="p-sub">The environmental factors used by the model.</p>
+              <div class="step-empty">Content for this step will go here.</div>
+            </section>
+            <div class="nav-btns"><button type="button" class="btn-back" data-go="2">Back</button><button type="button" class="btn-next" data-go="4">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+          <div class="step-body hidden" data-body="4">
+            <section class="step-panel">
+              <h2>5. Review &amp; Run</h2>
+              <p class="p-sub">Check your setup and run the optimization.</p>
+              <div class="step-empty">Content for this step will go here.</div>
+            </section>
+            <div class="nav-btns"><button type="button" class="btn-back" data-go="3">Back</button></div>
+          </div>
         </div>
       </div>
 
@@ -222,6 +294,17 @@
       window.addEventListener("hashchange", show);
       show();
 
+      // New Analysis: step tabs
+      function goStep(n) {
+        document.querySelectorAll("#page-new .step").forEach(function (b, i) {
+          b.classList.toggle("active", i === n);
+          b.classList.toggle("done", i < n);
+        });
+        document.querySelectorAll("#page-new .step-body").forEach(function (b, i) { b.classList.toggle("hidden", i !== n); });
+        window.scrollTo(0, 0);
+      }
+      document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.step)); }); });
+      document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.go)); }); });
     })();
   </script>
 </body>
