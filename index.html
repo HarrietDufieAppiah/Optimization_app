@@ -6,7 +6,7 @@
   <title>ECO-FAST | Rowan University</title>
   <meta name="description" content="ECO-FAST: find the best treatment pathway for a food waste stream.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="assets/rowan_torch.png">
   <style>
     * { box-sizing: border-box; }
@@ -127,6 +127,208 @@
     .btn-next:hover { background: #0C3D38; }
     .btn-next svg { width: 20px; height: 20px; }
     @media (max-width: 899px) { .na-wrap { padding: 24px 16px 48px; } .na-title { font-size: 30px; } }
+
+    /* ---------- New Analysis: header + chevron steps ---------- */
+    .na-wrap { max-width: 1340px; }
+    .na-h1 { margin: 0; font-size: 30px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; color: #0B2E2D; }
+    .na-sub { margin: 4px 0 18px; font-size: 16px; color: #25585C; }
+    .steps { display: flex; padding: 0; background: #F5F8F7; border: 1px solid #DCE6E2; border-radius: 8px; margin-bottom: 20px; overflow: hidden; gap: 0; }
+    .step { position: relative; flex: 1 1 auto; display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 18px 0 30px; border-radius: 0; background: transparent;
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); margin-right: -14px; }
+    .step:first-child { padding-left: 16px; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); }
+    .step:last-child { margin-right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+    .step:hover { background: #EAF1EE; }
+    .step .num { width: 28px; height: 28px; font-size: 14px; }
+    .step .lbl { font-size: 14.5px; }
+    .step.active { background: #0E4A42; }
+    .step.active .num { background: #fff; border-color: #fff; color: #0E4A42; }
+    .step.active .lbl { color: #fff; }
+    .step.done { background: #E3EEEA; }
+    .step-line { display: none; }
+
+    /* ---------- Feedstock step ---------- */
+    .fs-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) 280px; grid-template-areas: "a b i" "c d i"; gap: 20px; align-items: start; }
+    .fs-a { grid-area: a; } .fs-b { grid-area: b; } .fs-c { grid-area: c; } .fs-d { grid-area: d; } .fs-i { grid-area: i; }
+    .fs-a, .fs-b { align-self: stretch; }
+    .card { background: #fff; border: 1px solid #DCE6E2; border-radius: 8px; overflow: hidden; }
+    .card-h { padding: 12px 16px; background: #F5F8F7; border-bottom: 1px solid #E3EAE7; }
+    .card-h h3 { margin: 0; font-size: 16.5px; font-weight: 700; color: #0B2E2D; }
+    .card-h small { display: block; font-size: 12.5px; color: #6C7485; margin-top: 1px; }
+    .card-b { padding: 14px 16px 16px; }
+    .f { margin-bottom: 14px; }
+    .f:last-child { margin-bottom: 0; }
+    .f > label, .lbl-s { display: block; font-size: 14px; font-weight: 600; color: #1C2A3A; margin-bottom: 6px; }
+    .req { color: #B42318; }
+    .fin { width: 100%; height: 40px; padding: 0 12px; border: 1px solid #CCD2E0; border-radius: 5px; background: #fff; font: inherit; font-size: 14.5px; color: #13242D; outline: none; }
+    textarea.fin { height: 80px; padding: 9px 12px; resize: vertical; line-height: 1.45; }
+    select.fin { appearance: none; padding-right: 32px; cursor: pointer;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%233C4757' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 10px center / 16px no-repeat; }
+    .fin:focus { border-color: #0E4A42; box-shadow: 0 0 0 3px rgba(14,74,66,.13); }
+    .fin[readonly] { background: #F5F8F7; color: #4B6B6E; }
+    .pair { display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: 8px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .pct { position: relative; }
+    .pct .fin { padding-right: 30px; }
+    .pct span { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); font-size: 13.5px; color: #4B6B6E; pointer-events: none; }
+    .sub-h { margin: 18px 0 8px; font-size: 15px; font-weight: 700; color: #0B2E2D; }
+    .lbl-s { font-size: 13.2px; }
+    .hint-s { display: block; margin-top: 4px; font-size: 12.2px; color: #6C7485; }
+
+    .ctbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .ctbl th { text-align: left; font-size: 13px; font-weight: 700; color: #1C2A3A; padding: 8px 10px; background: #F5F8F7; border-bottom: 1px solid #E3EAE7; }
+    .ctbl th.n { text-align: center; }
+    .ctbl td { padding: 4px 6px; border-bottom: 1px solid #EEF2F0; }
+    .ctbl td:first-child { padding-left: 10px; font-weight: 600; color: #1C2A3A; width: 34%; }
+    .ctbl .fin { height: 34px; text-align: center; padding: 0 8px; }
+    .ctbl tfoot td { font-weight: 700; color: #0B2E2D; text-align: center; background: #F5F8F7; padding: 9px 6px; }
+    .ctbl tfoot td:first-child { text-align: left; }
+    .verify { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 14px; font-weight: 600; color: #1F7A4A; }
+    .verify.bad { color: #9A6200; }
+    .verify svg { width: 20px; height: 20px; flex: none; }
+
+    .adata { display: grid; grid-template-columns: 130px minmax(0, 150px) auto; gap: 8px 12px; align-items: center; }
+    .adata label { font-size: 14px; color: #1C2A3A; }
+    .adata .fin { height: 34px; }
+    .adata .u { font-size: 13.5px; color: #4B6B6E; }
+    .adata select.fin { width: 96px; }
+    .btn-add { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; height: 38px; padding: 0 14px; border: 1px solid #CCD2E0; border-radius: 6px; background: #fff;
+      font: inherit; font-size: 14.2px; font-weight: 600; color: #0E4A42; cursor: pointer; }
+    .btn-add:hover { border-color: #0E4A42; }
+    .btn-add svg { width: 18px; height: 18px; }
+    .x { border: none; background: none; color: #8A949E; cursor: pointer; font-size: 18px; line-height: 1; padding: 4px; }
+
+    .fs-i { background: #F2F7F5; border: 1px solid #DCE6E2; border-radius: 8px; padding: 18px 20px 20px; }
+    .fs-i .ih { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .fs-i .ih svg { width: 24px; height: 24px; color: #0E4A42; flex: none; }
+    .fs-i h4 { margin: 0; font-size: 16px; font-weight: 700; color: #0B2E2D; }
+    .fs-i p { margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid #DCE6E2; font-size: 13.6px; line-height: 20px; color: #4B6B6E; }
+    .fs-i h5 { margin: 12px 0 6px; font-size: 15px; font-weight: 700; color: #0B2E2D; }
+    .fs-i ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 22px; color: #2E5A5E; }
+
+    .fs-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid #E3EAE7; }
+    .btn-draft { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; border-radius: 6px; border: 1px solid #CCD2E0; background: #fff;
+      font: inherit; font-size: 15px; font-weight: 600; color: #0E3A3A; cursor: pointer; }
+    .btn-draft svg { width: 20px; height: 20px; }
+    .saved { margin-left: 12px; font-size: 13.5px; color: #1F7A4A; }
+
+    @media (max-width: 1300px) { .fs-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "a b" "c d" "i i"; } }
+    @media (max-width: 899px) {
+      .fs-grid { grid-template-columns: 1fr; grid-template-areas: "a" "b" "c" "d" "i"; }
+      .steps { flex-direction: column; } .step, .step:first-child, .step:last-child { clip-path: none; margin: 0; padding-left: 16px; }
+      .three { grid-template-columns: 1fr; }
+    }
+
+    /* Analysis summary panel */
+    .fs-i { background: #fff; padding: 0; overflow: hidden; }
+    .sum-h { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: #F2F7F5; border-bottom: 1px solid #DCE6E2; }
+    .sum-ico { width: 36px; height: 36px; border-radius: 8px; background: #0E4A42; display: grid; place-items: center; flex: none; }
+    .sum-ico svg { width: 21px; height: 21px; }
+    .sum-h h4 { margin: 0; font-size: 18px; font-weight: 800; color: #0B2E2D; }
+    .sum-b { padding: 6px 18px 16px; }
+    .sr { display: grid; grid-template-columns: 112px 1fr; gap: 10px; padding: 9px 0; font-size: 14px; }
+    .sr span:first-child { color: #4B6B6E; }
+    .sr span:last-child { color: #0B2E2D; font-weight: 600; word-break: break-word; }
+    .sum-sep { border: none; border-top: 1px solid #E3EAE7; margin: 8px 0 12px; }
+    .sum-t { font-size: 14.5px; font-weight: 700; color: #0B2E2D; margin-bottom: 6px; }
+    .sum-t small { font-weight: 400; color: #4B6B6E; font-size: 13.5px; }
+    .cr { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; color: #1C2A3A; }
+    .cr b { font-weight: 600; color: #0B2E2D; }
+    .muted { color: #8A949E !important; font-weight: 500 !important; }
+
+    /* ===== New Analysis: match the mockup (Inter font, mockup shapes) ===== */
+    #page-new { --ink: #0F2E2B; --muted: #5A6B70; --line: #D7E2DE; --tint: #F2F7F5; --g: #0E4A42; }
+    #page-new, #page-new button, #page-new input, #page-new select, #page-new textarea { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    #page-new .na-wrap { max-width: none; padding: 20px 22px 0 22px; }
+    #page-new .na-h1 { font-size: 25px; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+    #page-new .na-sub { margin: 2px 0 16px; font-size: 14px; color: var(--muted); letter-spacing: .005em; }
+
+    /* chevron step bar: only the active step is filled, the rest are split by thin chevron lines */
+    #page-new .steps { height: 46px; background: var(--tint); border: 1px solid var(--line); border-radius: 6px; margin-bottom: 22px; }
+    #page-new .step { flex: 1 1 0; height: 44px; gap: 12px; padding: 0 20px 0 34px; margin-right: -16px; background: var(--line);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); }
+    #page-new .step::before { content: ""; position: absolute; inset: 0; background: var(--tint);
+      clip-path: polygon(0 0, calc(100% - 17.5px) 0, calc(100% - 1.5px) 50%, calc(100% - 17.5px) 100%, 0 100%, 16px 50%); }
+    #page-new .step:first-of-type { padding-left: 14px; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); }
+    #page-new .step:first-of-type::before { clip-path: polygon(0 0, calc(100% - 17.5px) 0, calc(100% - 1.5px) 50%, calc(100% - 17.5px) 100%, 0 100%); }
+    #page-new .step:last-of-type { margin-right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+    #page-new .step:last-of-type::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+    #page-new .step:nth-of-type(1) { z-index: 5; } #page-new .step:nth-of-type(2) { z-index: 4; } #page-new .step:nth-of-type(3) { z-index: 3; } #page-new .step:nth-of-type(4) { z-index: 2; } #page-new .step:nth-of-type(5) { z-index: 1; }
+    #page-new .step > span { position: relative; }
+    #page-new .step:hover::before { background: #E8F0EC; }
+    #page-new .step .num { width: 26px; height: 26px; font-size: 13.5px; font-weight: 600; border: 1.5px solid #6F8C86; color: var(--ink); background: transparent; }
+    #page-new .step .lbl { font-size: 13.5px; font-weight: 500; color: var(--ink); }
+    #page-new .step.done, #page-new .step { background: var(--line); }
+    #page-new .step.done .num { background: transparent; border-color: #6F8C86; color: var(--ink); }
+    #page-new .step.active, #page-new .step.active::before { background: var(--g); }
+    #page-new .step.active .num { background: #fff; border-color: #fff; color: var(--g); }
+    #page-new .step.active .lbl { color: #fff; font-weight: 600; }
+
+    /* cards */
+    #page-new .fs-grid { grid-template-columns: minmax(0, 432fr) minmax(0, 510fr) minmax(250px, 277fr); gap: 20px 22px; }
+    #page-new .card { border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 2px rgba(16,40,36,.04); }
+    #page-new .card-h { padding: 11px 14px 9px; background: var(--tint); border-bottom: 1px solid #E6EDEA; }
+    #page-new .card-h h3 { font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+    #page-new .card-h small { font-size: 11.5px; color: var(--muted); margin-top: 0; }
+    #page-new .card-b { padding: 13px 14px 16px; }
+    #page-new .f { margin-bottom: 13px; }
+    #page-new .f > label, #page-new .lbl-s { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    #page-new .fin { height: 34px; padding: 0 11px; border: 1px solid #CFDCD8; border-radius: 4px; font-size: 13.5px; color: var(--ink); }
+    #page-new textarea.fin { height: 80px; padding: 8px 11px; }
+    #page-new select.fin { background-size: 14px; background-position: right 9px center; padding-right: 30px; }
+    #page-new .fin[readonly] { background: #fff; color: var(--ink); }
+    #page-new .fin::placeholder { color: #9AA6A3; }
+    #page-new .pair { grid-template-columns: minmax(0, 1fr) 102px; gap: 8px; }
+    #page-new .two { gap: 18px; }
+    #page-new .three { gap: 14px; }
+    #page-new .sub-h { margin: 14px 0 8px; font-size: 14px; font-weight: 600; color: var(--ink); }
+    #page-new .hint-s { font-size: 11.5px; }
+    #page-new .pct span { font-size: 13px; color: var(--ink); }
+
+    /* composition table: boxed grid */
+    #page-new .fs-c .card-b { padding: 8px 14px 14px !important; }
+    #page-new .ctbl { border: 1px solid #E1E9E6; border-radius: 6px; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 13px; }
+    #page-new .ctbl th { font-size: 12.5px; font-weight: 600; color: var(--ink); padding: 8px 12px; background: #F2F7F5; border-bottom: 1px solid #E1E9E6; }
+    #page-new .ctbl th + th, #page-new .ctbl td + td { border-left: 1px solid #E1E9E6; }
+    #page-new .ctbl td { padding: 3px 4px; border-bottom: 1px solid #E8EEEC; }
+    #page-new .ctbl td:first-child { padding-left: 12px; font-weight: 600; font-size: 12.8px; color: var(--ink); }
+    #page-new .ctbl .fin { height: 31px; font-size: 13px; }
+    #page-new .ctbl tfoot td { background: #F2F7F5; padding: 9px 4px; font-size: 13px; font-weight: 700; border-bottom: none; }
+    #page-new .verify { margin: 12px 0 0 2px !important; font-size: 13px; font-weight: 500; color: #1E8A4C; }
+    #page-new .verify svg { width: 19px; height: 19px; }
+
+    /* additional data */
+    #page-new .adata { grid-template-columns: 150px minmax(0, 145px) auto; gap: 8px 14px; }
+    #page-new .adata label { font-size: 13px; color: var(--ink); }
+    #page-new .adata .fin { height: 30px; }
+    #page-new .adata .u { font-size: 13px; color: var(--ink); }
+    #page-new .adata select.fin { width: 90px; }
+    #page-new .btn-add { height: 38px; border-radius: 6px; border-color: #CFDCD8; font-size: 13.5px; font-weight: 500; color: var(--g); background: #fff; }
+
+    /* Analysis Summary (matches the summary mockup) */
+    #page-new .fs-i { border-radius: 8px; }
+    #page-new .sum-h { padding: 16px 16px 14px; background: var(--tint); border-bottom: 1px solid #E6EDEA; gap: 12px; }
+    #page-new .sum-ico { width: 30px; height: 34px; border-radius: 6px; background: #1C5A48; }
+    #page-new .sum-ico svg { width: 18px; height: 18px; }
+    #page-new .sum-h h4 { font-size: 18px; font-weight: 700; color: #134B3E; letter-spacing: -0.01em; }
+    #page-new .sum-b { padding: 8px 14px 14px; }
+    #page-new .sr { grid-template-columns: 102px 1fr; gap: 12px; padding: 8px 0; font-size: 13px; }
+    #page-new .sr span:first-child { color: #44535A; }
+    #page-new .sr span:last-child { color: #1C2A30; font-weight: 400; }
+    #page-new .sum-sep { margin: 8px 0 12px; border-top-color: #E3EAE7; }
+    #page-new .sum-t { font-size: 13.5px; font-weight: 600; color: #1C2A30; margin-bottom: 8px; }
+    #page-new .sum-t small { font-size: 13px; font-weight: 400; color: #44535A; }
+    #page-new .cr { padding: 3px 0; font-size: 13px; color: #1C2A30; }
+    #page-new .cr b { font-weight: 400; color: #1C2A30; }
+    #page-new .muted { color: #9AA6A3 !important; }
+
+    /* footer band */
+    #page-new .fs-foot { margin: 22px -22px 0; padding: 16px 22px 18px; background: #F7FAF9; border-top: 1px solid #E3EAE7; }
+    #page-new .btn-draft { height: 46px; padding: 0 22px; border-radius: 6px; border-color: #CFDCD8; background: #F2F7F5; font-size: 14px; font-weight: 500; color: var(--ink); }
+    #page-new .btn-next { height: 46px; padding: 0 24px; border-radius: 6px; font-size: 14.5px; font-weight: 600; background: var(--g); }
+    #page-new .nav-btns { margin-top: 22px; }
+    #page-new .step-panel { border-radius: 6px; }
+    @media (max-width: 899px) { #page-new .step, #page-new .step::before { clip-path: none !important; margin: 0; } #page-new .steps { height: auto; } }
   </style>
 </head>
 <body>
@@ -163,9 +365,9 @@
           <h2 class="hb-title">Start a New Analysis</h2>
           <p class="hb-sub">Provide details about your food waste stream and choose your optimization goal.</p>
           <div class="goal-cards">
-              <a href="#new" class="goal" data-page="new"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><ellipse cx="12" cy="6.5" rx="6.5" ry="2.6"/><path d="M5.5 6.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 10.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 14.5v3c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-3"/></g></svg></span><span class="g-title">Lowest Cost</span><span class="g-desc">Find the treatment pathway<br>with the lowest net annualized<br>cost.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
-              <a href="#new" class="goal" data-page="new"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5C10 4.5 5 9 5 15.5c0 1.4.3 2.6.8 3.6 1 .3 2 .4 3 .4 6.5 0 10.7-5 10.7-15z"/><path d="M5.6 19.4 14 11"/></g></svg></span><span class="g-title">Lowest Environmental Impact</span><span class="g-desc">Find the pathway with the lowest<br>overall environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
-              <a href="#new" class="goal" data-page="new"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v16M7.5 20.5h9M4.5 7h15"/><circle cx="12" cy="4" r=".6"/><path d="M6.5 7 3.5 13.5h6z"/><path d="M17.5 7l-3 6.5h6z"/><path d="M3.5 13.5a3 2 0 0 0 6 0M14.5 13.5a3 2 0 0 0 6 0"/></g></svg></span><span class="g-title">Best Balance</span><span class="g-desc">Find the pathway that balances<br>cost and environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new" data-goal="cost"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><ellipse cx="12" cy="6.5" rx="6.5" ry="2.6"/><path d="M5.5 6.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 10.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 14.5v3c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-3"/></g></svg></span><span class="g-title">Lowest Cost</span><span class="g-desc">Find the treatment pathway<br>with the lowest net annualized<br>cost.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new" data-goal="env"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5C10 4.5 5 9 5 15.5c0 1.4.3 2.6.8 3.6 1 .3 2 .4 3 .4 6.5 0 10.7-5 10.7-15z"/><path d="M5.6 19.4 14 11"/></g></svg></span><span class="g-title">Lowest Environmental Impact</span><span class="g-desc">Find the pathway with the lowest<br>overall environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new" data-goal="balance"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v16M7.5 20.5h9M4.5 7h15"/><circle cx="12" cy="4" r=".6"/><path d="M6.5 7 3.5 13.5h6z"/><path d="M17.5 7l-3 6.5h6z"/><path d="M3.5 13.5a3 2 0 0 0 6 0M14.5 13.5a3 2 0 0 0 6 0"/></g></svg></span><span class="g-title">Best Balance</span><span class="g-desc">Find the pathway that balances<br>cost and environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
             </div>
         </div>
 
@@ -183,8 +385,8 @@
 
       <div id="page-new" class="page hidden">
         <div class="na-wrap">
-          <div class="pg-eyebrow">NEW ANALYSIS</div>
-          <p class="na-sub">Set up your food waste stream and assumptions, then run the optimization.</p>
+          <h1 class="na-h1">New Analysis</h1>
+          <p class="na-sub" id="na-sub">Define the feedstock that will be evaluated by ECO-FAST.</p>
           <div class="steps">
             <button type="button" class="step active" data-step="0"><span class="num">1</span><span class="lbl">Feedstock</span></button>
             <span class="step-line"></span>
@@ -197,12 +399,70 @@
             <button type="button" class="step" data-step="4"><span class="num">5</span><span class="lbl">Review &amp; Run</span></button>
           </div>
           <div class="step-body" data-body="0">
-            <section class="step-panel">
-              <h2>1. Feedstock</h2>
-              <p class="p-sub">Your food waste stream.</p>
-              <div class="step-empty">Content for this step will go here.</div>
-            </section>
-            <div class="nav-btns"><span></span><button type="button" class="btn-next" data-go="1">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="fs-grid">
+              <section class="card fs-a">
+                <div class="card-h"><h3>1. Analysis Information</h3></div>
+                <div class="card-b">
+                  <div class="f"><label for="fs-name">Analysis Name <span class="req">*</span></label><input class="fin" id="fs-name" placeholder="e.g. Campus Food Waste Study"></div>
+                  <div class="f"><label for="fs-desc">Description</label><textarea class="fin" id="fs-desc" placeholder="What is this analysis for?"></textarea></div>
+                  <div class="f"><label for="fs-loc">Location</label><input class="fin" id="fs-loc" placeholder="City, state or zip code"></div>
+                </div>
+              </section>
+
+              <section class="card fs-b">
+                <div class="card-h"><h3>2. Feedstock Characteristics</h3></div>
+                <div class="card-b">
+                  <div class="f"><label for="fs-type">Feedstock Type <span class="req">*</span></label>
+                    <select class="fin" id="fs-type"><option value="">Select a feedstock type</option><option>Household</option><option>Restaurant</option><option>Institutional</option><option>Retail</option><option>Market</option></select>
+                    <span class="hint-s">Fills in typical values below. You can change any of them.</span></div>
+                  <div class="two">
+                    <div class="f"><label for="fs-rate">Feed Rate <span class="req">*</span></label><div class="pair"><input class="fin" type="number" min="0" step="any" id="fs-rate" value="10000"><select class="fin" id="fs-rateu"><option value="kghr">kg/hr</option><option value="tday">tonne/day</option></select></div></div>
+                    <div class="f"><label for="fs-hours">Operating Hours <span class="req">*</span></label><div class="pair"><input class="fin" type="number" min="0" max="8760" step="any" id="fs-hours" value="7920"><select class="fin" id="fs-hoursu"><option>hr/year</option></select></div></div>
+                  </div>
+                  <div class="sub-h">Physical Properties</div>
+                  <div class="three">
+                    <div><label class="lbl-s" for="fs-moist">Moisture Content</label><div class="pct"><input class="fin" type="number" step="0.01" min="0" max="100" id="fs-moist"><span>%</span></div></div>
+                    <div><label class="lbl-s" for="fs-ts">Total Solids (TS)</label><div class="pct"><input class="fin" type="number" step="0.01" min="0" max="100" id="fs-ts"><span>%</span></div></div>
+                    <div><label class="lbl-s" for="fs-vs">Volatile Solids (VS)</label><div class="pct"><input class="fin" type="number" step="0.01" min="0" max="100" id="fs-vs"><span>%</span></div><span class="hint-s">% of total solids</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <aside class="card fs-i">
+                <div class="sum-h"><span class="sum-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="M12 10.5v6M9 13.5h6"/></g></svg></span><h4>Analysis Summary</h4></div>
+                <div class="sum-b">
+                  <div class="sr"><span>Analysis Name</span><span id="s-name"></span></div>
+                  <div class="sr"><span>Feedstock</span><span id="s-type"></span></div>
+                  <div class="sr"><span>Location</span><span id="s-loc"></span></div>
+                  <div class="sr"><span>Objective</span><span id="s-goal"></span></div>
+                  <div class="sr"><span>Feed Rate</span><span id="s-rate"></span></div>
+                  <div class="sr"><span>Operating Hours</span><span id="s-hours"></span></div>
+                  <hr class="sum-sep">
+                  <div class="sum-t">Composition <small>(wet basis)</small></div>
+                  <div id="s-comp"></div>
+                </div>
+              </aside>
+
+              <section class="card fs-c">
+                <div class="card-h"><h3>3. Feedstock Composition</h3><small>Enter the dry-basis values. The wet basis is calculated from the moisture content.</small></div>
+                <div class="card-b" style="padding:0 0 14px">
+                  <table class="ctbl"><thead><tr><th>Component</th><th class="n">% (Wet Basis)</th><th class="n">% (Dry Basis)</th></tr></thead>
+                    <tbody><tr><td>Water</td><td><input class="fin" readonly id="w-WATER" tabindex="-1"></td><td><input class="fin" readonly value="&#8212;" tabindex="-1"></td></tr><tr><td>Carbohydrates</td><td><input class="fin" readonly id="w-CBH" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-CBH" data-k="CBH"></td></tr><tr><td>Proteins</td><td><input class="fin" readonly id="w-PRT" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-PRT" data-k="PRT"></td></tr><tr><td>Fats</td><td><input class="fin" readonly id="w-FAT" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-FAT" data-k="FAT"></td></tr><tr><td>Ash</td><td><input class="fin" readonly id="w-ASH" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-ASH" data-k="ASH"></td></tr><tr><td>Fixed carbon</td><td><input class="fin" readonly id="w-FC" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-FC" data-k="FC"></td></tr><tr><td>Other organics</td><td><input class="fin" readonly id="w-OTH" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-OTH" data-k="OTH"></td></tr></tbody>
+                    <tfoot><tr><td>Total</td><td id="w-tot">&#8212;</td><td id="d-tot">&#8212;</td></tr></tfoot></table>
+                  <div class="verify" id="fs-verify" style="margin-left:14px"></div>
+                </div>
+              </section>
+
+              <section class="card fs-d">
+                <div class="card-h"><h3>4. Additional Feedstock Data</h3><small>(Optional)</small></div>
+                <div class="card-b">
+                  <div class="adata" id="fs-adata"><label for="x-C">Carbon (C)</label><input class="fin" type="number" step="any" id="x-C"><span class="u">%</span><label for="x-H">Hydrogen (H)</label><input class="fin" type="number" step="any" id="x-H"><span class="u">%</span><label for="x-O">Oxygen (O)</label><input class="fin" type="number" step="any" id="x-O"><span class="u">%</span><label for="x-N">Nitrogen (N)</label><input class="fin" type="number" step="any" id="x-N"><span class="u">%</span><label for="x-S">Sulfur (S)</label><input class="fin" type="number" step="any" id="x-S"><span class="u">%</span><label for="x-pH">pH</label><input class="fin" type="number" step="any" id="x-pH"><span class="u"></span><label for="x-HHV">Heating value</label><input class="fin" type="number" step="any" id="x-HHV"><select class="fin" id="x-HHVu"><option>MJ/kg</option></select></div>
+                  <div class="adata" id="fs-extra" style="margin-top:8px"></div>
+                  <button type="button" class="btn-add" id="fs-add"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></g></svg>Add Property</button>
+                </div>
+              </section>
+            </div>
+            <div class="fs-foot"><div><button type="button" class="btn-draft" id="fs-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="fs-saved"></span></div><button type="button" class="btn-next" data-go="1">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
           </div>
           <div class="step-body hidden" data-body="1">
             <section class="step-panel">
@@ -305,6 +565,119 @@
       }
       document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.step)); }); });
       document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.go)); }); });
+
+      // Subtitle for each step
+      var SUBS = ["Define the feedstock that will be evaluated by ECO-FAST.", "Choose the treatment pathways to consider.", "Review the cost values used by the model.", "Review the environmental factors used by the model.", "Check your setup and run the optimization."];
+      var _goStep = goStep;
+      goStep = function (n) { _goStep(n); document.getElementById("na-sub").textContent = SUBS[n]; };
+      document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { document.getElementById("na-sub").textContent = SUBS[Number(b.dataset.step)]; }); });
+      document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { document.getElementById("na-sub").textContent = SUBS[Number(b.dataset.go)]; }); });
+
+      // ---------- Feedstock step ----------
+      // Typical values per feedstock type (from feedstock_composition.csv), all dry basis except moisture
+      var FEED = {
+        Household:     { moist: 72.52, vm: 82.39, ash: 5.58,  fc: 12.03, cbh: 12.5,  prt: 13.53, fat: 10.6,  C: 48.76, H: 6.29, N: 3.85, O: 40.69, S: 0.41, hhv: 18.65 },
+        Restaurant:    { moist: 75.7,  vm: 81.72, ash: 6.11,  fc: 12.17, cbh: 35.33, prt: 21.39, fat: 25.0,  C: 48.63, H: 6.5,  N: 3.41, O: 41.17, S: 0.29, hhv: 20.23 },
+        Institutional: { moist: 60.85, vm: 84.31, ash: 5.01,  fc: 10.68, cbh: 42.11, prt: 18.9,  fat: 13.58, C: 46.72, H: 6.28, N: 3.7,  O: 42.93, S: 0.37, hhv: 22.69 },
+        Retail:        { moist: 61.08, vm: 80.79, ash: 7.73,  fc: 11.48, cbh: 11.57, prt: 25.51, fat: 31.57, C: 50.09, H: 6.58, N: 4.09, O: 38.89, S: 0.35, hhv: 24.74 },
+        Market:        { moist: 89.18, vm: 75.14, ash: 12.0,  fc: 12.86, cbh: 52.94, prt: 12.37, fat: 3.0,   C: 46.07, H: 5.7,  N: 2.86, O: 44.91, S: 0.46, hhv: 13.5 }
+      };
+      var DRY = ["CBH", "PRT", "FAT", "ASH", "FC", "OTH"];
+      function el(id) { return document.getElementById(id); }
+      function val(id) { var v = el(id).value; return v === "" ? NaN : Number(v); }
+      function r2(x) { return Math.round(x * 100) / 100; }
+      var OK_ICO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#1F7A4A"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var WARN_ICO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#E8B62C"/><path d="M12 7v6.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17" r="1.4" fill="#fff"/></svg>';
+
+      function fillType(t) {
+        var f = FEED[t]; if (!f) return;
+        el("fs-moist").value = f.moist; el("fs-ts").value = r2(100 - f.moist); el("fs-vs").value = f.vm;
+        var d = { CBH: f.cbh, PRT: f.prt, FAT: f.fat, ASH: f.ash, FC: f.fc, OTH: r2(f.vm - f.cbh - f.prt - f.fat) };
+        DRY.forEach(function (k) { el("d-" + k).value = d[k]; });
+        ["C", "H", "O", "N", "S"].forEach(function (k) { el("x-" + k).value = f[k]; });
+        el("x-HHV").value = f.hhv; el("x-pH").value = "";
+        updateComp();
+      }
+      function updateComp() {
+        var m = val("fs-moist"), dsum = 0, wsum = 0, have = false;
+        DRY.forEach(function (k) { var v = val("d-" + k); if (isFinite(v)) { dsum += v; have = true; } });
+        DRY.forEach(function (k) {
+          var v = val("d-" + k);
+          el("w-" + k).value = isFinite(v) && isFinite(m) ? r2(v * (100 - m) / 100).toFixed(2) : "";
+          if (isFinite(v) && isFinite(m)) wsum += v * (100 - m) / 100;
+        });
+        el("w-WATER").value = isFinite(m) ? r2(m).toFixed(2) : "";
+        if (isFinite(m)) wsum += m;
+        el("d-tot").textContent = have ? dsum.toFixed(2) : "\u2014";
+        el("w-tot").textContent = have && isFinite(m) ? wsum.toFixed(2) : "\u2014";
+        var v = el("fs-verify");
+        if (!have) { v.innerHTML = ""; return; }
+        var ok = Math.abs(dsum - 100) <= 0.5;
+        v.className = "verify" + (ok ? "" : " bad");
+        v.innerHTML = (ok ? OK_ICO : WARN_ICO) + (ok ? "Composition verified (" + dsum.toFixed(1) + "%)" : "Dry basis adds up to " + dsum.toFixed(2) + "%. It should add up to 100%.");
+      }
+      el("fs-type").addEventListener("change", function (e) { fillType(e.target.value); });
+      el("fs-moist").addEventListener("input", function () { var m = val("fs-moist"); el("fs-ts").value = isFinite(m) ? r2(100 - m) : ""; updateComp(); });
+      el("fs-ts").addEventListener("input", function () { var t = val("fs-ts"); el("fs-moist").value = isFinite(t) ? r2(100 - t) : ""; updateComp(); });
+      document.querySelectorAll("#page-new .dry-in").forEach(function (i) { i.addEventListener("input", updateComp); });
+
+      // feed rate unit switch (kg/hr <-> tonne/day), converts the number
+      var rateUnit = "kghr";
+      el("fs-rateu").addEventListener("change", function (e) {
+        var v = val("fs-rate"), u = e.target.value;
+        if (isFinite(v) && u !== rateUnit) el("fs-rate").value = u === "tday" ? r2(v * 24 / 1000) : r2(v * 1000 / 24);
+        rateUnit = u;
+      });
+
+      // add custom property rows
+      el("fs-add").addEventListener("click", function () {
+        var box = el("fs-extra");
+        var row = document.createElement("div"); row.style.display = "contents";
+        row.innerHTML = '<input class="fin" placeholder="Property name"><input class="fin" placeholder="Value"><span style="display:flex;gap:6px;align-items:center"><input class="fin" placeholder="Unit" style="width:70px"><button type="button" class="x" title="Remove">&times;</button></span>';
+        row.querySelector(".x").addEventListener("click", function () { row.remove(); });
+        box.appendChild(row);
+      });
+
+      // Save Draft (kept in this browser only)
+      var FIELDS = ["fs-name", "fs-desc", "fs-loc", "fs-type", "fs-rate", "fs-rateu", "fs-hours", "fs-moist", "fs-ts", "fs-vs", "x-C", "x-H", "x-O", "x-N", "x-S", "x-pH", "x-HHV"].concat(DRY.map(function (k) { return "d-" + k; }));
+      el("fs-save").addEventListener("click", function () {
+        var d = {}; FIELDS.forEach(function (id) { d[id] = el(id).value; });
+        try { localStorage.setItem("ecofast_feedstock_draft", JSON.stringify(d)); el("fs-saved").textContent = "Draft saved"; }
+        catch (e) { el("fs-saved").textContent = "Could not save in this browser"; }
+        setTimeout(function () { el("fs-saved").textContent = ""; }, 2500);
+      });
+      try {
+        var saved = JSON.parse(localStorage.getItem("ecofast_feedstock_draft") || "null");
+        if (saved) { FIELDS.forEach(function (id) { if (saved[id] != null) el(id).value = saved[id]; }); rateUnit = el("fs-rateu").value; }
+      } catch (e) {}
+      updateComp();
+
+      // ---------- Analysis Summary (updates as you type) ----------
+      var GOALS = { cost: "Lowest Cost", env: "Lowest Environmental Impact", balance: "Best Balance" }, goal = null;
+      try { goal = sessionStorage.getItem("ecofast_goal"); } catch (e) {}
+      document.querySelectorAll("#page-home .goal").forEach(function (a) {
+        a.addEventListener("click", function () { goal = a.getAttribute("data-goal"); try { sessionStorage.setItem("ecofast_goal", goal); } catch (e) {} renderSummary(); });
+      });
+      var COMP_LBL = [["CBH", "Carbohydrates (CBH)"], ["PRT", "Protein (PRT)"], ["FAT", "Fat (FAT)"], ["ASH", "Ash"], ["FC", "Fixed carbon"], ["OTH", "Other organics"], ["WATER", "Moisture"]];
+      function setTxt(id, t) { var e = el(id); if (t) { e.textContent = t; e.classList.remove("muted"); } else { e.textContent = "Not set"; e.classList.add("muted"); } }
+      function renderSummary() {
+        setTxt("s-name", el("fs-name").value.trim());
+        setTxt("s-type", el("fs-type").value);
+        setTxt("s-loc", el("fs-loc").value.trim());
+        setTxt("s-goal", goal ? GOALS[goal] : "");
+        var r = val("fs-rate"), hr = val("fs-hours");
+        setTxt("s-rate", isFinite(r) ? r.toLocaleString() + " " + el("fs-rateu").selectedOptions[0].text : "");
+        setTxt("s-hours", isFinite(hr) ? hr.toLocaleString() + " hr/yr" : "");
+        el("s-comp").innerHTML = COMP_LBL.map(function (c) {
+          var v = el("w-" + c[0]).value;
+          return '<div class="cr"><span>' + c[1] + "</span><b>" + (v === "" ? "\u2014" : Number(v).toFixed(1) + "%") + "</b></div>";
+        }).join("");
+      }
+      document.querySelectorAll("#page-new [data-body='0'] input, #page-new [data-body='0'] select, #page-new [data-body='0'] textarea").forEach(function (i) {
+        i.addEventListener("input", function () { setTimeout(renderSummary, 0); });
+        i.addEventListener("change", function () { setTimeout(renderSummary, 0); });
+      });
+      renderSummary();
     })();
   </script>
 </body>
