@@ -368,6 +368,39 @@
     #page-new .ni.byp svg { width: 36px; flex: none; }
     #page-new .btn-back { height: 46px; padding: 0 20px; border-radius: 6px; border: 1px solid #CFDCD8; background: #fff; font-size: 14px; font-weight: 500; color: var(--ink); }
     @media (max-width: 1100px) { #page-new .pw-nom { grid-template-columns: 1fr; } #page-new .nom + .nom { border-left: none; } }
+
+    /* ===== Cost Assumptions step ===== */
+    #page-new .ca-card .card-b { padding: 18px 20px 22px; }
+    #page-new .ca-tabs { display: flex; align-items: flex-end; gap: 4px; padding: 0 14px; background: var(--tint); border-bottom: 1px solid var(--line); }
+    #page-new .ca-tab { position: relative; height: 46px; padding: 0 14px; border: none; background: none; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; }
+    #page-new .ca-tab:hover { color: var(--ink); }
+    #page-new .ca-tab.on { color: var(--g); font-weight: 600; }
+    #page-new .ca-tab.on::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--g); }
+    #page-new .ca-tab i { display: inline-block; width: 7px; height: 7px; margin-left: 6px; border-radius: 50%; background: #E8B62C; vertical-align: 2px; font-style: normal; }
+    #page-new .ca-right { margin-left: auto; display: flex; align-items: center; gap: 10px; padding-bottom: 7px; font-size: 12.5px; color: var(--muted); }
+    #page-new .ca-reset { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid #CFDCD8; border-radius: 6px; background: #fff; font-size: 12.5px; font-weight: 500; color: var(--ink); cursor: pointer; }
+    #page-new .ca-reset:hover { border-color: var(--g); }
+    #page-new .ca-reset svg { width: 14px; height: 14px; }
+    #page-new .ca-reset:disabled { opacity: .45; cursor: default; }
+    #page-new .ca-wrap { max-width: 980px; }
+    #page-new .ca-pick { max-width: 480px; margin-bottom: 16px; }
+    #page-new .ca-tech { display: flex; align-items: center; gap: 14px; padding: 12px 16px; margin-bottom: 18px; border-radius: 6px; border-left: 4px solid var(--c); background: var(--ct); }
+    #page-new .ca-tech b { display: inline-grid; place-items: center; width: 46px; height: 30px; border-radius: 5px; background: var(--c); color: #fff; font-size: 12px; font-weight: 700; flex: none; }
+    #page-new .ca-tech .tn { font-size: 15px; font-weight: 600; color: var(--ink); }
+    #page-new .ca-tech .ts { font-size: 12.5px; color: var(--muted); }
+    #page-new .ca-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; }
+    #page-new .ca-f label { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--ink); }
+    #page-new .ca-f label .q { display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; border: 1.3px solid #8FA39E; color: #6F8C86; font-size: 10px; font-weight: 700; cursor: help; }
+    #page-new .ca-in { position: relative; }
+    #page-new .ca-in .fin { padding-right: 90px; }
+    #page-new .ca-in .u { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--muted); pointer-events: none; }
+    #page-new .fin.chg { background: #FFF7E3; border-color: #E8B62C; }
+    #page-new .fin.bad { background: #FDF0EE; border-color: #B42318; }
+    #page-new .fin.ro { background: #F5F8F7 !important; color: var(--muted); }
+    #page-new .ca-sec { grid-column: 1 / -1; margin: 6px 0 -4px; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+    #page-new .ca-fields.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; }
+    @media (max-width: 1100px) { #page-new .ca-fields.c3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 760px) { #page-new .ca-fields, #page-new .ca-fields.c3 { grid-template-columns: 1fr; } #page-new .ca-tabs { flex-wrap: wrap; } #page-new .ca-right { margin-left: 0; width: 100%; } }
   </style>
 </head>
 <body>
@@ -521,12 +554,17 @@
             <div class="fs-foot"><div></div><div class="right"><button type="button" class="btn-back" data-go="0">Back</button><button type="button" class="btn-next" id="pw-next" data-go="2">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
           </div>
           <div class="step-body hidden" data-body="2">
-            <section class="step-panel">
-              <h2>3. Cost Assumptions</h2>
-              <p class="p-sub">The cost values used by the model.</p>
-              <div class="step-empty">Content for this step will go here.</div>
+            <section class="card ca-card">
+              <div class="ca-tabs" id="ca-tabs">
+                <button type="button" class="ca-tab on" data-tab="tech">Technology Capital &amp; Labor</button>
+                <button type="button" class="ca-tab" data-tab="global">Global Assumptions</button>
+                <button type="button" class="ca-tab" data-tab="prod">Product Prices &amp; Fees</button>
+                <button type="button" class="ca-tab" data-tab="disp">Disposal Costs</button>
+                <div class="ca-right"><span id="ca-count"></span><button type="button" class="ca-reset" id="ca-reset-all"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/></g></svg>Reset to defaults</button></div>
+              </div>
+              <div class="card-b"><div class="ca-wrap" id="ca-panel"></div></div>
             </section>
-            <div class="nav-btns"><button type="button" class="btn-back" data-go="1">Back</button><button type="button" class="btn-next" data-go="3">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="fs-foot"><div><button type="button" class="btn-draft" id="ca-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="ca-saved"></span></div><div class="right"><button type="button" class="btn-back" data-go="1">Back</button><button type="button" class="btn-next" data-go="3">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
           </div>
           <div class="step-body hidden" data-body="3">
             <section class="step-panel">
@@ -615,7 +653,7 @@
       document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.go)); }); });
 
       // Subtitle for each step
-      var SUBS = ["Define the feedstock that will be evaluated by ECO-FAST.", "See the treatment pathways ECO-FAST will evaluate.", "Review the cost values used by the model.", "Review the environmental factors used by the model.", "Check your setup and run the optimization."];
+      var SUBS = ["Define the feedstock that will be evaluated by ECO-FAST.", "See the treatment pathways ECO-FAST will evaluate.", "Review or change the cost values used by the model.", "Review the environmental factors used by the model.", "Check your setup and run the optimization."];
       var _goStep = goStep;
       goStep = function (n) { _goStep(n); document.getElementById("na-sub").textContent = SUBS[n]; };
       document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { document.getElementById("na-sub").textContent = SUBS[Number(b.dataset.step)]; }); });
@@ -890,6 +928,114 @@
       }
       buildTiles();
       renderPathways();
+
+      // ---------- Cost Assumptions step ----------
+      // Default values come from the ECO-FAST model (app.py / notebook).
+      // Technology: [code, purchase cost $, reference capacity, capacity unit, specific power kW per unit capacity, operators per unit capacity, stage label]
+      var CA_TECH = [
+        ["SHR", 111000, 10000, "kg/h throughput", 0.02, 0.1, "Mechanical pretreatment"], ["MCR", 111000, 60000, "kg/h throughput", 0.10, 0.1, "Mechanical pretreatment"],
+        ["AER", 882000, 15000, "m3 vessel volume", 0.04, 0.5, "Biological pretreatment"], ["ENZ", 882000, 15000, "m3 vessel volume", 0.04, 0.5, "Biological pretreatment"],
+        ["HTL", 645000, 40, "m3 reactor volume", 2.0, 2.0, "Conversion"], ["AND", 594000, 1000, "m3 digester volume", 0.005, 0.02, "Conversion"],
+        ["SLF", 450000, 0.15, "acres of new land/yr", 0.5, 1.0, "Conversion"], ["CMP", 786000, 350, "m3 vessel volume", 0.02, 0.5, "Conversion"],
+        ["WWT", 8000000, 15000, "m3 aeration tank volume", 0.04, 0.5, "Conversion"], ["INC", 4700000, 8000, "kg/h throughput", 0.05, 1.0, "Conversion"],
+        ["CEN", 66000, 0.01, "m2, sigma factor", 0.1, 1.0, "Recovery & upgrading"], ["FLT", 39000, 80, "m2 membrane area", 0.1, 0.5, "Recovery & upgrading"],
+        ["ABS", 30000, 32, "Nm3/h biogas", 0.1, 0.01, "Recovery & upgrading"], ["PSA", 80000, 50, "Nm3/h biogas", 0.4, 0.01, "Recovery & upgrading"],
+        ["STB", 45000, 30000, "kW electric output", 0.02, 0.05, "Recovery & upgrading"]
+      ];
+      // [label, key, default, unit, note]  (null label = section heading)
+      var CA_LISTS = {
+        global: [
+          [null, "Economics"],
+          ["Cost exponent", "nc", 0.67, "", "Six-tenths rule, applied to the capacity ratio for all technologies"],
+          ["Bare-module multiplier", "bmc", 5.4, "x", "Installed cost / purchase cost"],
+          ["Capital recovery factor", "crf", 0.11, "1/yr", "Annualizes installed capital"],
+          ["Working capital", "wc", 15.0, "% of FCI", "FCI = fixed capital investment"],
+          ["Insurance & property tax", "ins", 1.0, "% of FCI/yr", ""],
+          ["Facility overhead", "fac", 6.0, "% of FCI/yr", "Maintenance, factory overhead, local taxes"],
+          ["Labor rate", "clbr", 30.0, "$/h", "Per operator"],
+          [null, "Utilities"],
+          ["Electricity", "celec", 0.10, "$/kWh", ""],
+          ["Process steam", "cstm", 0.012, "$/kg", ""],
+          ["Cooling water", "cpwt", 0.00005, "$/kg", ""],
+          ["Process water", "cwater", 0.0053, "$/kg", "Dilution water for MCR, HTL, AND, STB"],
+          ["Natural gas", "cng", 0.25, "$/kg", "Extra fuel for INC when the waste is too wet to burn on its own"]],
+        prod: [
+          ["Biomethane (CH4)", "ch4", 0.55, "$/kg", "From AND or SLF biogas, after upgrading"],
+          ["Biocrude", "biocrude", 0.48, "$/kg", "HTL product"],
+          ["Compost", "compost", 0.068, "$/kg", "CMP product"],
+          ["Electricity sold", "elec_price", 0.10, "$/kWh", "From the INC steam turbine"],
+          ["Biosolids", "biosolids", 0.05, "$/kg", "WWT product"],
+          ["Tipping fee received", "tip", 0.055, "$/kg feed", "Paid to accept the waste at the gate"]],
+        disp: [
+          ["Shredder reject", "disp_reject", 0.055, "$/kg", ""],
+          ["Aqueous phase (HTL/AND)", "disp_aq", 0.030, "$/kg", "High-strength organic wastewater that needs treatment"],
+          ["Char / cake", "disp_char", 0.055, "$/kg", "HTL solids residue"],
+          ["Landfill gate fee", "disp_land", 0.055, "$/kg", "Charged on the feed entering SLF"],
+          ["AD digestate", "disp_digestate", 0.005, "$/kg", "Land applied, not landfilled"]]
+      };
+      var CA_DEF = {}, CA_VAL = {}, CA_TAB_OF = {}, caTab = "tech", caTech = "SHR";
+      CA_TECH.forEach(function (t) { [["c0_", 1], ["wsp_", 4], ["nlbr_", 5]].forEach(function (p) { CA_DEF[p[0] + t[0]] = t[p[1]]; CA_TAB_OF[p[0] + t[0]] = "tech"; }); });
+      Object.keys(CA_LISTS).forEach(function (tab) { CA_LISTS[tab].forEach(function (r) { if (r[0]) { CA_DEF[r[1]] = r[2]; CA_TAB_OF[r[1]] = tab; } }); });
+      Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = CA_DEF[k]; });
+      try { var cd = JSON.parse(localStorage.getItem("ecofast_cost_draft") || "null"); if (cd) Object.keys(cd).forEach(function (k) { if (k in CA_DEF && isFinite(cd[k])) CA_VAL[k] = cd[k]; }); } catch (e) {}
+
+      function caFmt(v, money) { return !isFinite(v) ? "" : money ? Math.round(v).toLocaleString("en-US") : String(v); }
+      function caParse(s) { s = String(s).replace(/[,$\s]/g, ""); return s === "" ? NaN : Number(s); }
+      function caField(label, key, unit, note, money) {
+        return '<div class="ca-f"><label>' + label + (note ? '<span class="q" title="' + note + '">?</span>' : "") + '</label><div class="ca-in"><input class="fin" type="text" inputmode="decimal" data-k="' + key + '"' + (money ? ' data-m="1"' : "") + ' value="' + caFmt(CA_VAL[key], money) + '"><span class="u">' + unit + "</span></div></div>";
+      }
+      function caChanged(k) { return !isFinite(CA_VAL[k]) || Math.abs(CA_VAL[k] - CA_DEF[k]) > 1e-12; }
+      function caRender() {
+        var h = "";
+        if (caTab === "tech") {
+          var t = CA_TECH.filter(function (x) { return x[0] === caTech; })[0], tk = tech(caTech), col = SCOL[tk[3]];
+          h += '<div class="ca-pick f"><label for="ca-sel">Technology</label><select class="fin" id="ca-sel">' +
+            [["pre", "Stage I: Pretreatment"], ["conv", "Stage II: Conversion"], ["rec", "Stage III: Recovery & Upgrading"]].map(function (g) {
+              return '<optgroup label="' + g[1] + '">' + TECH.filter(function (x) { return x[3] === g[0]; }).map(function (x) {
+                var ch = ["c0_", "wsp_", "nlbr_"].some(function (p) { return caChanged(p + x[0]); });
+                return '<option value="' + x[0] + '"' + (x[0] === caTech ? " selected" : "") + ">" + x[1] + " (" + x[0] + ")" + (ch ? "  • edited" : "") + "</option>";
+              }).join("") + "</optgroup>";
+            }).join("") + "</select></div>";
+          h += '<div class="ca-tech" style="--c:' + col + ";--ct:" + ({ pre: "#E7F5EE", conv: "#F2ECF9", rec: "#FCEFE6" })[tk[3]] + '"><b>' + t[0] + '</b><div><div class="tn">' + tk[1] + '</div><div class="ts">' + t[6] + "</div></div></div>";
+          h += '<div class="ca-fields">' +
+            caField("Reference purchase cost", "c0_" + t[0], "$", "Purchase cost at the reference capacity. ECO-FAST scales it to your feed rate with the cost exponent.", true) +
+            '<div class="ca-f"><label>Reference capacity</label><div class="ca-in"><input class="fin ro" readonly value="' + t[2].toLocaleString("en-US") + '"><span class="u">' + t[3] + "</span></div></div>" +
+            caField("Specific power", "wsp_" + t[0], "kW per unit capacity", "Electricity used per unit of capacity", false) +
+            caField("Labor requirement", "nlbr_" + t[0], "operators per unit capacity", "Operators needed per unit of capacity", false) + "</div>";
+        } else {
+          h += '<div class="ca-fields c3">' + CA_LISTS[caTab].map(function (r) { return r[0] ? caField(r[0], r[1], r[3], r[4], false) : '<div class="ca-sec">' + r[1] + "</div>"; }).join("") + "</div>";
+        }
+        el("ca-panel").innerHTML = h;
+        if (el("ca-sel")) el("ca-sel").addEventListener("change", function (e) { caTech = e.target.value; caRender(); });
+        el("ca-panel").querySelectorAll("input[data-k]").forEach(function (i) {
+          i.addEventListener("input", function () { CA_VAL[i.dataset.k] = caParse(i.value); caMark(); });
+          i.addEventListener("blur", function () { if (isFinite(CA_VAL[i.dataset.k])) i.value = caFmt(CA_VAL[i.dataset.k], !!i.dataset.m); });
+        });
+        caMark();
+      }
+      function caMark() {
+        el("ca-panel").querySelectorAll("input[data-k]").forEach(function (i) {
+          var v = CA_VAL[i.dataset.k], bad = !isFinite(v) || v < 0;
+          i.classList.toggle("bad", bad); i.classList.toggle("chg", !bad && caChanged(i.dataset.k));
+        });
+        var n = 0, tabs = {};
+        Object.keys(CA_DEF).forEach(function (k) { if (caChanged(k)) { n++; tabs[CA_TAB_OF[k]] = true; } });
+        document.querySelectorAll("#page-new .ca-tab").forEach(function (b) {
+          var dot = b.querySelector("i"); if (tabs[b.dataset.tab] && !dot) b.insertAdjacentHTML("beforeend", "<i></i>"); if (!tabs[b.dataset.tab] && dot) dot.remove();
+        });
+        el("ca-count").textContent = n ? n + " value" + (n > 1 ? "s" : "") + " changed" : "Model defaults";
+        el("ca-reset-all").disabled = !n;
+      }
+      document.querySelectorAll("#page-new .ca-tab").forEach(function (b) {
+        b.addEventListener("click", function () { caTab = b.dataset.tab; document.querySelectorAll("#page-new .ca-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); caRender(); });
+      });
+      el("ca-reset-all").addEventListener("click", function () { Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = CA_DEF[k]; }); caRender(); });
+      el("ca-save").addEventListener("click", function () {
+        try { localStorage.setItem("ecofast_cost_draft", JSON.stringify(CA_VAL)); el("ca-saved").textContent = "Draft saved"; }
+        catch (e) { el("ca-saved").textContent = "Could not save in this browser"; }
+        setTimeout(function () { el("ca-saved").textContent = ""; }, 2500);
+      });
+      caRender();
       setPlay(!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
     })();
   </script>
