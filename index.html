@@ -401,6 +401,23 @@
     #page-new .ca-fields.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; }
     @media (max-width: 1100px) { #page-new .ca-fields.c3 { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 760px) { #page-new .ca-fields, #page-new .ca-fields.c3 { grid-template-columns: 1fr; } #page-new .ca-tabs { flex-wrap: wrap; } #page-new .ca-right { margin-left: 0; width: 100%; } }
+
+    /* ===== Environmental Assumptions step ===== */
+    #page-new .ea-tbl { width: 100%; max-width: 980px; border: 1px solid #E1E9E6; border-radius: 6px; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 13px; table-layout: fixed; }
+    #page-new .ea-tbl th { text-align: left; padding: 9px 12px; background: #F2F7F5; border-bottom: 1px solid #E1E9E6; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+    #page-new .ea-tbl th small { display: block; font-weight: 400; color: var(--muted); font-size: 11.5px; }
+    #page-new .ea-tbl th.ghg { border-top: 3px solid #C0561B; }
+    #page-new .ea-tbl th.ep { border-top: 3px solid #1D6FB8; }
+    #page-new .ea-tbl td { padding: 6px 12px; border-bottom: 1px solid #EDF2F0; vertical-align: middle; color: var(--ink); }
+    #page-new .ea-tbl tr:last-child td { border-bottom: none; }
+    #page-new .ea-tbl td .nm { font-weight: 600; }
+    #page-new .ea-tbl td .nt { display: block; font-size: 11.5px; color: var(--muted); }
+    #page-new .ea-tbl td.b { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    #page-new .ea-tbl .fin { height: 32px; width: 150px; text-align: right; }
+    #page-new .ea-tbl .na { color: #9AA6A3; font-size: 12px; }
+    #page-new .ea-gap { height: 18px; }
+    #page-new .ea-tbl .fin { max-width: 100%; }
+    @media (max-width: 760px) { main { min-width: 0; } #page-new .ea-scroll { overflow-x: auto; } #page-new .ea-tbl { min-width: 560px; } }
   </style>
 </head>
 <body>
@@ -567,12 +584,17 @@
             <div class="fs-foot"><div><button type="button" class="btn-draft" id="ca-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="ca-saved"></span></div><div class="right"><button type="button" class="btn-back" data-go="1">Back</button><button type="button" class="btn-next" data-go="3">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
           </div>
           <div class="step-body hidden" data-body="3">
-            <section class="step-panel">
-              <h2>4. Environmental Assumptions</h2>
-              <p class="p-sub">The environmental factors used by the model.</p>
-              <div class="step-empty">Content for this step will go here.</div>
+            <section class="card ca-card">
+              <div class="ca-tabs">
+                <button type="button" class="ca-tab ea-tab on" data-tab="impact">Impact Factors</button>
+                <button type="button" class="ca-tab ea-tab" data-tab="inputs">Utilities &amp; Inputs</button>
+                <button type="button" class="ca-tab ea-tab" data-tab="process">Process Emissions</button>
+                <button type="button" class="ca-tab ea-tab" data-tab="credits">Product Credits</button>
+                <div class="ca-right"><span id="ea-count"></span><button type="button" class="ca-reset" id="ea-reset-all"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/></g></svg>Reset to defaults</button></div>
+              </div>
+              <div class="card-b"><div class="ca-wrap" id="ea-panel"></div></div>
             </section>
-            <div class="nav-btns"><button type="button" class="btn-back" data-go="2">Back</button><button type="button" class="btn-next" data-go="4">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+            <div class="fs-foot"><div><button type="button" class="btn-draft" id="ea-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="ea-saved"></span></div><div class="right"><button type="button" class="btn-back" data-go="2">Back</button><button type="button" class="btn-next" data-go="4">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
           </div>
           <div class="step-body hidden" data-body="4">
             <section class="step-panel">
@@ -653,7 +675,7 @@
       document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.go)); }); });
 
       // Subtitle for each step
-      var SUBS = ["Define the feedstock that will be evaluated by ECO-FAST.", "See the treatment pathways ECO-FAST will evaluate.", "Review or change the cost values used by the model.", "Review the environmental factors used by the model.", "Check your setup and run the optimization."];
+      var SUBS = ["Define the feedstock that will be evaluated by ECO-FAST.", "See the treatment pathways ECO-FAST will evaluate.", "Review or change the cost values used by the model.", "Review or change the environmental factors used by the model.", "Check your setup and run the optimization."];
       var _goStep = goStep;
       goStep = function (n) { _goStep(n); document.getElementById("na-sub").textContent = SUBS[n]; };
       document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { document.getElementById("na-sub").textContent = SUBS[Number(b.dataset.step)]; }); });
@@ -1020,14 +1042,14 @@
         });
         var n = 0, tabs = {};
         Object.keys(CA_DEF).forEach(function (k) { if (caChanged(k)) { n++; tabs[CA_TAB_OF[k]] = true; } });
-        document.querySelectorAll("#page-new .ca-tab").forEach(function (b) {
+        document.querySelectorAll("#ca-tabs .ca-tab").forEach(function (b) {
           var dot = b.querySelector("i"); if (tabs[b.dataset.tab] && !dot) b.insertAdjacentHTML("beforeend", "<i></i>"); if (!tabs[b.dataset.tab] && dot) dot.remove();
         });
         el("ca-count").textContent = n ? n + " value" + (n > 1 ? "s" : "") + " changed" : "Model defaults";
         el("ca-reset-all").disabled = !n;
       }
-      document.querySelectorAll("#page-new .ca-tab").forEach(function (b) {
-        b.addEventListener("click", function () { caTab = b.dataset.tab; document.querySelectorAll("#page-new .ca-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); caRender(); });
+      document.querySelectorAll("#ca-tabs .ca-tab").forEach(function (b) {
+        b.addEventListener("click", function () { caTab = b.dataset.tab; document.querySelectorAll("#ca-tabs .ca-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); caRender(); });
       });
       el("ca-reset-all").addEventListener("click", function () { Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = CA_DEF[k]; }); caRender(); });
       el("ca-save").addEventListener("click", function () {
@@ -1036,6 +1058,115 @@
         setTimeout(function () { el("ca-saved").textContent = ""; }, 2500);
       });
       caRender();
+
+      // ---------- Environmental Assumptions step ----------
+      // Default values come from the ECO-FAST model notebook (optimization_31.ipynb). GHG in kg CO2e, eutrophication (EP) in kg N-eq.
+      // Field lists: [label, key, default, unit, note]  (null label = section heading)
+      var EA_LISTS = {
+        impact: [
+          [null, "Global warming"],
+          ["GWP of methane (CH4)", "GWP_CH4", 34.0, "kg CO2e/kg CH4", "Global warming potential of methane"],
+          ["GWP of nitrous oxide (N2O)", "GWP_N2O", 298.0, "kg CO2e/kg N2O", "Global warming potential of nitrous oxide"],
+          ["Fossil CO2 from burning natural gas", "EF_NG_fossil", 2.743, "kg CO2/kg gas", "Used for extra gas burned in INC and HTL"],
+          [null, "Marine eutrophication"],
+          ["Nitrogen to water", "CF_N_water", 0.297, "kg N-eq/kg N", "Characterization factor for waterborne nitrogen"],
+          ["NOx to air", "CF_NOx_marine_EF", 0.0902, "kg N-eq/kg NOx", "Characterization factor for NOx from incineration"]],
+        process: [
+          [null, "Composting (CMP)"],
+          ["CH4 emission", "EF_CH4_CMP_wet", 0.004, "kg/kg wet feed", ""],
+          ["N2O emission", "EF_N2O_CMP_wet", 0.00024, "kg/kg wet feed", ""],
+          ["Nitrogen leaching", "leach_frac_CMP", 0.0065, "fraction", ""],
+          [null, "Incineration (INC)"],
+          ["CH4 emission", "EF_CH4_INC_wet", 2e-7, "kg/kg wet feed", ""],
+          ["N2O emission", "EF_N2O_INC_wet", 5e-5, "kg/kg wet feed", ""],
+          ["NOx emission", "EF_NOx_INC_wet", 0.00183, "kg/kg wet feed", ""],
+          [null, "Sanitary landfill (SLF)"],
+          ["Methane capture", "CAP_SLF", 0.75, "fraction", "Share of landfill methane that is captured"],
+          ["Methane oxidation", "OX", 0.10, "fraction", "Share of uncaptured methane oxidized in the cover"],
+          ["Nitrogen leaching", "leach_frac_SLF", 0.01, "fraction", ""],
+          [null, "Wastewater treatment (WWT)"],
+          ["N2O emission", "EF_N2O_WWT", 0.016, "kg N2O-N/kg N", "Applied to the nitrogen entering WWT"],
+          ["Max methane capacity (B0)", "B0_WWT", 0.25, "", ""],
+          ["Methane correction factor", "MCF_WWT", 0.034, "fraction", ""],
+          [null, "Anaerobic digestion (AND) and HTL"],
+          ["AND nitrogen leaching", "leach_frac_AND", 0.194, "fraction", ""],
+          ["HTL gas vented", "HTL_gas_vent_frac", 0.10, "fraction", ""],
+          ["CH4 in HTL gas", "HTL_gas_CH4_frac", 0.08, "fraction", ""],
+          ["HTL nitrogen to aqueous phase", "HTL_N_to_AQ", 0.65, "fraction", "Model assumption, not validated for the base feed"]]
+      };
+      // Paired tables: [label, note, basis, GHG key, GHG default, EP key, EP default]
+      var EA_PAIRS = {
+        inputs: [
+          ["Electricity", "Grid power used by the plant", "per kWh", "EF_elec", 0.676, "EP_elec", 4.69e-5],
+          ["Steam", "", "per kg", "EF_stm", 0.2103, "EP_stm", 1.478e-6],
+          ["Natural gas supply", "Upstream burden of the gas used", "per kg", "EF_NG_sup", 0.7225, "EP_NG_sup", 1.202e-5],
+          ["Enzyme", "Used in ENZ", "per kg", "EF_enz", 7.18, "EP_enz", 8.06e-3],
+          ["Process water", "", "per kg", "EF_water", 5.63e-4, "EP_water", 2.27e-8]],
+        credits: [
+          ["Biomethane", "Replaces pipeline natural gas", "per kg CH4", "EF_CH4_disp", 3.466, "EP_CH4_disp", 1.202e-5],
+          ["Biocrude", "Replaces heavy fuel oil", "per kg", "EF_BIOCRUDE_disp", 3.203, "EP_BIOCRUDE_disp", 5.76e-5],
+          ["Electricity sold", "Replaces grid electricity", "per kWh", "EF_ELEC_disp", 0.676, "EP_ELEC_disp", 4.69e-5],
+          ["Nitrogen fertilizer", "Replaced by compost, digestate and biosolids", "per kg N", "EF_Nfert", 10.6, "EP_Nfert", 1.59e-4]],
+        burdens: [
+          ["Aqueous phase disposal", "HTL aqueous phase and ABS water", "per kg", "EF_AQ_disp", 5.78e-4, null, null],
+          ["Char / ash disposal", "HTL solids and INC ash", "per kg", "EF_CHAR_disp", 5.34e-3, "EP_CHAR_disp", 4.52e-8]]
+      };
+      var EA_MFE = [
+        ["Compost", "MFE_CMP", 0.20, "fraction", "Share of compost nitrogen that replaces fertilizer"],
+        ["Digestate", "MFE_AND", 0.50, "fraction", "Share of digestate nitrogen that replaces fertilizer"],
+        ["Biosolids", "MFE_WWT", 0.40, "fraction", "Share of biosolids nitrogen that replaces fertilizer"]];
+      var EA_DEF = {}, EA_VAL = {}, EA_TAB_OF = {}, eaTab = "impact";
+      Object.keys(EA_LISTS).forEach(function (t) { EA_LISTS[t].forEach(function (r) { if (r[0]) { EA_DEF[r[1]] = r[2]; EA_TAB_OF[r[1]] = t; } }); });
+      Object.keys(EA_PAIRS).forEach(function (t) { EA_PAIRS[t].forEach(function (r) { var tab = t === "burdens" ? "credits" : t; EA_DEF[r[3]] = r[4]; EA_TAB_OF[r[3]] = tab; if (r[5]) { EA_DEF[r[5]] = r[6]; EA_TAB_OF[r[5]] = tab; } }); });
+      EA_MFE.forEach(function (r) { EA_DEF[r[1]] = r[2]; EA_TAB_OF[r[1]] = "credits"; });
+      Object.keys(EA_DEF).forEach(function (k) { EA_VAL[k] = EA_DEF[k]; });
+      try { var ed = JSON.parse(localStorage.getItem("ecofast_env_draft") || "null"); if (ed) Object.keys(ed).forEach(function (k) { if (k in EA_DEF && isFinite(ed[k])) EA_VAL[k] = ed[k]; }); } catch (e) {}
+
+      function eaChanged(k) { return !isFinite(EA_VAL[k]) || Math.abs(EA_VAL[k] - EA_DEF[k]) > 1e-15; }
+      function eaInput(k) { return '<input class="fin" type="text" inputmode="decimal" data-ek="' + k + '" value="' + EA_VAL[k] + '">'; }
+      function eaField(r) {
+        return '<div class="ca-f"><label>' + r[0] + (r[4] ? '<span class="q" title="' + r[4] + '">?</span>' : "") + '</label><div class="ca-in">' + eaInput(r[1]) + '<span class="u">' + r[3] + "</span></div></div>";
+      }
+      function eaTable(rows, title) {
+        return '<div class="ea-scroll"><table class="ea-tbl"><colgroup><col style="width:38%"><col style="width:14%"><col style="width:24%"><col style="width:24%"></colgroup><thead><tr><th>' + title + '</th><th>Basis</th><th class="ghg">Greenhouse gas<small>kg CO2e</small></th><th class="ep">Marine eutrophication<small>kg N-eq</small></th></tr></thead><tbody>' +
+          rows.map(function (r) {
+            return '<tr><td><span class="nm">' + r[0] + "</span>" + (r[1] ? '<span class="nt">' + r[1] + "</span>" : "") + '</td><td class="b">' + r[2] + "</td><td>" + eaInput(r[3]) + "</td><td>" + (r[5] ? eaInput(r[5]) : '<span class="na">Not used</span>') + "</td></tr>";
+          }).join("") + "</tbody></table></div>";
+      }
+      function eaRender() {
+        var h = "";
+        if (eaTab === "inputs") h = eaTable(EA_PAIRS.inputs, "Utility or input");
+        else if (eaTab === "credits") h = eaTable(EA_PAIRS.credits, "Product credit") + '<div class="ea-gap"></div><div class="ca-fields c3"><div class="ca-sec">Fertilizer value (share of product nitrogen that replaces fertilizer)</div>' + EA_MFE.map(eaField).join("") + '</div><div class="ea-gap"></div>' + eaTable(EA_PAIRS.burdens, "Disposal burden");
+        else h = '<div class="ca-fields c3">' + EA_LISTS[eaTab].map(function (r) { return r[0] ? eaField(r) : '<div class="ca-sec">' + r[1] + "</div>"; }).join("") + "</div>";
+        el("ea-panel").innerHTML = h;
+        el("ea-panel").querySelectorAll("input[data-ek]").forEach(function (i) {
+          i.addEventListener("input", function () { EA_VAL[i.dataset.ek] = caParse(i.value); eaMark(); });
+        });
+        eaMark();
+      }
+      function eaMark() {
+        el("ea-panel").querySelectorAll("input[data-ek]").forEach(function (i) {
+          var v = EA_VAL[i.dataset.ek], bad = !isFinite(v) || v < 0;
+          i.classList.toggle("bad", bad); i.classList.toggle("chg", !bad && eaChanged(i.dataset.ek));
+        });
+        var n = 0, tabs = {};
+        Object.keys(EA_DEF).forEach(function (k) { if (eaChanged(k)) { n++; tabs[EA_TAB_OF[k]] = true; } });
+        document.querySelectorAll("#page-new .ea-tab").forEach(function (b) {
+          var dot = b.querySelector("i"); if (tabs[b.dataset.tab] && !dot) b.insertAdjacentHTML("beforeend", "<i></i>"); if (!tabs[b.dataset.tab] && dot) dot.remove();
+        });
+        el("ea-count").textContent = n ? n + " value" + (n > 1 ? "s" : "") + " changed" : "Model defaults";
+        el("ea-reset-all").disabled = !n;
+      }
+      document.querySelectorAll("#page-new .ea-tab").forEach(function (b) {
+        b.addEventListener("click", function () { eaTab = b.dataset.tab; document.querySelectorAll("#page-new .ea-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); eaRender(); });
+      });
+      el("ea-reset-all").addEventListener("click", function () { Object.keys(EA_DEF).forEach(function (k) { EA_VAL[k] = EA_DEF[k]; }); eaRender(); });
+      el("ea-save").addEventListener("click", function () {
+        try { localStorage.setItem("ecofast_env_draft", JSON.stringify(EA_VAL)); el("ea-saved").textContent = "Draft saved"; }
+        catch (e) { el("ea-saved").textContent = "Could not save in this browser"; }
+        setTimeout(function () { el("ea-saved").textContent = ""; }, 2500);
+      });
+      eaRender();
       setPlay(!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
     })();
   </script>
