@@ -543,13 +543,11 @@
     return s + "</svg>";
   }
 
-  function renderResults(saved) {
-    if (!resSlot) return;
+  function resultsHtml(saved, forPdf) {
     var r = saved.result, o = r.objectives || {}, c = r.cost_breakdown_MUSD_per_yr || {};
     var goalCol = { NAC: ["#9A5B13", "#FBF1E4"], GHG: ["#1F8A5B", "#E9F6EF"], EP: ["#1F8A5B", "#E9F6EF"], BALANCE: ["#6A3D9A", "#F2ECF9"] }[r.objective] || ["#0E4A42", "#E3F1EC"];
-    var h = '<div class="rs"><div class="rs-top"><span class="rs-name">' + esc(saved.name) + '</span><span class="rs-pill" style="--gc:' + goalCol[0] + ";--gt:" + goalCol[1] + '">' + esc(OBJ_NAME[r.objective] || r.objective) + "</span>" +
-      '<span class="rs-when">' + new Date(saved.when).toLocaleString() + (r.solve_time_s != null ? " &middot; solved in " + fmt(r.solve_time_s, 1) + " s" : "") + "</span>" +
-      '<button type="button" class="er-btn2" id="er-dl">Download results (JSON)</button></div>';
+    var h = '<div class="rs">' + (forPdf ? "" : '<div class="rs-top"><span class="rs-name">' + esc(saved.name) + '</span><span class="rs-pill" style="--gc:' + goalCol[0] + ";--gt:" + goalCol[1] + '">' + esc(OBJ_NAME[r.objective] || r.objective) + "</span>" +
+      '<span class="rs-when">' + new Date(saved.when).toLocaleString() + (r.solve_time_s != null ? " &middot; solved in " + fmt(r.solve_time_s, 1) + " s" : "") + "</span></div>");
 
     // Show only what belongs to the goal the user ran
     var show = { cost: r.objective === "NAC", ghg: r.objective === "GHG", ep: r.objective === "EP", bal: r.objective === "BALANCE" };
@@ -651,7 +649,7 @@
     h += "</div>";
 
     // Data tables (same numbers as the figures)
-    h += '<details class="rs-det"><summary>Data tables and notes</summary>';
+    h += forPdf ? '<div class="rp-tables"><h2 class="rp-h2 rp-break">Data tables</h2>' : '<details class="rs-det"><summary>Data tables and notes</summary>';
     if (show.cost && r.units && r.units.length) {
       h += '<div class="er-h">Equipment</div><table class="er-tbl"><thead><tr><th>Unit</th><th class="r">Capacity</th><th class="r">Purchase cost ($)</th></tr></thead><tbody>' +
         r.units.map(function (u) { return "<tr><td>" + esc(u.name) + " (" + esc(u.code) + ')</td><td class="r">' + fmt(u.capacity, 2) + '</td><td class="r">' + fmt(u.purchase_cost_usd, 0) + "</td></tr>"; }).join("") +
@@ -684,14 +682,116 @@
     var notes = (r.notes || []).slice();
     if (r.defaults_used && r.defaults_used.length) notes.unshift("Model default values were used for: " + r.defaults_used.join(", ") + ".");
     notes.push("Solved with " + r.solver + (r.solve_time_s != null ? " in " + r.solve_time_s + " s" : "") + ". The result is the proven global optimum of the model.");
-    h += '<div class="er-h">Notes</div>' + notes.map(function (n) { return '<div class="er-note">' + esc(n) + "</div>"; }).join("") + '<div style="height:10px"></div></details></div>';
+    h += '<div class="er-h">Notes</div>' + notes.map(function (n) { return '<div class="er-note">' + esc(n) + "</div>"; }).join("") + '<div style="height:10px"></div>' + (forPdf ? "</div>" : "</details>") + "</div>";
+    return h;
+  }
 
-    resSlot.className = ""; resSlot.innerHTML = h;
+  function renderResults(saved) {
+    if (!resSlot) return;
+    resSlot.className = ""; resSlot.innerHTML = resultsHtml(saved, false);
     bindTips(resSlot);
-    el("er-dl").addEventListener("click", function () {
-      var b = new Blob([JSON.stringify(saved, null, 2)], { type: "application/json" });
-      var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "ecofast_result.json"; a.click();
+  }
+
+  // ---------- PDF report (My Projects) ----------
+  var PDF_LIB = "https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.3/dist/html2pdf.bundle.min.js";
+  var FORM_ROWS = [["fs-type", "Feedstock type", ""], ["fs-loc", "Location", ""], ["fs-rate", "Feed rate", "rate"], ["fs-hours", "Operating hours", " hr/yr"],
+    ["fs-moist", "Moisture", "%"], ["fs-ts", "Total solids", "%"], ["fs-vs", "Volatile solids", "% of TS"]];
+  var COMP_ROWS = [["d-CBH", "Carbohydrates"], ["d-PRT", "Proteins"], ["d-FAT", "Lipids"], ["d-ASH", "Ash"], ["d-FC", "Fixed carbon"], ["d-OTH", "Other organics"]];
+  var ELEM_ROWS = [["x-C", "Carbon", "%"], ["x-H", "Hydrogen", "%"], ["x-O", "Oxygen", "%"], ["x-N", "Nitrogen", "%"], ["x-S", "Sulfur", "%"], ["x-HHV", "Heating value (HHV)", " MJ/kg"], ["x-pH", "pH", ""]];
+  var GOAL_TEXT = { NAC: "Lowest net annual cost: all yearly costs minus product sales and tipping fees.",
+    GHG: "Lowest net greenhouse gas emissions, after credits for products.", EP: "Lowest marine eutrophication.",
+    BALANCE: "Best balance: the design closest to the best cost, GHG and EP at the same time." };
+  function rows(list) { return list.map(function (x) { return "<tr><td>" + x[0] + '</td><td class="r">' + x[1] + "</td></tr>"; }).join(""); }
+  function reportHtml(p) {
+    var f = p.form || {}, r = p.result, val = function (id) { return f[id] == null || f[id] === "" ? null : f[id]; };
+    var when = new Date(p.when || p.updated);
+    var h = '<div class="rp"><div class="rp-band"><div><b>ECO-FAST</b><span>Food waste treatment analysis report</span></div><span>Created ' + new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) + "</span></div>";
+    h += '<h1 class="rp-h1">' + esc(p.name) + "</h1>" + (p.desc ? '<p class="rp-desc">' + esc(p.desc) + "</p>" : "") +
+      '<div class="rp-meta"><span><i>Goal</i>' + esc(OBJ_NAME[r.objective] || r.objective) + "</span><span><i>Run on</i>" + when.toLocaleString() + "</span>" +
+      (r.solve_time_s != null ? "<span><i>Solve time</i>" + fmt(r.solve_time_s, 1) + " s</span>" : "") + "</div>";
+    // Inputs
+    h += '<h2 class="rp-h2">1. Inputs</h2><div class="rp-cols">';
+    h += '<div><h3 class="rp-h3">Feedstock</h3><table class="er-tbl rp-t"><tbody>' + rows(FORM_ROWS.filter(function (x) { return val(x[0]) != null; }).map(function (x) {
+      var v = val(x[0]); if (x[2] === "rate") v = fmt(Number(v), 0) + (f["fs-rateu"] === "tday" ? " tonne/day" : " kg/hr"); else if (x[2]) v = (isFinite(Number(v)) ? fmt(Number(v), Number(v) % 1 ? 2 : 0) : esc(v)) + x[2]; else v = esc(v);
+      return [x[1], v]; })) + "</tbody></table></div>";
+    h += '<div><h3 class="rp-h3">Composition, dry basis</h3><table class="er-tbl rp-t"><tbody>' + rows(COMP_ROWS.filter(function (x) { return val(x[0]) != null; }).map(function (x) { return [x[1], fmt(Number(val(x[0])), 2) + "%"]; })) + "</tbody></table>";
+    var el2 = ELEM_ROWS.filter(function (x) { return val(x[0]) != null; });
+    if (el2.length) h += '<h3 class="rp-h3">Elemental analysis</h3><table class="er-tbl rp-t"><tbody>' + rows(el2.map(function (x) { return [x[1], fmt(Number(val(x[0])), 2) + x[2]]; })) + "</tbody></table>";
+    h += "</div></div>";
+    h += '<h3 class="rp-h3">Goal</h3><p class="rp-p">' + (GOAL_TEXT[r.objective] || "") + "</p>";
+    var ch = p.changed || [];
+    if (!p.changed) ["cost", "env"].forEach(function (g) { Object.keys(p[g] || {}).forEach(function (k) { ch.push([g === "cost" ? "Cost Assumptions" : "Environmental Assumptions", k, "-", p[g][k]]); }); });
+    h += '<h3 class="rp-h3">Assumptions changed from the model defaults</h3>' + (ch.length ?
+      '<table class="er-tbl rp-t"><thead><tr><th>Parameter</th><th>Step</th><th class="r">Default</th><th class="r">Used</th></tr></thead><tbody>' +
+      ch.map(function (c) { return "<tr><td>" + esc(c[1]) + "</td><td>" + esc(c[0]) + '</td><td class="r">' + fmtAny(c[2]) + '</td><td class="r"><b>' + fmtAny(c[3]) + "</b></td></tr>"; }).join("") + "</tbody></table>" :
+      '<p class="rp-p">None. The run used the model default values.</p>');
+    // Results
+    h += '<h2 class="rp-h2 rp-break">2. Results</h2>' + resultsHtml({ result: r, name: p.name, when: p.when || p.updated }, true);
+    h += "</div>";
+    return h;
+  }
+  function fmtAny(v) { var n = Number(v); if (!isFinite(n)) return esc(v); var a = Math.abs(n); return fmt(n, a === 0 ? 0 : a >= 1000 ? 0 : a >= 1 ? 3 : 6).replace(/(\.\d*?)0+$/, "$1").replace(/\.$/, ""); }
+  css.textContent += [
+    ".rp{width:728px;padding:0;background:#fff;color:#0B2E2D;font-family:'Figtree',system-ui,sans-serif}",
+    ".rp-band{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-radius:10px;background:#561B29;color:#fff;font-size:12.5px}",
+    ".rp-band b{display:block;font-size:20px;letter-spacing:.02em}.rp-band span{opacity:.9}",
+    ".rp-h1{margin:18px 0 4px;font-size:28px;font-weight:800;letter-spacing:-.02em}",
+    ".rp-desc{margin:0 0 8px;font-size:14px;color:#4A6460}",
+    ".rp-meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:8px 0 6px;font-size:13px}.rp-meta i{display:block;font-style:normal;font-size:11px;color:#6B7F7A}",
+    ".rp-h2{margin:22px 0 10px;padding-bottom:6px;border-bottom:2px solid #0E4A42;font-size:19px;font-weight:800;color:#0E4A42}",
+    ".rp-h3{margin:14px 0 6px;font-size:14.5px;font-weight:800}",
+    ".rp-p{margin:0;font-size:13.5px;color:#33413D}",
+    ".rp-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}",
+    ".rp-t{font-size:13px;margin:0}.rp-t td,.rp-t th{padding:5px 8px}",
+    ".rp .rs-card,.rp .rs-tile,.rp table,.rp tr{break-inside:avoid;page-break-inside:avoid}",
+    ".rp .rs-grid{grid-template-columns:1fr 1fr}",
+    ".rp .rs-flow svg{min-width:0}",
+    ".rp-foot{margin:18px 0 4px;padding-top:8px;border-top:1px solid #E6ECEA;font-size:11.5px;color:#6B7F7A}"
+  ].join("");
+  function loadPdfLib(cb) {
+    if (window.html2pdf) return cb(null);
+    var sc = document.createElement("script"); sc.src = window.ECOFAST_PDF_LIB || PDF_LIB;
+    sc.onload = function () { cb(window.html2pdf ? null : new Error("not loaded")); }; sc.onerror = function () { cb(new Error("not loaded")); };
+    document.head.appendChild(sc);
+  }
+  window.ECOFAST_PDF = function (p, btn) {
+    if (!p || !p.result) return;
+    var label = btn ? btn.innerHTML : ""; if (btn) { btn.disabled = true; btn.textContent = "Making PDF..."; }
+    function done() { if (btn) { btn.disabled = false; btn.innerHTML = label; } }
+    loadPdfLib(function (err) {
+      if (err) { done(); alert("The PDF tool could not load. Check your internet connection and try again."); return; }
+      var box = document.createElement("div"); box.style.cssText = "position:fixed;left:-10000px;top:0;z-index:-1";
+      box.innerHTML = reportHtml(p); document.body.appendChild(box);
+      prepReport(box).then(function () {
+      var file = "ECO-FAST " + String(p.name || "analysis").replace(/[\\/:*?"<>|]+/g, "").trim() + ".pdf";
+      window.html2pdf().set({ margin: [10, 10, 12, 10], filename: file, image: { type: "jpeg", quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" }, jsPDF: { unit: "mm", format: "letter", orientation: "portrait" },
+        pagebreak: { mode: ["css", "legacy"], before: ".rp-break", avoid: [".rs-card", ".rs-tile", "tr", ".rp-cols", ".rp-keep"] } })
+        .from(box.firstChild).save().then(function () { box.remove(); done(); }, function () { box.remove(); done(); alert("The PDF could not be made in this browser."); });
+      });
     });
+  };
+  function prepReport(box) {
+    // Charts drawn as SVG become images so the PDF tool draws them exactly
+    var waits = [];
+    box.querySelectorAll(".rp svg").forEach(function (svg) {
+      var rc = svg.getBoundingClientRect(); if (!rc.width) return;
+      var c = svg.cloneNode(true);
+      c.setAttribute("xmlns", "http://www.w3.org/2000/svg"); c.setAttribute("width", Math.round(rc.width)); c.setAttribute("height", Math.round(rc.height));
+      c.setAttribute("font-family", "Figtree, Arial, Helvetica, sans-serif");
+      c.querySelectorAll("path").forEach(function (pth) { if (svg.closest(".dn")) { pth.setAttribute("stroke", "#fff"); pth.setAttribute("stroke-width", "2"); } });
+      var img = new Image(); img.width = Math.round(rc.width); img.height = Math.round(rc.height); img.style.display = "block";
+      waits.push(new Promise(function (res) { img.onload = res; img.onerror = res; }));
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(c));
+      svg.parentNode.replaceChild(img, svg);
+    });
+    // Keep each table with its heading
+    box.querySelectorAll(".rp .er-h").forEach(function (hd) {
+      var w = document.createElement("div"); w.className = "rp-keep"; hd.parentNode.insertBefore(w, hd); w.appendChild(hd);
+      while (w.nextSibling && !(w.nextSibling.classList && w.nextSibling.classList.contains("er-h"))) w.appendChild(w.nextSibling);
+    });
+    box.querySelectorAll(".rp .rs-card .sub").forEach(function (sb) { sb.textContent = sb.textContent.replace(" Hover a box for details.", ""); });
+    return Promise.all(waits);
   }
 
   function renderNoResults() {
