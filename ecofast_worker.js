@@ -1,10 +1,4 @@
-/*
-  ECO-FAST model worker. Runs the Pyomo + HiGHS model inside the user's browser (Pyodide, WebAssembly),
-  in the background so the page stays responsive. No server needed.
 
-  Files it loads from this site: py/model_core.py, py/engine.py, py/pyomo-6.10.1-py3-none-any.whl
-  Files it loads from the Pyodide CDN: Python itself, numpy, pandas, highspy (cached by the browser after the first visit).
-*/
 var PYODIDE_VERSION = "0.29.3";
 importScripts("https://cdn.jsdelivr.net/pyodide/v" + PYODIDE_VERSION + "/full/pyodide.js");
 
