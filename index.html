@@ -1167,8 +1167,10 @@
         setTimeout(function () { el("ea-saved").textContent = ""; }, 2500);
       });
       eaRender();
+      window.ECOFAST = { CA_DEF: CA_DEF, CA_VAL: CA_VAL, CA_TECH: CA_TECH, caRender: caRender, EA_DEF: EA_DEF, EA_VAL: EA_VAL, eaRender: eaRender, isOn: isOn, getBypass: function () { return BYPASS; }, getGoal: function () { return goal; } };
       setPlay(!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
     })();
   </script>
+  <script src="ecofast_run.js"></script>
 </body>
 </html>
