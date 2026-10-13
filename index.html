@@ -550,6 +550,8 @@
     .ej-vl { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
     .ej-vv { font-size: 26px; font-weight: 800; margin: 2px 0; }
     .ej-vs { font-size: 13px; opacity: .95; }
+    .ej-mean { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: -4px 0 18px; padding: 12px 16px; border-radius: 12px; background: #FBF5F6; border-left: 5px solid #561B29; font-size: 14.5px; color: #33413D; line-height: 1.5; }
+    .ej-mean-k { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #561B29; }
     .ej-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .ej-card { border: 1px solid #DDE5E2; border-radius: 14px; background: #fff; padding: 18px; min-width: 0; }
     .ej-card.wide { grid-column: 1 / -1; }
@@ -561,6 +563,7 @@
     .ej-btn.pri { background: #0E4A42; color: #fff; }
     .ej-find { display: flex; gap: 10px; margin-bottom: 14px; }
     .ej-find .fin { flex: 1; min-width: 0; }
+    .ej-find .ej-state { flex: 0 0 210px; }
     .ej-mapwrap { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; }
     .ej-map { position: relative; height: 400px; border-radius: 12px; overflow: hidden; border: 1px solid #DDE5E2; background: #EEF0EA; }
     #ej-map { position: absolute; inset: 0; z-index: 0; }
@@ -607,7 +610,7 @@
     .ej-st b { font-size: 14.5px; color: #0B2E2D; } .ej-st small { margin-top: 3px; font-size: 12.5px; color: #5A6B70; line-height: 1.4; max-width: 230px; }
     .ej-src { margin-top: 14px; font-size: 12.5px; color: #6B7F7A; }
     @media (max-width: 1000px) { .ej-eq { grid-template-columns: 1fr; gap: 6px; } .ej-op { font-size: 22px; } .ej-grid, .ej-mapwrap, .ej-cov { grid-template-columns: 1fr; } .ej-map { height: 320px; } }
-    @media (max-width: 640px) { .ej-tl { grid-template-columns: 1fr; } .ej-line { display: none; } .ej-find { flex-direction: column; } }
+    @media (max-width: 640px) { .ej-tl { grid-template-columns: 1fr; } .ej-line { display: none; } .ej-find { flex-direction: column; } .ej-find .ej-state { flex: none; } }
   </style>
 </head>
 <body>
@@ -684,7 +687,8 @@
                 <div class="card-b">
                   <div class="f"><label for="fs-name">Analysis Name <span class="req">*</span></label><input class="fin" id="fs-name" placeholder="e.g. Campus Food Waste Study"></div>
                   <div class="f"><label for="fs-desc">Description</label><textarea class="fin" id="fs-desc" placeholder="What is this analysis for?"></textarea></div>
-                  <div class="f"><label for="fs-loc">Site Address</label><input class="fin" id="fs-loc" placeholder="e.g. 201 Mullica Hill Rd, Glassboro, NJ 08028"><span class="hint-s">Street address of the planned site. Used for the environmental justice check.</span></div>
+                  <div class="f"><label for="fs-state">Site State</label><select class="fin" id="fs-state"><option value="">Select a state</option><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select></div>
+                  <div class="f"><label for="fs-loc">Site Address</label><input class="fin" id="fs-loc" placeholder="Street and town, e.g. 201 Mullica Hill Rd, Glassboro 08028"><span class="hint-s">Street address of the planned site. Used for the environmental justice check.</span></div>
                 </div>
               </section>
 
@@ -820,12 +824,14 @@
           <p class="pg-sub">Does New Jersey's Environmental Justice Law apply to your design?</p>
           <div class="ej-ctx" id="ej-ctx"></div>
           <div class="ej-eq" id="ej-eq"></div>
+          <div class="ej-mean" id="ej-mean"></div>
           <div class="ej-grid">
             <section class="ej-card wide">
               <h3>Is your site in an overburdened community?</h3>
               <p class="ej-p">Checked from the site address, using NJDEP's official overburdened community map.</p>
               <form class="ej-find" id="ej-find" autocomplete="off">
-                <input class="fin" id="ej-addr" placeholder="Street address of the planned site, e.g. 201 Mullica Hill Rd, Glassboro, NJ 08028">
+                <select class="fin ej-state" id="ej-state"><option value="">Select a state</option><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="DC">District of Columbia</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option></select>
+                <input class="fin" id="ej-addr" placeholder="Street and town, e.g. 201 Mullica Hill Rd, Glassboro 08028">
                 <button type="submit" class="ej-btn pri">Check address</button>
               </form>
               <div class="ej-mapwrap">
@@ -958,7 +964,7 @@
       });
 
       // Save Draft (kept in this browser only)
-      var FIELDS = ["fs-name", "fs-desc", "fs-loc", "fs-type", "fs-rate", "fs-rateu", "fs-hours", "fs-moist", "fs-ts", "fs-vs", "x-C", "x-H", "x-O", "x-N", "x-S", "x-pH", "x-HHV"].concat(DRY.map(function (k) { return "d-" + k; }));
+      var FIELDS = ["fs-name", "fs-desc", "fs-state", "fs-loc", "fs-type", "fs-rate", "fs-rateu", "fs-hours", "fs-moist", "fs-ts", "fs-vs", "x-C", "x-H", "x-O", "x-N", "x-S", "x-pH", "x-HHV"].concat(DRY.map(function (k) { return "d-" + k; }));
       el("fs-save").addEventListener("click", function () {
         var d = {}; FIELDS.forEach(function (id) { d[id] = el(id).value; });
         try { localStorage.setItem("ecofast_feedstock_draft", JSON.stringify(d)); el("fs-saved").textContent = "Draft saved"; }
@@ -982,7 +988,7 @@
       function renderSummary() {
         setTxt("s-name", el("fs-name").value.trim());
         setTxt("s-type", el("fs-type").value);
-        setTxt("s-loc", el("fs-loc").value.trim());
+        setTxt("s-loc", [el("fs-loc").value.trim(), el("fs-state").value].filter(Boolean).join(", "));
         setTxt("s-goal", goal ? GOALS[goal] : "");
         var r = val("fs-rate"), hr = val("fs-hours");
         setTxt("s-rate", isFinite(r) ? r.toLocaleString() + " " + el("fs-rateu").selectedOptions[0].text : "");
@@ -1642,20 +1648,17 @@
       }
 
       // ----- location lookup -----
-      var look = { addr: "", state: "idle" }, reqId = 0;
+      var look = { addr: "", key: "", state: "idle" }, reqId = 0;
       function getJSON(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }); }
-      function geocode(a) {
-        var u1 = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&maxLocations=1&countryCode=USA&outFields=Match_addr,RegionAbbr&SingleLine=" + encodeURIComponent(a);
-        return getJSON(u1).then(function (j) {
-          var c = j.candidates && j.candidates[0]; if (!c || c.score < 75) throw new Error("none");
-          return { lat: c.location.y, lon: c.location.x, label: c.attributes.Match_addr || c.address, st: c.attributes.RegionAbbr || "" };
-        }).catch(function () {
-          var u2 = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=us&addressdetails=1&q=" + encodeURIComponent(a);
-          return getJSON(u2).then(function (j) {
-            var c = j && j[0]; if (!c) throw new Error("notfound");
-            var iso = (c.address && c.address["ISO3166-2-lvl4"]) || "";
-            return { lat: Number(c.lat), lon: Number(c.lon), label: c.display_name, st: iso.replace("US-", "") };
-          });
+      function geocode(a, st) {
+        var u = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=us&addressdetails=1&q=" + encodeURIComponent(a + ", " + stName(st) + ", USA");
+        return getJSON(u).then(function (j) {
+          var c = j && j[0]; if (!c) throw new Error("notfound");
+          var ad = c.address || {}, iso = ad["ISO3166-2-lvl4"] || "";
+          var street = [ad.house_number, ad.road].filter(Boolean).join(" ");
+          var town = ad.city || ad.town || ad.village || ad.borough || ad.township || ad.hamlet || ad.municipality || ad.county || "";
+          var label = [street, town, [iso.replace("US-", ""), ad.postcode].filter(Boolean).join(" ")].filter(Boolean).join(", ");
+          return { lat: Number(c.lat), lon: Number(c.lon), label: label || c.display_name, st: iso.replace("US-", "") };
         });
       }
       function obcAt(lat, lon) {
@@ -1667,20 +1670,25 @@
         var u = OBC + "?f=geojson&outFields=GEOID,OVERBURDENED_COMMUNITY_CRITERI&returnGeometry=true&outSR=4326&inSR=4326&geometryPrecision=5&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&geometry=" + encodeURIComponent(env);
         return getJSON(u).then(function (j) { return j.features || []; }).catch(function () { return []; });
       }
-      function check(a) {
-        a = (a || "").trim(); var my = ++reqId;
-        if (!a) { look = { addr: "", state: "idle" }; render(); return; }
-        if (a === look.addr && (look.state === "done" || look.state === "busy")) { render(); return; }
-        look = { addr: a, state: "busy" }; render();
-        geocode(a).then(function (g) {
+      function stName(st) { var o = el("ej-state").querySelector('option[value="' + st + '"]'); return o ? o.textContent : st; }
+      function check(a, st) {
+        a = (a || "").trim(); st = st || ""; var my = ++reqId, key = a + "|" + st;
+        if (!st && !a) { look = { addr: "", key: key, state: "idle" }; render(); return; }
+        if (!st) { look = { addr: a, key: key, state: "err", title: "Select the state first", msg: "Choose the state of the planned site, then enter the street and town" }; render(); return; }
+        if (!a) { look = { addr: "", key: key, st: st, state: "idle" }; render(); return; }
+        if (key === look.key && (look.state === "done" || look.state === "busy")) { render(); return; }
+        if (a.indexOf(",") < 0 && !/\b\d{5}\b/.test(a)) { look = { addr: a, key: key, state: "err", title: "Add the town", msg: "For example: 106 Silver Ave, Glassboro" }; render(); return; }
+        look = { addr: a, key: key, st: st, state: "busy" }; render();
+        geocode(a, st).then(function (g) {
           if (my !== reqId) return;
-          if (g.st !== "NJ") { look = { addr: a, state: "done", g: g, nj: false }; render(); return; }
+          if (g.st && g.st !== st) { look = { addr: a, key: key, state: "err", title: "Address not found in " + stName(st), msg: "Check the street and town, or the state you selected" }; render(); return; }
+          if (st !== "NJ") { look = { addr: a, key: key, st: st, state: "done", g: g, nj: false }; render(); return; }
           return obcAt(g.lat, g.lon).then(function (f) {
             if (my !== reqId) return;
-            look = { addr: a, state: "done", g: g, nj: true, f: f, near: [] }; render();
+            look = { addr: a, key: key, st: st, state: "done", g: g, nj: true, f: f, near: [] }; render();
             obcNear(g.lat, g.lon).then(function (fs) { if (my === reqId) { look.near = fs; drawMap(); } });
-          }, function () { if (my === reqId) { look = { addr: a, state: "err", g: g, msg: "NJDEP's map service did not answer. Try again in a moment, or open the NJDEP map." }; render(); } });
-        }).catch(function () { if (my === reqId) { look = { addr: a, state: "err", msg: "That address could not be found. Add the street, town, state and zip code." }; render(); } });
+          }, function () { if (my === reqId) { look = { addr: a, key: key, state: "err", g: g, msg: "NJDEP's map service did not answer. Try again in a moment, or open the NJDEP map." }; render(); } });
+        }).catch(function () { if (my === reqId) { look = { addr: a, key: key, state: "err", title: "Address not found", msg: "Check the street and town, and add the zip code" }; render(); } });
       }
 
       // ----- map -----
@@ -1710,8 +1718,8 @@
           });
           if (look.f) {
             var b = L.geoJSON(look.f, { style: { color: "#3A1220", weight: 3, dashArray: "7 4", fillColor: "#561B29", fillOpacity: .45 } }).addTo(layers);
-            map.fitBounds(b.getBounds().pad(0.6), { maxZoom: 16 });
-          } else map.setView([g.lat, g.lon], look.nj ? 15 : 13);
+            map.fitBounds(b.getBounds().pad(1.2), { maxZoom: 15 });
+          } else map.setView([g.lat, g.lon], look.nj ? 14 : 11);
           L.marker([g.lat, g.lon], { icon: L.divIcon({ className: "", iconSize: [36, 46], iconAnchor: [18, 44], html: '<svg width="36" height="46" viewBox="-20 -42 40 48"><path d="M0 0C-4-10-18-20-18-33a18 18 0 0 1 36 0C18-20 4-10 0 0Z" fill="#0E4A42" stroke="#fff" stroke-width="3"/><circle cx="0" cy="-33" r="6.5" fill="#fff"/></svg>' }) }).addTo(layers);
         }).catch(function () { el("ej-map").innerHTML = '<div class="ej-note" style="padding:16px">The map could not load. The check on the right still works.</div>'; });
       }
@@ -1732,17 +1740,17 @@
       var BTN_MAP = '<a class="ej-btn" href="' + EJMAP + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Open NJDEP EJ map</a>';
       function panel() {
         var s = look.state, h;
-        if (s === "idle") return '<div class="ej-badge gray">' + ICO_INFO + '<div><b>No site address yet</b><span>Type it above, or add it in step 1 of New Analysis</span></div></div><div class="ej-note">ECO-FAST finds the address on the map and checks it against NJDEP\'s list of overburdened communities.</div><div class="ej-acts">' + BTN_MAP + "</div>";
+        if (s === "idle") return '<div class="ej-badge gray">' + ICO_INFO + '<div><b>No site address yet</b><span>Select the state and enter the street and town above</span></div></div><div class="ej-note">ECO-FAST finds the address on the map and checks it against NJDEP\'s list of overburdened communities.</div><div class="ej-acts">' + BTN_MAP + "</div>";
         if (s === "busy") return '<div class="ej-badge gray"><span class="ej-spin" style="border-color:rgba(255,255,255,.35);border-top-color:#fff"></span><div><b>Checking the address</b><span>' + esc(look.addr) + "</span></div></div>";
-        if (s === "err") return '<div class="ej-badge wait">' + ICO_INFO + '<div><b>Could not check</b><span>' + esc(look.msg) + '</span></div></div><div class="ej-acts">' + BTN_MAP + "</div>";
-        var g = look.g;
-        if (!look.nj) return '<div class="ej-badge gray">' + ICO_INFO + '<div><b>Outside New Jersey</b><span>' + esc(g.label) + '</span></div></div><div class="ej-note">The automatic check covers New Jersey only. EPA removed its national screening tools (EJScreen and the Climate and Economic Justice Screening Tool) in 2025. Check with the environmental agency of the state where the site is.</div>';
+        if (s === "err") return '<div class="ej-badge wait">' + ICO_INFO + '<div><b>' + esc(look.title || "Could not check") + '</b><span>' + esc(look.msg) + '</span></div></div><div class="ej-acts">' + BTN_MAP + "</div>";
+        var g = look.g, found = '<dl class="ej-dl"><div class="full"><dt>Address found</dt><dd>' + esc(g.label) + '</dd></div></dl><div class="ej-note">Not the right place? Check the state, street and town, add the zip code, and check again.</div>';
+        if (!look.nj) return '<div class="ej-badge gray">' + ICO_INFO + '<div><b>Outside New Jersey</b><span>The automatic check covers New Jersey only</span></div></div>' + found;
         var f = look.f;
-        if (!f) return '<div class="ej-badge no">' + ICO_OK + '<div><b>Not an overburdened community</b><span>NJDEP lists no overburdened block group at this address</span></div></div><dl class="ej-dl"><div class="full"><dt>Address found</dt><dd>' + esc(g.label) + '</dd></div></dl><div class="ej-note">NJDEP publishes figures only for overburdened block groups, so none are shown here.</div><div class="ej-acts">' + BTN_MAP + "</div>";
+        if (!f) return '<div class="ej-badge no">' + ICO_OK + '<div><b>Not an overburdened community</b><span>NJDEP lists no overburdened block group at this address</span></div></div>' + found + '<div class="ej-acts">' + BTN_MAP + "</div>";
         var p = f.properties || {}, c = p.OVERBURDENED_COMMUNITY_CRITERI || "", v = pct(p);
         var adj = /adjacent/i.test(c), n = [v[0] >= 35, v[1] >= 40, v[2] >= 40].filter(Boolean).length;
         h = '<div class="ej-badge">' + ICO_SHIELD + '<div><b>Overburdened community</b><span>' + (adj ? "Adjacent block group with no residents" : "Criteria: " + esc(c || (n + " of 3"))) + '</span></div></div>';
-        h += '<dl class="ej-dl"><div><dt>Municipality</dt><dd>' + esc(p.NAME || "n/a") + '</dd></div><div><dt>County</dt><dd>' + esc(p.COUNTY || "n/a") + '</dd></div><div class="full"><dt>Census block group</dt><dd>' + esc(p.GEOID || "n/a") + "</dd></div></dl>";
+        h += '<dl class="ej-dl"><div class="full"><dt>Address found</dt><dd>' + esc(g.label) + '</dd></div><div><dt>Municipality</dt><dd>' + esc(p.NAME || "n/a") + '</dd></div><div><dt>County</dt><dd>' + esc(p.COUNTY || "n/a") + '</dd></div><div class="full"><dt>Census block group</dt><dd>' + esc(p.GEOID || "n/a") + "</dd></div></dl>";
         if (adj) h += '<div class="ej-note">NJDEP includes block groups with no residents that border an overburdened community.</div>';
         else h += '<div class="ej-bars">' + bar("Low income households", v[0], 35) + bar("Minority or tribal residents", v[1], 40) + bar("Limited English households", v[2], 40) + "</div>";
         return h + '<div class="ej-acts">' + BTN_MAP + "</div>";
@@ -1753,6 +1761,7 @@
       var I_FAC = '<svg viewBox="0 0 48 48"><path d="M8 40V22l10-6v6l10-6v6l10-6v24z" fill="#fff" opacity=".95"/><rect x="31" y="6" width="5" height="12" fill="#fff"/></svg>';
       var I_SIZE = '<svg viewBox="0 0 48 48"><path d="M24 6a18 18 0 1 0 18 18" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M24 24l10-10" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="24" cy="24" r="4" fill="#fff"/></svg>';
       var I_PIN = '<svg viewBox="0 0 48 48"><path d="M24 44s-14-12-14-24a14 14 0 0 1 28 0c0 12-14 24-14 24z" fill="#fff"/><circle cx="24" cy="20" r="5" fill="currentColor"/></svg>';
+      var meaning = "";
       function equation(d) {
         var h = "", fac, size, loc, ver;
         if (!d || !d.list.length) {
@@ -1772,13 +1781,14 @@
         else if (s === "done") loc = cell("yes", I_PIN.replace("currentColor", "#1F8A5B"), "Overburdened community", "No", "From the NJDEP map");
         else loc = cell("wait", I_PIN.replace("currentColor", "#B07A00"), "Overburdened community", s === "busy" ? "Checking" : "Not checked", s === "err" ? "Lookup failed" : "Add the site address");
         var F = d && d.list.length ? d.st : null, O = s === "done" ? (!look.nj ? "out" : look.f ? "yes" : "no") : null;
-        if (O === "out") ver = ["gray", "Does not apply", "The site is outside New Jersey"];
-        else if (F === "no") ver = ["no", "Likely does not apply", "The design is not a covered facility at this size"];
-        else if (O === "no") ver = ["no", "Likely does not apply", "The site is not in an overburdened community"];
-        else if (F === "yes" && O === "yes") ver = ["yes", "Likely applies", "Confirm with NJDEP before applying for a permit"];
-        else if (F === null) ver = ["wait", "Not known yet", "Run an analysis to check the facility"];
-        else if (F === "maybe" && O === "yes") ver = ["wait", "Ask NJDEP", "The technology is not clearly named in the law"];
-        else ver = ["wait", "Not known yet", "Check the site address"];
+        if (O === "out") ver = ["gray", "Does not apply", "The site is outside New Jersey", "New Jersey's Environmental Justice Law does not apply. Check the rules of the state where the site is."];
+        else if (F === "no") ver = ["no", "Likely does not apply", "The design is not a covered facility at this size", "The law adds no extra permit steps for this design. Normal NJDEP permits still apply."];
+        else if (O === "no") ver = ["no", "Likely does not apply", "The site is not in an overburdened community", "The law adds no extra permit steps at this site. Normal NJDEP permits still apply."];
+        else if (F === "yes" && O === "yes") ver = ["yes", "Likely applies", "Confirm with NJDEP before applying for a permit", "Before NJDEP can issue a permit, you must prepare an environmental justice impact statement and hold a public hearing in the community. NJDEP can deny a new facility that would add to the community's environmental burdens."];
+        else if (F === null) ver = ["wait", "Not known yet", "Run an analysis to check the facility", "Run an analysis and add the site address to see whether the law applies."];
+        else if (F === "maybe" && O === "yes") ver = ["wait", "Ask NJDEP", "The technology is not clearly named in the law", "The site is in an overburdened community, but the law does not clearly name this technology. Ask NJDEP whether it counts as a covered facility."];
+        else ver = ["wait", "Not known yet", "Check the site address", "Add the full site address to see whether the law applies."];
+        meaning = ver[3];
         return fac + '<div class="ej-op">+</div>' + size + '<div class="ej-op">+</div>' + loc + '<div class="ej-op">=</div><div class="ej-v ' + ver[0] + '"><div class="ej-vl">NJ EJ Law</div><div class="ej-vv">' + ver[1] + '</div><div class="ej-vs">' + ver[2] + "</div></div>";
       }
       function coverage(d) {
@@ -1791,24 +1801,27 @@
         var d = design(), ctx = '<span class="ej-ctx-k">Checking</span>';
         if (saved) ctx += "<b>" + esc(saved.name || "Untitled analysis") + "</b>";
         else ctx += '<span>No analysis run yet. <a href="#new">Start one in New Analysis</a></span>';
-        if (look.addr) ctx += '<span class="dot"></span>' + esc(look.addr);
+        if (look.addr) ctx += '<span class="dot"></span>' + esc(look.addr) + (look.st ? ", " + look.st : "");
         el("ej-ctx").innerHTML = ctx;
         el("ej-eq").innerHTML = equation(d);
+        el("ej-mean").innerHTML = '<span class="ej-mean-k">What this means</span>' + esc(meaning);
         el("ej-res").innerHTML = panel();
         drawMap();
       }
       function onPage() { return (location.hash || "").slice(1) === "ej"; }
       function enter() {
         if (!onPage()) return;
-        var a = ((el("fs-loc") || {}).value || "").trim();
+        var a = ((el("fs-loc") || {}).value || "").trim(), st = (el("fs-state") || {}).value || "";
         if (document.activeElement !== el("ej-addr")) el("ej-addr").value = a;
-        check(a);
+        el("ej-state").value = st;
+        check(a, st);
       }
       el("ej-find").addEventListener("submit", function (e) {
         e.preventDefault();
-        var a = el("ej-addr").value.trim(), loc = el("fs-loc");
+        var a = el("ej-addr").value.trim(), st = el("ej-state").value, loc = el("fs-loc"), fst = el("fs-state");
         if (loc && loc.value !== a) { loc.value = a; loc.dispatchEvent(new Event("input", { bubbles: true })); }
-        check(a);
+        if (fst && fst.value !== st) { fst.value = st; fst.dispatchEvent(new Event("change", { bubbles: true })); }
+        check(a, st);
       });
       window.addEventListener("hashchange", enter);
       enter();
