@@ -366,44 +366,328 @@
     Utilities: "Utilities", Labour: "Labor", Overhead: "Overhead", Materials_and_fuel: "Materials and fuel",
     Disposal: "Disposal", Fixed_charge: "Fixed charge", Total_cost: "Total cost", Total_revenue: "Total revenue",
     Tipping_revenue: "Tipping revenue (part of revenue)" };
+  var TECH_NAME = { SHR: "Shredder", MCR: "Macerator", AER: "Aerobic pretreatment", ENZ: "Enzymatic pretreatment", HTL: "Hydrothermal liquefaction",
+    AND: "Anaerobic digestion", SLF: "Sanitary landfill", CMP: "Composting", WWT: "Wastewater treatment", INC: "Incineration",
+    CEN: "Centrifuge", FLT: "Filtration", ABS: "Water scrubbing", PSA: "Pressure swing adsorption", STB: "Boiler + steam turbine" };
+  var PROD = { CH4: ["Biomethane", "#eb6834"], BIOCRUDE: ["Biocrude", "#1baf7a"], COMPOST: ["Compost", "#eda100"], ELECTRICITY: ["Electricity", "#e87ba4"], BIOSOLIDS: ["Biosolids", "#008300"] };
+  var BRANCH_PROD = { AND: "CH4", HTL: "BIOCRUDE", CMP: "COMPOST", INC: "ELECTRICITY", WWT: "BIOSOLIDS" };
+  var GHG_LABEL = { Energy_and_materials: "Energy and materials", Direct_emissions: "Direct process emissions", Residue_disposal: "Residue disposal",
+    Product_credits: "Credit for products", Digestate_credit: "Credit for digestate fertilizer" };
+  var EP_LABEL = { Nitrogen_to_water_and_air: "Nitrogen to water and air", Energy_and_materials: "Energy and materials", Residue_disposal: "Residue disposal",
+    Product_credits: "Credit for products", Fertilizer_credits: "Credit for fertilizer" };
+  var FEED_PARTS = [["Carbohydrate (%)", "Carbohydrates"], ["Protein (%)", "Proteins"], ["Lipid (%)", "Lipids"], ["Ash (%)", "Ash"], ["Fixed carbon (%)", "Fixed carbon"]];
+  var CAT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300"];
+
+  css.textContent += [
+    ".rs{font-family:inherit;color:#0B2E2D;max-width:1180px}",
+    ".rs-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:-8px 0 16px}",
+    ".rs-name{font-size:20px;font-weight:800}",
+    ".rs-pill{padding:3px 10px;border-radius:99px;font-size:12.5px;font-weight:700;background:var(--gt);color:var(--gc)}",
+    ".rs-when{font-size:13px;color:#5A6B70}",
+    ".rs-top .er-btn2{margin-left:auto;height:36px;font-size:14px}",
+    ".rs-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}",
+    ".rs-tiles.one{grid-template-columns:minmax(0,380px)}",
+    ".tm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}",
+    ".tm h4{margin:0 0 8px;font-size:13.5px;font-weight:700;color:#0B2E2D}",
+    ".tm .hb{grid-template-columns:minmax(84px,max-content) 1fr}",
+    ".rs-tile{position:relative;padding:16px 18px 14px;border:1px solid #DDE5E2;border-radius:12px;background:#fff;overflow:hidden}",
+    ".rs-tile::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--c)}",
+    ".rs-tile .k{font-size:13px;font-weight:600;color:#4A6460}",
+    ".rs-tile .v{margin-top:4px;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}",
+    ".rs-tile .u{margin-top:2px;font-size:12.5px;color:#5A6B70}",
+    ".rs-tile .tag{display:inline-block;margin-top:8px;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;background:#E3F4EA;color:#17693F}",
+    ".rs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}",
+    ".rs-card{border:1px solid #DDE5E2;border-radius:12px;background:#fff;padding:16px 18px 14px;min-width:0}",
+    ".rs-card.wide{grid-column:1/-1}",
+    ".rs-card h3{margin:0;font-size:16px;font-weight:800;color:#0B2E2D}",
+    ".rs-card .sub{margin:2px 0 12px;font-size:12.5px;color:#5A6B70}",
+    ".rs-flow{overflow-x:auto}.rs-flow svg{display:block;min-width:720px;width:100%;height:auto}",
+    ".rs-flow text{font-family:inherit}",
+    ".hb{display:grid;grid-template-columns:minmax(110px,max-content) 1fr;gap:6px 12px;align-items:center}",
+    ".hb .l{font-size:13px;color:#33413D;text-align:right;white-space:nowrap}",
+    ".hb .t{position:relative;height:22px}",
+    ".hb .b{position:absolute;top:3px;height:16px;border-radius:0 4px 4px 0;background:var(--c);min-width:2px}",
+    ".hb .b.neg{border-radius:4px 0 0 4px}",
+    ".hb .val{position:absolute;top:2px;font-size:12px;font-weight:600;color:#33413D;white-space:nowrap;font-variant-numeric:tabular-nums}",
+    ".hb .z{position:absolute;top:-3px;bottom:-3px;width:1px;background:#8FA19C}",
+    ".hb .row-net .l{font-weight:800;color:#0B2E2D}",
+    ".hb .sep{grid-column:1/-1;height:1px;background:#E6ECEA;margin:2px 0}",
+    ".hb .hit{cursor:default}.hb .hit:hover .b{filter:brightness(.92)}",
+    ".ax{display:grid;grid-template-columns:minmax(110px,max-content) 1fr;gap:0 12px;margin-top:4px}",
+    ".ax .tk{position:relative;height:16px;border-top:1px solid #E6ECEA}",
+    ".ax .tk span{position:absolute;top:2px;transform:translateX(-50%);font-size:11px;color:#6B7F7A;white-space:nowrap}",
+    ".rs-sum{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;padding-top:10px;border-top:1px solid #EEF2F0;font-size:13px;color:#4A6460}",
+    ".rs-sum b{color:#0B2E2D;font-variant-numeric:tabular-nums}",
+    ".dn{display:flex;align-items:center;gap:18px;flex-wrap:wrap}",
+    ".dn svg{flex:none;width:150px;height:150px}",
+    ".dn path{cursor:default;stroke:#fff;stroke-width:2}.dn path:hover{opacity:.85}",
+    ".lg{flex:1;min-width:180px;display:grid;gap:6px}",
+    ".lg div{display:grid;grid-template-columns:12px 1fr auto;gap:8px;align-items:center;font-size:13px;color:#33413D}",
+    ".lg i{width:12px;height:12px;border-radius:3px;background:var(--c)}",
+    ".lg b{font-variant-numeric:tabular-nums;color:#0B2E2D}",
+    ".lg small{grid-column:2/-1;margin-top:-4px;font-size:11.5px;color:#6B7F7A}",
+    ".sb{display:flex;gap:2px;height:34px;border-radius:6px;overflow:hidden}",
+    ".sb div{background:var(--c);min-width:3px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.35);cursor:default}",
+    ".sb div:hover{filter:brightness(.92)}",
+    ".sbl{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:13px;color:#33413D}",
+    ".sbl span{display:inline-flex;align-items:center;gap:7px}.sbl i{width:12px;height:12px;border-radius:3px;background:var(--c)}.sbl b{color:#0B2E2D}",
+    ".rs-note{font-size:12px;color:#5A6B70;margin-top:8px}",
+    ".rs-tip{position:fixed;z-index:50;pointer-events:none;padding:7px 10px;border-radius:7px;background:#0B2E2D;color:#fff;font-size:12.5px;line-height:1.4;box-shadow:0 6px 18px rgba(0,0,0,.18);display:none;max-width:260px}",
+    ".rs-tip b{font-variant-numeric:tabular-nums}",
+    ".rs-det{margin-top:16px;border:1px solid #DDE5E2;border-radius:12px;background:#fff;padding:4px 18px}",
+    ".rs-det summary{cursor:pointer;padding:10px 0;font-size:15px;font-weight:700;color:#0E4A42}",
+    "@media (max-width:900px){.rs-grid,.tm{grid-template-columns:1fr}}",
+    "@media (max-width:640px){.rs-tiles{grid-template-columns:1fr}.rs-tile .v{font-size:26px}.rs-top .er-btn2{margin-left:0}}"
+  ].join("");
+
+  var tip = document.createElement("div"); tip.className = "rs-tip"; document.body.appendChild(tip);
+  function bindTips(root) {
+    root.querySelectorAll("[data-tip]").forEach(function (n) {
+      n.addEventListener("mousemove", function (e) {
+        tip.innerHTML = n.getAttribute("data-tip"); tip.style.display = "block";
+        var x = e.clientX + 14, y = e.clientY + 14, w = tip.offsetWidth, h = tip.offsetHeight;
+        if (x + w > innerWidth - 8) x = e.clientX - w - 14; if (y + h > innerHeight - 8) y = e.clientY - h - 14;
+        tip.style.left = x + "px"; tip.style.top = y + "px";
+      });
+      n.addEventListener("mouseleave", function () { tip.style.display = "none"; });
+    });
+  }
+
+  function niceStep(span, n) { var raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p; return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p; }
+  function scaleOf(min, max, n) {                                                       // clean axis from min..max, always containing 0
+    min = Math.min(0, min); max = Math.max(0, max); if (max - min < 1e-12) max = min + 1;
+    var st = niceStep(max - min, n || 4), lo = Math.floor(min / st) * st, hi = Math.ceil(max / st) * st, ticks = [];
+    for (var v = lo; v <= hi + st / 2; v += st) ticks.push(Math.abs(v) < st / 1e6 ? 0 : v);
+    var padL = lo < 0 ? 15 : 0, padR = 17;                                            // room for value labels
+    return { lo: lo, hi: hi, ticks: ticks, pos: function (v) { return padL + (v - lo) / (hi - lo) * (100 - padL - padR); } };
+  }
+  function short(v) { var a = Math.abs(v); return a >= 1e6 ? fmt(v / 1e6, a >= 1e7 ? 0 : 1) + "M" : a >= 1e3 ? fmt(v / 1e3, a >= 1e4 ? 0 : 1) + "k" : fmt(v, a >= 10 || a === 0 ? 0 : a >= 1 ? 1 : 2); }
+
+  // rows: [label, value, color, tipHtml, extraClass]
+  function hbars(rows, sc, valFmt) {
+    var h = '<div class="hb">';
+    rows.forEach(function (r) {
+      if (r === "sep") { h += '<div class="sep"></div>'; return; }
+      var z = sc.pos(0), p = sc.pos(r[1]), neg = r[1] < 0, left = Math.min(z, p), w = Math.abs(p - z);
+      var vt = valFmt(r[1]), vstyle = neg ? "right:" + (100 - left + 1) + "%" : "left:calc(" + (left + w) + "% + 6px)";
+      h += '<div class="l ' + (r[4] || "") + '">' + r[0] + '</div><div class="t hit ' + (r[4] || "") + '" data-tip="' + esc(r[3] || "") + '">' +
+        '<div class="z" style="left:' + z + '%"></div><div class="b' + (neg ? " neg" : "") + '" style="--c:' + r[2] + ";left:" + left + "%;width:" + w + '%"></div>' +
+        '<span class="val" style="' + vstyle + '">' + vt + "</span></div>";
+    });
+    return h + "</div>";
+  }
+  function axis(sc, f) {
+    return '<div class="ax"><div></div><div class="tk">' + sc.ticks.map(function (t) { return '<span style="left:' + sc.pos(t) + '%">' + f(t) + "</span>"; }).join("") + "</div></div>";
+  }
+  function donut(parts) {                                                             // parts: [label, value, color, tip]
+    var tot = parts.reduce(function (s, p) { return s + p[1]; }, 0), a0 = -Math.PI / 2, R = 70, r = 44, cx = 75, cy = 75, h = '<svg viewBox="0 0 150 150" aria-hidden="true">';
+    if (parts.length === 1) return h + '<circle cx="75" cy="75" r="57" fill="none" stroke="' + parts[0][2] + '" stroke-width="26"/></svg>';
+    parts.forEach(function (p) {
+      var a1 = a0 + p[1] / tot * 2 * Math.PI, lg = a1 - a0 > Math.PI ? 1 : 0;
+      var P = function (rad, a) { return (cx + rad * Math.cos(a)).toFixed(2) + " " + (cy + rad * Math.sin(a)).toFixed(2); };
+      h += '<path data-tip="' + esc(p[3]) + '" fill="' + p[2] + '" d="M' + P(R, a0) + " A" + R + " " + R + " 0 " + lg + " 1 " + P(R, a1) + " L" + P(r, a1) + " A" + r + " " + r + " 0 " + lg + " 0 " + P(r, a0) + 'Z"/>';
+      a0 = a1;
+    });
+    return h + "</svg>";
+  }
+  function parts(s) {                                                                 // "HTL 6.61% / AND 93.39%" -> [["HTL",6.61],["AND",93.39]]
+    if (!s || s === "Inactive" || s === "Bypass" || s === "-") return [];
+    return String(s).split("/").map(function (x) { var m = x.trim().match(/^(\w+)\s*([\d.]+)?%?$/); return m ? [m[1], m[2] ? Number(m[2]) : 100] : null; })
+      .filter(function (x) { return x && x[1] > 0.005; });
+  }
+
+  function flowSvg(r) {
+    var p = r.pathway || {}, split = r.conversion_split || {}, have = {}; (r.units || []).forEach(function (u) { have[u.code] = true; });
+    var conv = Object.keys(split).map(function (k) { return [k, split[k]]; }).sort(function (a, b) { return b[1] - a[1]; });
+    if (!conv.length) conv = parts(p.conversion).map(function (x) { return [x[0], x[1] / 100]; });
+    var pre = parts(p.mechanical).map(function (x) { return x[0]; }), bio = parts(p.biological).map(function (x) { return x[0]; });
+    var rec = { AND: parts(p.biogas_upgrading).map(function (x) { return x[0]; }), HTL: parts(p.htl_recovery).map(function (x) { return x[0]; }), INC: have.STB ? ["STB"] : [] };
+    var W = 1000, colX = [10, 185, 360, 535, 710, 870], nodeW = 120, H0 = 64, gap = 18;
+    var branches = conv.map(function (c) { var code = c[0], pr = BRANCH_PROD[code]; return { code: code, f: c[1], rec: rec[code] || [], prod: pr && r.products && r.products[pr] ? pr : null }; });
+    var H = Math.max(170, branches.length * (H0 + gap) + 40), mid = H / 2;
+    var STAGE = { pre: "#1F8A5B", conv: "#6A3D9A", rec: "#C0561B" };
+    var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Treatment pathway">';
+    function node(x, y, h, col, code, sub, tipH, dashed) {
+      return '<g data-tip="' + esc(tipH || "") + '"><rect x="' + x + '" y="' + (y - h / 2) + '" width="' + nodeW + '" height="' + h + '" rx="9" fill="' + (dashed ? "#fff" : col) + '" stroke="' + col + '" stroke-width="1.5"' + (dashed ? ' stroke-dasharray="4 3"' : "") + "/>" +
+        '<text x="' + (x + nodeW / 2) + '" y="' + (y - (sub ? 3 : -5)) + '" text-anchor="middle" font-size="15" font-weight="800" fill="' + (dashed ? col : "#fff") + '">' + esc(code) + "</text>" +
+        (sub ? '<text x="' + (x + nodeW / 2) + '" y="' + (y + 14) + '" text-anchor="middle" font-size="11" fill="' + (dashed ? "#5A6B70" : "rgba(255,255,255,.9)") + '">' + esc(sub) + "</text>" : "") + "</g>";
+    }
+    function ribbon(x1, y1, x2, y2, w, col) {
+      var m = (x1 + x2) / 2;
+      return '<path d="M' + x1 + " " + (y1 - w / 2) + " C" + m + " " + (y1 - w / 2) + " " + m + " " + (y2 - w / 2) + " " + x2 + " " + (y2 - w / 2) + " L" + x2 + " " + (y2 + w / 2) + " C" + m + " " + (y2 + w / 2) + " " + m + " " + (y1 + w / 2) + " " + x1 + " " + (y1 + w / 2) + 'Z" fill="' + col + '" opacity=".22"/>';
+    }
+    var maxW = 40, by = branches.map(function (b, i) { return 20 + (H0 + gap) * i + H0 / 2 + (H - 40 - branches.length * (H0 + gap) + gap) / 2; });
+    // shared trunk
+    s += ribbon(colX[0] + nodeW, mid, colX[1], mid, maxW, STAGE.pre) + ribbon(colX[1] + nodeW, mid, colX[2], mid, maxW, STAGE.pre);
+    branches.forEach(function (b, i) {
+      var w = Math.max(3, maxW * b.f);
+      s += ribbon(colX[2] + nodeW, mid, colX[3], by[i], w, STAGE.conv);
+      if (b.rec.length) s += ribbon(colX[3] + nodeW, by[i], colX[4], by[i], w, STAGE.rec);
+      if (b.prod) s += ribbon((b.rec.length ? colX[4] : colX[3]) + nodeW, by[i], colX[5], by[i], w, PROD[b.prod][1]);
+    });
+    var fr = r.inputs_used && r.inputs_used.feed_rate_kg_h;
+    s += node(colX[0], mid, 72, "#0B2E2D", "Food waste", fr ? fmt(fr * 24 / 1000, 0) + " t/day" : "", "Food waste feed" + (fr ? "<br><b>" + fmt(fr, 0) + " kg/hr</b>" : ""));
+    s += pre.length ? node(colX[1], mid, H0, STAGE.pre, pre.join(" + "), "Pretreatment", pre.map(function (c) { return TECH_NAME[c] || c; }).join(", ")) : node(colX[1], mid, H0, STAGE.pre, "None", "Pretreatment", "No pretreatment", true);
+    s += bio.length ? node(colX[2], mid, H0, STAGE.pre, bio.join(" + "), "Biological", bio.map(function (c) { return TECH_NAME[c] || c; }).join(", ")) : node(colX[2], mid, H0, STAGE.pre, "Bypass", "Biological", "Biological pretreatment skipped", true);
+    branches.forEach(function (b, i) {
+      var pct = b.f * 100, ps = pct >= 99.995 ? "100%" : fmt(pct, pct < 1 ? 2 : 1) + "%";
+      s += node(colX[3], by[i], H0, STAGE.conv, b.code, ps + " of flow", (TECH_NAME[b.code] || b.code) + "<br><b>" + ps + "</b> of the stream");
+      if (b.rec.length) s += node(colX[4], by[i], H0, STAGE.rec, b.rec.join(" + "), "Recovery", b.rec.map(function (c) { return TECH_NAME[c] || c; }).join(", "));
+      if (b.prod) {
+        var pd = r.products[b.prod], amt = pd.unit === "kWh" ? fmt(pd.per_year / 1000, 0) + " MWh/yr" : fmt(pd.per_year / 1000, 0) + " t/yr";
+        s += '<g data-tip="' + esc(PROD[b.prod][0] + "<br><b>" + amt + "</b><br>$" + fmt(pd.revenue_MUSD_per_yr, 2) + "M per year") + '"><rect x="' + colX[5] + '" y="' + (by[i] - H0 / 2) + '" width="' + nodeW + '" height="' + H0 + '" rx="9" fill="#fff" stroke="' + PROD[b.prod][1] + '" stroke-width="2"/>' +
+          '<text x="' + (colX[5] + nodeW / 2) + '" y="' + (by[i] - 3) + '" text-anchor="middle" font-size="14" font-weight="800" fill="#0B2E2D">' + PROD[b.prod][0] + "</text>" +
+          '<text x="' + (colX[5] + nodeW / 2) + '" y="' + (by[i] + 14) + '" text-anchor="middle" font-size="11" fill="#5A6B70">' + amt + "</text></g>";
+      }
+    });
+    return s + "</svg>";
+  }
 
   function renderResults(saved) {
     if (!resSlot) return;
-    var r = saved.result, o = r.objectives, p = r.pathway;
-    var h = '<div class="er-k">' + esc(saved.name) + " &middot; " + esc(OBJ_NAME[r.objective] || r.objective) + " &middot; " + new Date(saved.when).toLocaleString() + "</div>";
-    h += '<div class="er-tiles">' +
-      '<div class="er-tile"><div class="er-k">Net annual cost</div><div class="n">' + fmt(o.NAC_MUSD_per_yr, 3) + '</div><div class="er-k">million $ per year' + (o.NAC_MUSD_per_yr < 0 ? " (negative = net profit)" : "") + '</div></div>' +
-      '<div class="er-tile"><div class="er-k">Greenhouse gas</div><div class="n">' + fmt(o.GHG_tCO2e_per_yr, 0) + '</div><div class="er-k">t CO2-eq per year</div></div>' +
-      '<div class="er-tile"><div class="er-k">Marine eutrophication</div><div class="n">' + fmt(o.EP_tN_eq_per_yr, 3) + '</div><div class="er-k">t N-eq per year</div></div></div>';
-    var chain = ["Food waste", p.mechanical, p.biological, p.conversion, p.htl_recovery !== "Inactive" ? p.htl_recovery : null,
-      p.biogas_upgrading !== "Inactive" ? p.biogas_upgrading : null].filter(function (x) { return x && x !== "-" && x !== ""; });
-    h += '<div class="er-h">Recommended pathway</div><div class="er-chain">' + chain.map(function (c, i) {
-      return (i ? '<span class="er-arrow">&rarr;</span>' : "") + '<span class="er-chip">' + esc(c) + "</span>";
-    }).join("") + "</div>";
-    if (r.units && r.units.length) {
+    var r = saved.result, o = r.objectives || {}, c = r.cost_breakdown_MUSD_per_yr || {};
+    var goalCol = { NAC: ["#9A5B13", "#FBF1E4"], GHG: ["#1F8A5B", "#E9F6EF"], EP: ["#1F8A5B", "#E9F6EF"], BALANCE: ["#6A3D9A", "#F2ECF9"] }[r.objective] || ["#0E4A42", "#E3F1EC"];
+    var h = '<div class="rs"><div class="rs-top"><span class="rs-name">' + esc(saved.name) + '</span><span class="rs-pill" style="--gc:' + goalCol[0] + ";--gt:" + goalCol[1] + '">' + esc(OBJ_NAME[r.objective] || r.objective) + "</span>" +
+      '<span class="rs-when">' + new Date(saved.when).toLocaleString() + (r.solve_time_s != null ? " &middot; solved in " + fmt(r.solve_time_s, 1) + " s" : "") + "</span>" +
+      '<button type="button" class="er-btn2" id="er-dl">Download results (JSON)</button></div>';
+
+    // Show only what belongs to the goal the user ran
+    var show = { cost: r.objective === "NAC", ghg: r.objective === "GHG", ep: r.objective === "EP", bal: r.objective === "BALANCE" };
+    var tCost = '<div class="rs-tile" style="--c:#9A5B13"><div class="k">Net annual cost</div><div class="v">' + (o.NAC_MUSD_per_yr < 0 ? "-$" : "$") + fmt(Math.abs(o.NAC_MUSD_per_yr), 2) + 'M</div><div class="u">per year</div>' + (o.NAC_MUSD_per_yr < 0 ? '<span class="tag">Net profit</span>' : "") + "</div>";
+    var tGhg = '<div class="rs-tile" style="--c:#1F8A5B"><div class="k">Greenhouse gas</div><div class="v">' + fmt(o.GHG_tCO2e_per_yr, 0) + '</div><div class="u">t CO2-eq per year</div>' + (o.GHG_tCO2e_per_yr < 0 ? '<span class="tag">Net reduction</span>' : "") + "</div>";
+    var tEp = '<div class="rs-tile" style="--c:#1D6FB8"><div class="k">Marine eutrophication</div><div class="v">' + fmt(o.EP_tN_eq_per_yr, 2) + '</div><div class="u">t N-eq per year</div></div>';
+    h += '<div class="rs-tiles' + (show.bal ? "" : " one") + '">' + (show.cost ? tCost : show.ghg ? tGhg : show.ep ? tEp : tCost + tGhg + tEp) + "</div>";
+    var halves = 0;
+
+    h += '<div class="rs-grid">';
+    // Pathway flow
+    h += '<section class="rs-card wide"><h3>Recommended treatment pathway</h3><div class="sub">Band width shows the share of the food waste stream. Hover a box for details.</div><div class="rs-flow">' + flowSvg(r) + "</div></section>";
+
+    // Annual costs
+    var costKeys = ["Annualized_capital", "Labour", "Overhead", "Working_capital", "Insurance", "Utilities", "Disposal", "Materials_and_fuel", "Fixed_charge"]
+      .filter(function (k) { return c[k] != null && Math.abs(c[k]) > 1e-6; }).sort(function (a, b) { return c[b] - c[a]; });
+    if (show.cost && costKeys.length) { halves++;
+      var csc = scaleOf(0, Math.max.apply(null, costKeys.map(function (k) { return c[k]; })));
+      h += '<section class="rs-card"><h3>Annual costs</h3><div class="sub">Million $ per year</div>' +
+        hbars(costKeys.map(function (k) { return [COST_LABEL[k], c[k], "#9A5B13", COST_LABEL[k] + "<br><b>$" + fmt(c[k], 3) + "M</b> per year<br>" + fmt(c[k] / c.Total_cost * 100, 1) + "% of total cost"]; }), csc, function (v) { return "$" + fmt(v, 2) + "M"; }) +
+        axis(csc, function (t) { return "$" + short(t) + "M"; }) +
+        '<div class="rs-sum"><span>Total cost <b>$' + fmt(c.Total_cost, 2) + 'M</b></span><span>Revenue <b>$' + fmt(c.Total_revenue, 2) + 'M</b></span><span>Net <b>' + (o.NAC_MUSD_per_yr < 0 ? "-$" : "$") + fmt(Math.abs(o.NAC_MUSD_per_yr), 2) + "M</b></span></div></section>";
+    }
+
+    // Revenue sources (donut)
+    var rev = [];
+    if (c.Tipping_revenue > 1e-6) rev.push(["Tipping fees", c.Tipping_revenue, CAT[0], null]);
+    Object.keys(PROD).forEach(function (k) { var pd = r.products && r.products[k]; if (pd && pd.revenue_MUSD_per_yr > 1e-6) rev.push([PROD[k][0] + " sales", pd.revenue_MUSD_per_yr, PROD[k][1], pd]); });
+    if (show.cost && rev.length) { halves++;
+      var rt = rev.reduce(function (s, x) { return s + x[1]; }, 0);
+      h += '<section class="rs-card"><h3>Revenue sources</h3><div class="sub">Million $ per year</div><div class="dn">' +
+        donut(rev.map(function (x) { return [x[0], x[1], x[2], x[0] + "<br><b>$" + fmt(x[1], 2) + "M</b> per year<br>" + fmt(x[1] / rt * 100, 1) + "%"]; })) +
+        '<div class="lg">' + rev.map(function (x) {
+          var amt = x[3] ? (x[3].unit === "kWh" ? fmt(x[3].per_year / 1000, 0) + " MWh" : fmt(x[3].per_year / 1000, 0) + " t") + " per year" : "";
+          return '<div style="--c:' + x[2] + '"><i></i><span>' + x[0] + "</span><b>$" + fmt(x[1], 2) + "M</b>" + (amt ? "<small>" + amt + "</small>" : "") + "</div>";
+        }).join("") + "</div></div>";
+      var negP = Object.keys(r.products || {}).filter(function (k) { return r.products[k].revenue_MUSD_per_yr < -1e-6; });
+      if (negP.length) h += '<div class="rs-note">' + negP.map(function (k) { return PROD[k][0] + " cost $" + fmt(-r.products[k].revenue_MUSD_per_yr, 2) + "M per year to dispose"; }).join(". ") + ".</div>";
+      h += "</section>";
+    }
+
+    // GHG by source (diverging)
+    var g = r.ghg_breakdown_t_per_yr;
+    if (show.ghg && g) { halves++;
+      var gk = Object.keys(GHG_LABEL).filter(function (k) { return g[k] != null && Math.abs(g[k]) > 0.5; });
+      var gv = gk.map(function (k) { return g[k]; }).concat([o.GHG_tCO2e_per_yr]);
+      var gsc = scaleOf(Math.min.apply(null, gv), Math.max.apply(null, gv));
+      h += '<section class="rs-card"><h3>Greenhouse gas by source</h3><div class="sub">t CO2-eq per year. Credits are emissions avoided by the products.</div>' +
+        hbars(gk.map(function (k) { var v = g[k]; return [GHG_LABEL[k], v, v < 0 ? "#2a78d6" : "#eb6834", GHG_LABEL[k] + "<br><b>" + fmt(v, 0) + "</b> t CO2-eq/yr"]; })
+          .concat(["sep", ["Net", o.GHG_tCO2e_per_yr, "#0B2E2D", "Net greenhouse gas<br><b>" + fmt(o.GHG_tCO2e_per_yr, 0) + "</b> t CO2-eq/yr", "row-net"]]), gsc, function (v) { return short(v); }) +
+        axis(gsc, short) + "</section>";
+    }
+
+    // Equipment purchase cost
+    var units = (r.units || []).filter(function (u) { return u.purchase_cost_usd > 0.5; }).sort(function (a, b) { return b.purchase_cost_usd - a.purchase_cost_usd; });
+    if (show.cost && units.length) { halves++;
+      var usc = scaleOf(0, units[0].purchase_cost_usd);
+      h += '<section class="rs-card"><h3>Equipment purchase cost</h3><div class="sub">$ per unit, before installation</div>' +
+        hbars(units.map(function (u) { return [esc(u.code) + " &middot; " + esc(TECH_NAME[u.code] || u.name), u.purchase_cost_usd, "#6A3D9A", esc(u.name) + "<br><b>$" + fmt(u.purchase_cost_usd, 0) + "</b><br>Capacity " + fmt(u.capacity, 2)]; }), usc, function (v) { return "$" + short(v); }) +
+        axis(usc, function (t) { return "$" + short(t); }) + "</section>";
+    }
+
+    // Trade-off (Best balance)
+    if (show.bal && r.balance && r.balance.payoff_table) {
+      var rows = r.balance.payoff_table.map(function (row) { return [{ NAC: "Lowest cost", GHG: "Lowest GHG", EP: "Lowest EP" }[row.minimized] || row.minimized, row, "#B5C3BF"]; })
+        .concat([["Best balance", { NAC: o.NAC_MUSD_per_yr, GHG: o.GHG_tCO2e_per_yr, EP: o.EP_tN_eq_per_yr }, "#6A3D9A"]]);
+      var M = [["NAC", "Net annual cost", "M$/yr", function (v) { return (v < 0 ? "-$" : "$") + fmt(Math.abs(v), 2) + "M"; }], ["GHG", "Greenhouse gas", "t CO2-eq/yr", function (v) { return short(v); }], ["EP", "Eutrophication", "t N-eq/yr", function (v) { return fmt(v, v >= 100 ? 0 : 1); }]];
+      h += '<section class="rs-card wide"><h3>Trade-off between the three goals</h3><div class="sub">Each grey bar is the design that is best for one goal. Best balance is the design closest to the best of all three.</div><div class="tm">' +
+        M.map(function (m) {
+          var vals = rows.map(function (x) { return x[1][m[0]]; }), sc = scaleOf(Math.min.apply(null, vals), Math.max.apply(null, vals), 2);
+          return "<div><h4>" + m[1] + ' <span style="font-weight:500;color:#5A6B70">(' + m[2] + ")</span></h4>" +
+            hbars(rows.map(function (x) { return [x[0], x[1][m[0]], x[2], x[0] + " design<br><b>" + m[3](x[1][m[0]]) + "</b> " + m[2] + (x[1].conversion_route ? "<br>Conversion: " + x[1].conversion_route : ""), x[0] === "Best balance" ? "row-net" : ""]; }), sc, m[3]) +
+            axis(sc, m[0] === "NAC" ? function (t) { return (t < 0 ? "-$" : "$") + short(Math.abs(t)) + "M"; } : short) + "</div>";
+        }).join("") + "</div></section>";
+    }
+    // Marine eutrophication by source
+    var ep = r.ep_breakdown_t_per_yr;
+    if (show.ep && ep) { halves++;
+      var ek = Object.keys(EP_LABEL).filter(function (k) { return ep[k] != null && Math.abs(ep[k]) > 0.0005; });
+      var ev = ek.map(function (k) { return ep[k]; }).concat([o.EP_tN_eq_per_yr]);
+      var esc2 = scaleOf(Math.min.apply(null, ev), Math.max.apply(null, ev));
+      var ef = function (v) { var a = Math.abs(v); return fmt(v, a >= 100 ? 0 : a >= 10 ? 1 : a >= 1 ? 2 : 3); };
+      h += '<section class="rs-card"><h3>Marine eutrophication by source</h3><div class="sub">t N-eq per year. Credits are impacts avoided by the products.</div>' +
+        hbars(ek.map(function (k) { var v = ep[k]; return [EP_LABEL[k], v, v < 0 ? "#2a78d6" : "#eb6834", EP_LABEL[k] + "<br><b>" + ef(v) + "</b> t N-eq/yr"]; })
+          .concat(["sep", ["Net", o.EP_tN_eq_per_yr, "#0B2E2D", "Net marine eutrophication<br><b>" + ef(o.EP_tN_eq_per_yr) + "</b> t N-eq/yr", "row-net"]]), esc2, ef) +
+        axis(esc2, ef) + "</section>";
+    }
+
+    // Feedstock composition
+    var fd = r.inputs_used && r.inputs_used.feed;
+    if (fd) {
+      var fp = FEED_PARTS.filter(function (x) { return fd[x[0]] > 0; }).map(function (x, i) { return [x[1], fd[x[0]], CAT[i]]; });
+      var oth = 100 - fp.reduce(function (s, x) { return s + x[1]; }, 0); if (oth > 0.05) fp.push(["Other organics", oth, CAT[5]]);
+      h += '<section class="rs-card' + (halves % 2 ? "" : " wide") + '"><h3>Feedstock composition</h3><div class="sub">Dry basis, %. Moisture is ' + fmt(fd["Moisture (%)"], 1) + "% of the wet feed.</div>" +
+        '<div class="sb">' + fp.map(function (x) { return '<div data-tip="' + esc(x[0] + "<br><b>" + fmt(x[1], 2) + "%</b> dry basis") + '" style="--c:' + x[2] + ";flex:" + x[1] + ' 1 0">' + (x[1] >= 8 ? fmt(x[1], 1) + "%" : "") + "</div>"; }).join("") + "</div>" +
+        '<div class="sbl">' + fp.map(function (x) { return '<span style="--c:' + x[2] + '"><i></i>' + x[0] + " <b>" + fmt(x[1], 1) + "%</b></span>"; }).join("") + "</div></section>";
+    }
+
+    h += "</div>";
+
+    // Data tables (same numbers as the figures)
+    h += '<details class="rs-det"><summary>Data tables and notes</summary>';
+    if (show.cost && r.units && r.units.length) {
       h += '<div class="er-h">Equipment</div><table class="er-tbl"><thead><tr><th>Unit</th><th class="r">Capacity</th><th class="r">Purchase cost ($)</th></tr></thead><tbody>' +
         r.units.map(function (u) { return "<tr><td>" + esc(u.name) + " (" + esc(u.code) + ')</td><td class="r">' + fmt(u.capacity, 2) + '</td><td class="r">' + fmt(u.purchase_cost_usd, 0) + "</td></tr>"; }).join("") +
         '</tbody></table><div class="er-note">Capacity units are the reference-capacity units listed on the Cost Assumptions step.</div>';
     }
-    var c = r.cost_breakdown_MUSD_per_yr || {};
-    if (Object.keys(c).length) {
+    if ((show.cost || show.bal) && Object.keys(c).length) {
       h += '<div class="er-h">Annual cost breakdown</div><table class="er-tbl"><thead><tr><th>Item</th><th class="r">Million $ per year</th></tr></thead><tbody>' +
-        Object.keys(COST_LABEL).filter(function (k) { return k in c; }).map(function (k) {
-          return "<tr><td>" + COST_LABEL[k] + '</td><td class="r">' + fmt(c[k], 4) + "</td></tr>";
-        }).join("") + "</tbody></table>";
+        Object.keys(COST_LABEL).filter(function (k) { return k in c; }).map(function (k) { return "<tr><td>" + COST_LABEL[k] + '</td><td class="r">' + fmt(c[k], 4) + "</td></tr>"; }).join("") + "</tbody></table>";
     }
-    if (r.balance) {
+    if (show.ghg && g) {
+      h += '<div class="er-h">Greenhouse gas by source</div><table class="er-tbl"><thead><tr><th>Source</th><th class="r">t CO2-eq per year</th></tr></thead><tbody>' +
+        Object.keys(GHG_LABEL).filter(function (k) { return k in g; }).map(function (k) { return "<tr><td>" + GHG_LABEL[k] + '</td><td class="r">' + fmt(g[k], 1) + "</td></tr>"; }).join("") +
+        '<tr><td><b>Net</b></td><td class="r"><b>' + fmt(o.GHG_tCO2e_per_yr, 1) + "</b></td></tr></tbody></table>";
+    }
+    if (show.ep && ep) {
+      h += '<div class="er-h">Marine eutrophication by source</div><table class="er-tbl"><thead><tr><th>Source</th><th class="r">t N-eq per year</th></tr></thead><tbody>' +
+        Object.keys(EP_LABEL).filter(function (k) { return k in ep; }).map(function (k) { return "<tr><td>" + EP_LABEL[k] + '</td><td class="r">' + fmt(ep[k], 4) + "</td></tr>"; }).join("") +
+        '<tr><td><b>Net</b></td><td class="r"><b>' + fmt(o.EP_tN_eq_per_yr, 4) + "</b></td></tr></tbody></table>";
+    }
+    if (r.balance && show.bal) {
       h += '<div class="er-h">Trade-off extremes</div><table class="er-tbl"><thead><tr><th>Design that minimizes</th><th class="r">Cost (M$/yr)</th><th class="r">GHG (t CO2-eq/yr)</th><th class="r">EP (t N-eq/yr)</th></tr></thead><tbody>' +
         r.balance.payoff_table.map(function (row) {
           return "<tr><td>" + esc(OBJ_NAME[row.minimized] || row.minimized) + '</td><td class="r">' + fmt(row.NAC, 3) + '</td><td class="r">' + fmt(row.GHG, 0) + '</td><td class="r">' + fmt(row.EP, 3) + "</td></tr>";
-        }).join("") + '</tbody></table><div class="er-note">Best balance picks the design closest to the best value of all three at once, each scaled by its range above.</div>';
+        }).join("") + "</tbody></table>";
+    }
+    if ((show.cost || show.ghg) && r.products && Object.keys(r.products).length) {
+      h += '<div class="er-h">Products</div><table class="er-tbl"><thead><tr><th>Product</th><th class="r">Amount per year</th><th class="r">Revenue (M$/yr)</th></tr></thead><tbody>' +
+        Object.keys(r.products).map(function (k) { var pd = r.products[k]; return "<tr><td>" + (PROD[k] ? PROD[k][0] : k) + '</td><td class="r">' + fmt(pd.per_year, 0) + " " + pd.unit + '</td><td class="r">' + fmt(pd.revenue_MUSD_per_yr, 4) + "</td></tr>"; }).join("") + "</tbody></table>";
     }
     var notes = (r.notes || []).slice();
     if (r.defaults_used && r.defaults_used.length) notes.unshift("Model default values were used for: " + r.defaults_used.join(", ") + ".");
-    notes.push("Solved with " + r.solver + " in " + r.solve_time_s + " s in your browser. The result is the proven global optimum of the model.");
-    h += '<div class="er-h">Notes</div>' + notes.map(function (n) { return '<div class="er-note">' + esc(n) + "</div>"; }).join("");
-    h += '<div style="margin-top:14px"><button type="button" class="er-btn2" id="er-dl">Download results (JSON)</button></div>';
+    notes.push("Solved with " + r.solver + (r.solve_time_s != null ? " in " + r.solve_time_s + " s" : "") + ". The result is the proven global optimum of the model.");
+    h += '<div class="er-h">Notes</div>' + notes.map(function (n) { return '<div class="er-note">' + esc(n) + "</div>"; }).join("") + '<div style="height:10px"></div></details></div>';
+
     resSlot.className = ""; resSlot.innerHTML = h;
+    bindTips(resSlot);
     el("er-dl").addEventListener("click", function () {
       var b = new Blob([JSON.stringify(saved, null, 2)], { type: "application/json" });
       var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "ecofast_result.json"; a.click();
