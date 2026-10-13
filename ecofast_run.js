@@ -649,7 +649,7 @@
     h += "</div>";
 
     // Data tables (same numbers as the figures)
-    h += forPdf ? '<div class="rp-tables"><h2 class="rp-h2 rp-break">Data tables</h2>' : '<details class="rs-det"><summary>Data tables and notes</summary>';
+    h += forPdf ? '<div class="rp-tables"><h2 class="rp-h2 rp-break">Data tables</h2>' : '<details class="rs-det"><summary>Data tables</summary>';
     if (show.cost && r.units && r.units.length) {
       h += '<div class="er-h">Equipment</div><table class="er-tbl"><thead><tr><th>Unit</th><th class="r">Capacity</th><th class="r">Purchase cost ($)</th></tr></thead><tbody>' +
         r.units.map(function (u) { return "<tr><td>" + esc(u.name) + " (" + esc(u.code) + ')</td><td class="r">' + fmt(u.capacity, 2) + '</td><td class="r">' + fmt(u.purchase_cost_usd, 0) + "</td></tr>"; }).join("") +
@@ -679,10 +679,7 @@
       h += '<div class="er-h">Products</div><table class="er-tbl"><thead><tr><th>Product</th><th class="r">Amount per year</th><th class="r">Revenue (M$/yr)</th></tr></thead><tbody>' +
         Object.keys(r.products).map(function (k) { var pd = r.products[k]; return "<tr><td>" + (PROD[k] ? PROD[k][0] : k) + '</td><td class="r">' + fmt(pd.per_year, 0) + " " + pd.unit + '</td><td class="r">' + fmt(pd.revenue_MUSD_per_yr, 4) + "</td></tr>"; }).join("") + "</tbody></table>";
     }
-    var notes = (r.notes || []).slice();
-    if (r.defaults_used && r.defaults_used.length) notes.unshift("Model default values were used for: " + r.defaults_used.join(", ") + ".");
-    notes.push("Solved with " + r.solver + (r.solve_time_s != null ? " in " + r.solve_time_s + " s" : "") + ". The result is the proven global optimum of the model.");
-    h += '<div class="er-h">Notes</div>' + notes.map(function (n) { return '<div class="er-note">' + esc(n) + "</div>"; }).join("") + '<div style="height:10px"></div>' + (forPdf ? "</div>" : "</details>") + "</div>";
+    h += '<div style="height:10px"></div>' + (forPdf ? "</div>" : "</details>") + "</div>";
     return h;
   }
 
