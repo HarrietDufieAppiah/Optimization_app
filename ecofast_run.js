@@ -162,12 +162,14 @@
     ".rr-chip.ok{background:#E9F6EF;color:#1F7A4A}.rr-chip.wait{background:#FFF4DC;color:#8A5A00}.rr-chip.wait i{animation:rr-pulse 1s ease-in-out infinite}",
     "@keyframes rr-pulse{50%{opacity:.25}}",
     ".rr-go .rr-chip{margin-left:auto}",
+    ".rr-save{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 18px;border:1.5px solid #0E4A42;border-radius:8px;background:#fff;color:#0E4A42;font:inherit;font-size:15px;font-weight:600;cursor:pointer;flex:none}",
+    ".rr-save:hover{background:#F2F7F5}.rr-save svg{width:19px;height:19px}",
     ".rr-cancel{height:40px;padding:0 18px;border:1.5px solid #C9D3D0;border-radius:8px;background:#fff;color:#33413D;font:inherit;font-size:14px;font-weight:600;cursor:pointer;flex:none}",
     ".rr-cancel:hover{border-color:#B42318;color:#B42318}",
     ".rr-err{margin-top:12px;padding:10px 12px;border-radius:8px;background:#FEECEB;color:#B42318;font-size:13px;line-height:1.45}",
     ".rr-warn{margin-top:10px;padding:8px 10px;border-radius:8px;background:#FFF4DC;color:#8A5A00;font-size:12px;line-height:1.45}",
     "@media (max-width:1100px){.rr-checks{grid-template-columns:repeat(2,minmax(0,1fr))}.rr-prog{grid-template-columns:repeat(2,minmax(0,1fr))}}",
-    "@media (max-width:760px){.rr-goals,.rr-checks,.rr-prog{grid-template-columns:1fr}.rr-go,.rr-pt{flex-direction:column;align-items:stretch}.rr-go .btn-run{width:100%}.rr-go .rr-note,.rr-pt .rr-note{text-align:center;max-width:none}.rr-pt .rr-time{text-align:center}}",
+    "@media (max-width:760px){.rr-goals,.rr-checks,.rr-prog{grid-template-columns:1fr}.rr-go,.rr-pt{flex-direction:column;align-items:stretch}.rr-go .btn-run{width:100%}.rr-save{justify-content:center}.rr-go .rr-note,.rr-pt .rr-note{text-align:center;max-width:none}.rr-pt .rr-time{text-align:center}}",
     /* Results */
     ".er-msg{margin:10px 0;padding:10px 12px;border-radius:8px;font-size:14px}",
     ".er-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:14px 0}",
@@ -185,6 +187,10 @@
     ".er-btn2{height:40px;padding:0 16px;border:1.5px solid #114D47;border-radius:6px;background:#fff;color:#114D47;font:inherit;font-weight:600;cursor:pointer}",
     ".er-btn2:hover{background:#F2F6F5}",
     "@keyframes er-s{to{transform:rotate(360deg)}}",
+    ".er-empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:48px 20px;border:2px dashed #CFDCD8;border-radius:14px;background:#FAFCFB;max-width:1100px}",
+    ".er-eico{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#E3F1EC;color:#0E4A42}.er-eico svg{width:32px;height:32px}",
+    ".er-et{margin-top:14px;font-size:20px;font-weight:800;color:#0B2E2D}.er-ed{margin:4px 0 18px;font-size:15px;color:#4A6460;max-width:380px}",
+    ".er-go{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:8px;background:#0E4A42;color:#fff;font-size:15px;font-weight:700;text-decoration:none}.er-go:hover{background:#0B3B35}",
     "@media (max-width:600px){.er-tbl{font-size:13px}.er-tbl th,.er-tbl td{padding:6px}}"
   ].join("");
   document.head.appendChild(css);
@@ -223,6 +229,14 @@
   var ICO_OK = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#1F8A5B"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var ICO_WARN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#E8B62C"/><path d="M12 7v6.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17" r="1.4" fill="#fff"/></svg>';
   var ICO_PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 8.5l6 3.5-6 3.5z" fill="currentColor"/></svg>';
+  var ICO_SAVE = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h11l3.5 3.5v13.5H5z"/><path d="M8 3.5v5h7v-5M8 20.5v-6h8v6"/></g></svg>';
+  var savedMsg = "", savedTimer = null;
+  function saveProject() {                                                 // My Projects (index.html) listens and saves
+    var d = { ok: false }; window.dispatchEvent(new CustomEvent("ecofast:save", { detail: d }));
+    savedMsg = d.ok ? "Saved to My Projects." : "Could not save in this browser.";
+    var n = el("rr-note"); if (n) n.textContent = savedMsg;
+    clearTimeout(savedTimer); savedTimer = setTimeout(function () { savedMsg = ""; renderSide(); }, 2500);
+  }
   var ICO_TICK = '<svg viewBox="0 0 24 24"><path d="M6 12.5l4 4L18 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   function checks(q) {
     var name = ((el("fs-name") || {}).value || "").trim(), type = (el("fs-type") || {}).value;
@@ -280,8 +294,9 @@
     var h = '<div class="rr-checks">' + st.map(function (s) { return '<div class="rr-check">' + (s[0] ? ICO_OK : ICO_WARN) + "<span>" + s[1] + '<small class="' + (s[0] ? "" : "bad") + '">' + esc(s[2]) + "</small></span></div>"; }).join("") + "</div>";
     if (r.skipped.length) h += '<div class="rr-warn">Not used by the model, so ignored: ' + esc(r.skipped.map(caName).join(", ")) + "</div>";
     if (runErr) h += '<div class="rr-err">' + esc(runErr) + "</div>";
-    h += '<div class="rr-go"><button type="button" class="btn-run" id="rr-run"' + (ok ? "" : " disabled") + ">" + ICO_PLAY + "Run Optimization</button>";
-    h += '<div class="rr-note">' + (ok ? "Results open on the Results page." : "Complete the items above to run.") + "</div>" +
+    h += '<div class="rr-go"><button type="button" class="btn-run" id="rr-run"' + (ok ? "" : " disabled") + ">" + ICO_PLAY + "Run Optimization</button>" +
+      '<button type="button" class="rr-save" id="rr-save">' + ICO_SAVE + "Save project</button>";
+    h += '<div class="rr-note" id="rr-note">' + (savedMsg || (ok ? "Results open on the Results page." : "Complete the items above to run.")) + "</div>" +
       (modelReady ? '<span class="rr-chip ok"><i></i>Model ready</span>' : '<span class="rr-chip wait"><i></i>Loading model...</span>') + "</div>";
     return h;
   }
@@ -290,6 +305,7 @@
   function renderSide() { var s = el("rr-side"); if (!s) return; sideLoaded = modelReady; var r = buildRequest(objectiveNow()); s.innerHTML = sideHtml(r.req, r); bindSide(); }
   function bindSide() {
     var rb = el("rr-run"); if (rb) rb.addEventListener("click", run);
+    var sb = el("rr-save"); if (sb) sb.addEventListener("click", saveProject);
     var cb = el("rr-cancel"); if (cb) cb.addEventListener("click", cancelRun);
   }
   function tickSide() {
@@ -324,6 +340,7 @@
         var saved = { request: q, result: res, name: (el("fs-name") || {}).value || "Untitled", when: new Date().toISOString() };
         try { sessionStorage.setItem("ecofast_last_result", JSON.stringify(saved)); } catch (e) {}
         renderResults(saved);
+        window.dispatchEvent(new CustomEvent("ecofast:result", { detail: saved }));   // My Projects saves it
         renderRun();
         doneTitle("Done.");
         location.hash = "#results";
@@ -393,8 +410,20 @@
     });
   }
 
+  function renderNoResults() {
+    if (!resSlot) return;
+    resSlot.className = "";
+    resSlot.innerHTML = '<div class="er-empty"><span class="er-eico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4.5 20h15"/><path d="M7 19v-5M11 19V9M15 19v-7M19 19V5"/></g></svg></span>' +
+      '<div class="er-et">No results yet</div><div class="er-ed">Run an optimization on the Review &amp; Run step and the results will show here.</div>' +
+      '<a class="er-go" href="#new">Go to New Analysis</a></div>';
+  }
+
   // ---------- Start ----------
-  try { var last = JSON.parse(sessionStorage.getItem("ecofast_last_result") || "null"); if (last) renderResults(last); } catch (e) {}
+  window.addEventListener("ecofast:show-result", function (e) {           // opened from My Projects
+    try { sessionStorage.setItem("ecofast_last_result", JSON.stringify(e.detail)); } catch (x) {}
+    renderResults(e.detail);
+  });
+  try { var last = JSON.parse(sessionStorage.getItem("ecofast_last_result") || "null"); if (last) renderResults(last); else renderNoResults(); } catch (e) { renderNoResults(); }
   document.querySelectorAll('#page-new .step[data-step="4"], #page-new [data-go="4"]').forEach(function (b) {
     b.addEventListener("click", function () { renderRun(); });
   });

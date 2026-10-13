@@ -418,6 +418,72 @@
     #page-new .ea-gap { height: 18px; }
     #page-new .ea-tbl .fin { max-width: 100%; }
     @media (max-width: 760px) { main { min-width: 0; } #page-new .ea-scroll { overflow-x: auto; } #page-new .ea-tbl { min-width: 560px; } }
+
+    /* ===== My Projects ===== */
+    #page-projects .page-wrap { max-width: 1180px; }
+    #page-projects .pg-sub { margin-bottom: 22px; }
+    .pj-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .pj-search { position: relative; flex: 1 1 260px; max-width: 360px; }
+    .pj-search svg { position: absolute; left: 12px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); color: #6B7F7A; }
+    .pj-search input { width: 100%; height: 42px; padding: 0 12px 0 38px; border: 1.5px solid #CFDCD8; border-radius: 8px; font: inherit; font-size: 15px; color: #0B2E2D; background: #fff; box-sizing: border-box; }
+    .pj-search input:focus, .pj-sort:focus { outline: none; border-color: #0E4A42; box-shadow: 0 0 0 3px rgba(14,74,66,.12); }
+    .pj-seg { display: inline-flex; padding: 3px; border-radius: 9px; background: #EEF3F1; }
+    .pj-seg button { border: none; background: none; padding: 7px 13px; border-radius: 7px; font: inherit; font-size: 14px; font-weight: 600; color: #375652; cursor: pointer; }
+    .pj-seg button i { font-style: normal; margin-left: 4px; padding: 1px 7px; border-radius: 99px; background: #DCE6E2; font-size: 12px; }
+    .pj-seg button.on { background: #fff; color: #0B2E2D; box-shadow: 0 1px 3px rgba(11,46,45,.15); }
+    .pj-seg button.on i { background: #0E4A42; color: #fff; }
+    .pj-sort { height: 42px; padding: 0 10px; border: 1.5px solid #CFDCD8; border-radius: 8px; font: inherit; font-size: 14px; color: #0B2E2D; background: #fff; }
+    .pj-new { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border: none; border-radius: 8px; background: #0E4A42; color: #fff; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .pj-new:hover { background: #0B3B35; }
+    .pj-new svg { width: 18px; height: 18px; }
+    .pj-bar .pj-new { margin-left: auto; }
+    .pj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; align-items: start; }
+    .pj-card { position: relative; display: flex; flex-direction: column; padding: 18px 18px 14px; border: 1px solid #DDE5E2; border-top: 4px solid var(--sc); border-radius: 12px; background: #fff; box-shadow: 0 1px 2px rgba(11,46,45,.05); transition: box-shadow .15s, transform .15s; }
+    .pj-card:hover { box-shadow: 0 8px 22px rgba(11,46,45,.10); transform: translateY(-1px); }
+    .pj-card.done { --sc: #1F8A5B; } .pj-card.draft { --sc: #C98F00; }
+    .pj-top { display: flex; align-items: flex-start; gap: 10px; }
+    .pj-top h3 { flex: 1; margin: 0; font-size: 18px; line-height: 1.3; font-weight: 700; color: #0B2E2D; }
+    .pj-st { flex: none; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 700; }
+    .pj-st.ok { background: #E3F4EA; color: #17693F; } .pj-st.dr { background: #FFF2D6; color: #8A5A00; }
+    .pj-more { flex: none; width: 30px; height: 26px; margin: -2px -6px 0 0; border: none; border-radius: 6px; background: none; color: #5A6B70; cursor: pointer; display: grid; place-items: center; }
+    .pj-more:hover { background: #EEF3F1; } .pj-more svg { width: 18px; height: 18px; }
+    .pj-menu { display: none; position: absolute; right: 12px; top: 46px; z-index: 5; min-width: 150px; padding: 5px; border: 1px solid #DDE5E2; border-radius: 9px; background: #fff; box-shadow: 0 10px 28px rgba(11,46,45,.16); }
+    .pj-card.menu .pj-menu { display: block; }
+    .pj-menu button { display: block; width: 100%; padding: 8px 10px; border: none; border-radius: 6px; background: none; text-align: left; font: inherit; font-size: 14px; color: #0B2E2D; cursor: pointer; }
+    .pj-menu button:hover { background: #F2F7F5; } .pj-menu button.red { color: #B42318; } .pj-menu button.red:hover { background: #FEECEB; }
+    .pj-desc { margin: 6px 0 0; font-size: 14px; line-height: 1.45; color: #4A6460; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .pj-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .pj-tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 99px; font-size: 12.5px; font-weight: 600; color: var(--t); background: color-mix(in srgb, var(--t) 11%, #fff); }
+    .pj-tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--t); }
+    .pj-tag.plain { color: #375652; background: #F1F5F4; font-weight: 500; }
+    .pj-tag svg { width: 13px; height: 13px; }
+    .pj-res { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+    .pj-res div { padding: 9px 10px; border-radius: 8px; background: #F6F9F8; }
+    .pj-res div:nth-child(1) { background: #FBF3E8; } .pj-res div:nth-child(2) { background: #EAF5EF; } .pj-res div:nth-child(3) { background: #EAF1FA; }
+    .pj-res span { display: block; font-size: 11.5px; color: #4A6460; }
+    .pj-res b { display: block; margin-top: 1px; font-size: 18px; font-weight: 800; color: #0B2E2D; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .pj-res small { font-size: 11px; color: #6B7F7A; }
+    .pj-path { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 10px; font-size: 12.5px; }
+    .pj-fw { color: #4A6460; } .pj-ar { color: #9AAAA6; }
+    .pj-u { padding: 2px 8px; border-radius: 6px; background: #0E4A42; color: #fff; font-weight: 700; }
+    .pj-prog { margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #FFF8E8; }
+    .pj-bars { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+    .pj-bars i { height: 6px; border-radius: 3px; background: #EADFC4; }
+    .pj-bars i.on { background: #C98F00; }
+    .pj-prog span { display: block; margin-top: 7px; font-size: 12.5px; font-weight: 600; color: #7A5200; }
+    .pj-foot { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 14px; }
+    .pj-meta { flex: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 12.5px; color: #6B7F7A; }
+    .pj-goal { padding: 2px 9px; border-radius: 99px; background: var(--gt); color: var(--gc); font-weight: 700; }
+    .pj-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border: 1.5px solid #0E4A42; border-radius: 8px; background: #fff; color: #0E4A42; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .pj-card.done .pj-btn { background: #0E4A42; color: #fff; }
+    .pj-btn:hover { filter: brightness(.95); } .pj-btn svg { width: 16px; height: 16px; }
+    .pj-empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px 20px; border: 2px dashed #CFDCD8; border-radius: 14px; background: #FAFCFB; }
+    .pj-eico { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #E3F1EC; color: #0E4A42; }
+    .pj-eico svg { width: 32px; height: 32px; }
+    .pj-et { margin-top: 14px; font-size: 20px; font-weight: 800; color: #0B2E2D; }
+    .pj-ed { margin: 4px 0 18px; font-size: 15px; color: #4A6460; max-width: 380px; }
+    .pj-none { padding: 30px; text-align: center; color: #4A6460; }
+    @media (max-width: 640px) { .pj-grid { grid-template-columns: 1fr; } .pj-bar .pj-new { margin-left: 0; width: 100%; justify-content: center; } .pj-search { max-width: none; } .pj-res b { font-size: 16px; } }
   </style>
 </head>
 <body>
@@ -611,8 +677,14 @@
         <div class="page-wrap">
           <div class="pg-eyebrow">MY PROJECTS</div>
           <h1 class="pg-title">My Projects</h1>
-          <p class="pg-sub">Your saved analyses in one place.</p>
-          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">Your past analyses and their results will be listed here.</div></div></div>
+          <p class="pg-sub">Your saved analyses, kept in this browser.</p>
+          <div class="pj-bar">
+            <label class="pj-search"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></g></svg><input id="pj-search" type="search" placeholder="Search projects" aria-label="Search projects"></label>
+            <div class="pj-seg" id="pj-count"></div>
+            <select class="pj-sort" id="pj-sort" aria-label="Sort"><option value="updated">Last edited</option><option value="name">Name</option></select>
+            <button type="button" class="pj-new" id="pj-newbtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>New Analysis</button>
+          </div>
+          <div id="pj-list"></div>
           <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
         </div>
       </div>
@@ -1167,6 +1239,167 @@
         setTimeout(function () { el("ea-saved").textContent = ""; }, 2500);
       });
       eaRender();
+      // ---------- My Projects (saved in this browser) ----------
+      var PJ_KEY = "ecofast_projects", PJ_CUR = "ecofast_current_project";
+      var STEP_NAMES = ["Feedstock", "Pathways", "Cost Assumptions", "Environmental Assumptions", "Review & Run"];
+      var curStep = 0;
+      document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { curStep = Number(b.dataset.step); }); });
+      document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { curStep = Number(b.dataset.go); }); });
+      function pjLoad() { try { return JSON.parse(localStorage.getItem(PJ_KEY) || "[]") || []; } catch (e) { return []; } }
+      function pjStore(list) { try { localStorage.setItem(PJ_KEY, JSON.stringify(list)); return true; } catch (e) { return false; } }
+      function pjCurId() { try { return sessionStorage.getItem(PJ_CUR); } catch (e) { return null; } }
+      function pjSetCur(id) { try { if (id) sessionStorage.setItem(PJ_CUR, id); else sessionStorage.removeItem(PJ_CUR); } catch (e) {} }
+      function pjDiff(DEF, VAL) { var o = {}; Object.keys(DEF).forEach(function (k) { if (VAL[k] !== DEF[k]) o[k] = VAL[k]; }); return o; }
+      function pjSnapshot() {
+        var f = {}; FIELDS.forEach(function (id) { f[id] = el(id).value; });
+        return { name: el("fs-name").value.trim() || "Untitled analysis", desc: el("fs-desc").value.trim(), loc: el("fs-loc").value.trim(),
+          type: el("fs-type").value, form: f, cost: pjDiff(CA_DEF, CA_VAL), env: pjDiff(EA_DEF, EA_VAL), goal: goal, step: curStep };
+      }
+      function pjSave(extra) {
+        var list = pjLoad(), id = pjCurId(), now = new Date().toISOString();
+        var p = list.filter(function (x) { return x.id === id; })[0];
+        if (!p) { p = { id: "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), created: now, status: "draft" }; list.unshift(p); pjSetCur(p.id); }
+        var s = pjSnapshot(); Object.keys(s).forEach(function (k) { p[k] = s[k]; });
+        if (extra) Object.keys(extra).forEach(function (k) { p[k] = extra[k]; });
+        p.updated = now;
+        return pjStore(list);
+      }
+      ["fs-save", "ca-save", "ea-save"].forEach(function (b) { el(b).addEventListener("click", function () { pjSave(); }); });
+      window.addEventListener("ecofast:save", function (e) { curStep = 4; e.detail.ok = pjSave(); });
+      window.addEventListener("ecofast:result", function (e) { curStep = 4; pjSave({ status: "done", result: e.detail.result, when: e.detail.when }); });
+
+      function pjRestore(p) {
+        el("fs-type").value = p.type || "";
+        FIELDS.forEach(function (id) { if (p.form && p.form[id] != null) el(id).value = p.form[id]; });
+        if (!el("fs-name").value) el("fs-name").value = p.name || ""; if (!el("fs-desc").value) el("fs-desc").value = p.desc || ""; if (!el("fs-loc").value) el("fs-loc").value = p.loc || "";
+        rateUnit = el("fs-rateu").value; updateComp();
+        Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = p.cost && k in p.cost ? p.cost[k] : CA_DEF[k]; });
+        Object.keys(EA_DEF).forEach(function (k) { EA_VAL[k] = p.env && k in p.env ? p.env[k] : EA_DEF[k]; });
+        caRender(); eaRender();
+        goal = p.goal || null; try { if (goal) sessionStorage.setItem("ecofast_goal", goal); } catch (e) {}
+        renderSummary();
+        pjSetCur(p.id);
+      }
+      function pjOpen(id, where) {
+        var p = pjLoad().filter(function (x) { return x.id === id; })[0]; if (!p) return;
+        pjRestore(p);
+        if (where === "results" && p.result) {
+          window.dispatchEvent(new CustomEvent("ecofast:show-result", { detail: { request: null, result: p.result, name: p.name, when: p.when || p.updated } }));
+          location.hash = "#results";
+        } else {
+          curStep = where === "start" ? 0 : (p.step || 0);
+          location.hash = "#new"; setTimeout(function () { var s = document.querySelector('#page-new .step[data-step="' + curStep + '"]'); if (s) s.click(); }, 0);
+        }
+      }
+      function pjNew() {
+        pjSetCur(null);
+        FIELDS.forEach(function (id) { var x = el(id); x.value = x.tagName === "SELECT" ? x.options[0].value : ""; });
+        el("fs-rate").value = "10000"; el("fs-hours").value = "7920"; rateUnit = el("fs-rateu").value; updateComp();
+        Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = CA_DEF[k]; });
+        Object.keys(EA_DEF).forEach(function (k) { EA_VAL[k] = EA_DEF[k]; });
+        caRender(); eaRender(); renderSummary();
+        curStep = 0; location.hash = "#new"; setTimeout(function () { document.querySelector('#page-new .step[data-step="0"]').click(); }, 0);
+      }
+
+      var PJ_GOAL = { cost: ["Lowest Cost", "#9A5B13", "#FBF1E4"], env: ["Lowest Environmental Impact", "#1F8A5B", "#E9F6EF"], balance: ["Best Balance", "#6A3D9A", "#F2ECF9"] };
+      var PJ_OBJ = { NAC: "Lowest cost", GHG: "Lowest greenhouse gas", EP: "Lowest eutrophication", BALANCE: "Best balance" };
+      var PJ_TYPE = { Household: "#1D6FB8", Restaurant: "#C0561B", Institutional: "#0E4A42", Retail: "#6A3D9A", Market: "#5E7D1F" };
+      var pjFilter = "all", pjSort = "updated", pjQuery = "";
+      function pjEsc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+      function pjDate(s) { var d = new Date(s); return isNaN(d) ? "" : d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }); }
+      function pjNum(v, d) { return v == null || !isFinite(v) ? "-" : Number(v).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d }); }
+      function pjChain(pw) {
+        if (!pw) return [];
+        function main(s) { if (!s || s === "Inactive" || s === "Bypass" || s === "-") return null;
+          var parts = String(s).split("/").map(function (x) { return x.trim(); }).filter(function (x) { return !/ 0\.00%$/.test(x); });
+          return parts.map(function (x) { return / 100\.00%$/.test(x) ? x.replace(/ 100\.00%$/, "") : x.replace(/\.\d+%$/, "%"); }).join(" + "); }
+        return [pw.mechanical, pw.biological, pw.conversion, pw.htl_recovery, pw.biogas_upgrading].map(main).filter(Boolean);
+      }
+      function pjRate(p) { var f = p.form || {}; var v = Number(f["fs-rate"]); return isFinite(v) && f["fs-rate"] !== "" ? v.toLocaleString("en-US") + (f["fs-rateu"] === "tday" ? " t/day" : " kg/hr") : ""; }
+
+      function pjRender() {
+        var all = pjLoad(), host = el("pj-list"); if (!host) return;
+        var nDraft = all.filter(function (p) { return p.status !== "done"; }).length, nDone = all.length - nDraft;
+        el("pj-count").innerHTML = '<button type="button" data-f="all" class="' + (pjFilter === "all" ? "on" : "") + '">All <i>' + all.length + '</i></button>' +
+          '<button type="button" data-f="draft" class="' + (pjFilter === "draft" ? "on" : "") + '">Drafts <i>' + nDraft + '</i></button>' +
+          '<button type="button" data-f="done" class="' + (pjFilter === "done" ? "on" : "") + '">Completed <i>' + nDone + "</i></button>";
+        el("pj-count").querySelectorAll("button").forEach(function (b) { b.addEventListener("click", function () { pjFilter = b.dataset.f; pjRender(); }); });
+        var q = pjQuery.toLowerCase();
+        var list = all.filter(function (p) {
+          if (pjFilter === "draft" && p.status === "done") return false;
+          if (pjFilter === "done" && p.status !== "done") return false;
+          return !q || [p.name, p.desc, p.loc, p.type].join(" ").toLowerCase().indexOf(q) >= 0;
+        }).sort(function (a, b) { return pjSort === "name" ? a.name.localeCompare(b.name) : String(b.updated).localeCompare(String(a.updated)); });
+        if (!all.length) {
+          host.className = "pj-empty";
+          host.innerHTML = '<span class="pj-eico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/><path d="M12 11v5M9.5 13.5h5"/></g></svg></span>' +
+            '<div class="pj-et">No projects yet</div><div class="pj-ed">Start an analysis and click Save Draft or Run. It will show up here.</div>' +
+            '<button type="button" class="pj-new" data-act="new">' + PJ_PLUS + "New Analysis</button>";
+          host.querySelector("[data-act=new]").addEventListener("click", pjNew);
+          return;
+        }
+        host.className = "pj-grid";
+        if (!list.length) { host.innerHTML = '<div class="pj-none">No projects match.</div>'; return; }
+        host.innerHTML = list.map(function (p) {
+          var done = p.status === "done", g = PJ_GOAL[p.goal], r = p.result, tc = PJ_TYPE[p.type] || "#5A6B70";
+          var h = '<article class="pj-card ' + (done ? "done" : "draft") + '" data-id="' + p.id + '">';
+          h += '<div class="pj-top"><h3>' + pjEsc(p.name) + "</h3>" + (done ? '<span class="pj-st ok">Completed</span>' : '<span class="pj-st dr">Draft</span>') +
+            '<button type="button" class="pj-more" data-act="menu" aria-label="More">' + PJ_DOTS + '</button><div class="pj-menu">' +
+            (done ? '<button type="button" data-act="edit">Edit inputs</button>' : "") +
+            '<button type="button" data-act="dup">Duplicate</button><button type="button" data-act="del" class="red">Delete</button></div></div>';
+          if (p.desc) h += '<p class="pj-desc">' + pjEsc(p.desc) + "</p>";
+          h += '<div class="pj-tags">' + (p.type ? '<span class="pj-tag" style="--t:' + tc + '"><i></i>' + pjEsc(p.type) + "</span>" : "") +
+            (pjRate(p) ? '<span class="pj-tag plain">' + pjRate(p) + "</span>" : "") + (p.loc ? '<span class="pj-tag plain">' + PJ_PIN + pjEsc(p.loc) + "</span>" : "") + "</div>";
+          if (done && r && r.objectives) {
+            var o = r.objectives, ch = pjChain(r.pathway);
+            h += '<div class="pj-res"><div><span>Net cost</span><b>' + (o.NAC_MUSD_per_yr < 0 ? "-$" : "$") + pjNum(Math.abs(o.NAC_MUSD_per_yr), 2) + 'M</b><small>per year</small></div>' +
+              '<div><span>GHG</span><b>' + pjNum(o.GHG_tCO2e_per_yr, 0) + '</b><small>t CO2-eq/yr</small></div>' +
+              '<div><span>EP</span><b>' + pjNum(o.EP_tN_eq_per_yr, 2) + '</b><small>t N-eq/yr</small></div></div>';
+            if (ch.length) h += '<div class="pj-path"><span class="pj-fw">Food waste</span>' + ch.map(function (c) { return '<span class="pj-ar">&rarr;</span><span class="pj-u">' + pjEsc(c) + "</span>"; }).join("") + "</div>";
+          } else {
+            var st = Math.max(0, Math.min(4, p.step || 0));
+            h += '<div class="pj-prog"><div class="pj-bars">' + STEP_NAMES.map(function (n, i) { return '<i class="' + (i <= st ? "on" : "") + '"></i>'; }).join("") +
+              '</div><span>Step ' + (st + 1) + " of 5: " + STEP_NAMES[st] + "</span></div>";
+          }
+          h += '<div class="pj-foot"><span class="pj-meta">' + (g ? '<span class="pj-goal" style="--gc:' + g[1] + ";--gt:" + g[2] + '">' + (done && r ? PJ_OBJ[r.objective] || g[0] : g[0]) + "</span>" : "") +
+            "Edited " + pjDate(p.updated) + "</span>" +
+            (done ? '<button type="button" class="pj-btn" data-act="results">View results ' + PJ_ARR + "</button>" : '<button type="button" class="pj-btn" data-act="open">Continue ' + PJ_ARR + "</button>") + "</div>";
+          return h + "</article>";
+        }).join("");
+        host.querySelectorAll(".pj-card").forEach(function (c) {
+          var id = c.dataset.id;
+          c.querySelectorAll("[data-act]").forEach(function (b) {
+            b.addEventListener("click", function (e) {
+              e.stopPropagation(); var a = b.dataset.act;
+              if (a === "menu") { var open = c.classList.contains("menu"); document.querySelectorAll(".pj-card.menu").forEach(function (x) { x.classList.remove("menu"); }); if (!open) c.classList.add("menu"); return; }
+              if (a === "results") pjOpen(id, "results");
+              else if (a === "open") pjOpen(id, "step");
+              else if (a === "edit") pjOpen(id, "start");
+              else if (a === "dup") {
+                var L = pjLoad(), s = L.filter(function (x) { return x.id === id; })[0]; if (!s) return;
+                var cp = JSON.parse(JSON.stringify(s)), now = new Date().toISOString();
+                cp.id = "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); cp.name = s.name + " (copy)"; cp.created = cp.updated = now;
+                if (cp.form) cp.form["fs-name"] = cp.name;
+                L.unshift(cp); pjStore(L); pjRender();
+              } else if (a === "del") {
+                if (!confirm('Delete "' + c.querySelector("h3").textContent + '"? This cannot be undone.')) return;
+                pjStore(pjLoad().filter(function (x) { return x.id !== id; })); if (pjCurId() === id) pjSetCur(null); pjRender();
+              }
+            });
+          });
+        });
+      }
+      var PJ_PLUS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+      var PJ_ARR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var PJ_DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></g></svg>';
+      var PJ_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></g></svg>';
+      el("pj-search").addEventListener("input", function (e) { pjQuery = e.target.value; pjRender(); });
+      el("pj-sort").addEventListener("change", function (e) { pjSort = e.target.value; pjRender(); });
+      el("pj-newbtn").addEventListener("click", pjNew);
+      document.addEventListener("click", function () { document.querySelectorAll(".pj-card.menu").forEach(function (x) { x.classList.remove("menu"); }); });
+      window.addEventListener("hashchange", function () { if (location.hash === "#projects") pjRender(); });
+      window.addEventListener("storage", function (e) { if (e.key === PJ_KEY) pjRender(); });
+      pjRender();
       window.ECOFAST = { CA_DEF: CA_DEF, CA_VAL: CA_VAL, CA_TECH: CA_TECH, caRender: caRender, EA_DEF: EA_DEF, EA_VAL: EA_VAL, eaRender: eaRender, isOn: isOn, getBypass: function () { return BYPASS; }, getGoal: function () { return goal; } };
       setPlay(!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
     })();
