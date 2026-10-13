@@ -250,7 +250,58 @@ def _package(mdl, r):
         "units": units,
         "bypasses": byp,
         "cost_breakdown_MUSD_per_yr": costs,
+        **_impacts(mdl),
     }
+
+
+def _impacts(mdl):
+    """GHG contributions and saleable products of the solved design, read from the model variables."""
+    v = mc.pval
+    s = mdl.P["sc"]
+    out = {}
+    try:
+        out["ghg_breakdown_t_per_yr"] = {
+            "Energy_and_materials": v(mdl.GHG_ind_tpy),           # electricity, steam, natural gas, enzyme, water
+            "Direct_emissions": v(mdl.GHG_dir_total),             # process CH4, N2O, fossil CO2
+            "Residue_disposal": v(mdl.GHG_aq),                    # aqueous phase, char and ash disposal
+            "Product_credits": -v(mdl.GHG_disp),                  # biomethane, biocrude, electricity, compost/biosolids N
+            "Digestate_credit": -v(mdl.GHG_digestate),            # digestate used as fertilizer
+        }
+    except AttributeError:
+        pass
+    try:
+        out["ep_breakdown_t_per_yr"] = _ep_breakdown(mdl)
+    except (AttributeError, KeyError):
+        pass
+    prods = {}
+    for kp in mdl.KP:
+        q = sum(v(mdl.Mprod[t, kp]) for t in mdl.I)               # kg/h (electricity: kW)
+        if abs(q) > 1e-9:
+            price = mdl.P["Price_prod"][kp]
+            prods[kp] = {"per_year": q * s["Tann"], "unit": "kWh" if kp == "ELECTRICITY" else "kg",
+                         "revenue_MUSD_per_yr": s["Tann"] / 1e6 * price * q}
+    out["products"] = prods
+    return out
+
+
+def _ep_breakdown(m):
+    """Marine eutrophication split into the same terms as model_core cell_43_EP, t N-eq/yr."""
+    v = mc.pval
+    s, Fd = m.P["sc"], m.Fd
+    Nf, TECH, ORG5 = Fd["N_frac"], mc.TECH, mc.ORG5
+    N_landfill_in = Nf * sum(m.M["28", k] for k in ORG5)
+    N_SHR_reject = Nf * sum(m.M["5", k] for k in ORG5)
+    N_to_water = (m.N_HTL_discharge + m.N_eff_WWT + s["leach_frac_CMP"] * m.N_compost + s["leach_frac_AND"] * m.N_digestate
+                  + s["leach_frac_SLF"] * (N_landfill_in + N_SHR_reject))
+    direct = s["CF_N_water"] * N_to_water + s["CF_NOx_marine_EF"] * m.NOx_INC_kgph
+    background = (s["EP_elec"] * sum(m.PW_op[t] for t in TECH) + s["EP_stm"] * sum(m.Mstm[t] for t in TECH)
+                  + s["EP_NG_sup"] * (m.NG_aux_INC + m.M_NG_HTL) + s["EP_enz"] * m.M["15", "ENZYME"] + s["EP_water"] * m.process_water_added)
+    disposal = s["EP_CHAR_disp"] * (m.HTL_solid_reject + m.m_ash_INC)
+    product = s["EP_CH4_disp"] * m.M["56", "CH4"] + s["EP_BIOCRUDE_disp"] * m.M["47", "BIOCRUDE"] + s["EP_ELEC_disp"] * m.Mprod["STB", "ELECTRICITY"]
+    fert = s["EP_Nfert"] * (s["MFE_CMP"] * m.N_compost + s["MFE_WWT"] * m.N_biosolids + s["MFE_AND"] * m.N_digestate)
+    k = s["Tann"] / 1000.0
+    return {"Nitrogen_to_water_and_air": k * v(direct), "Energy_and_materials": k * v(background), "Residue_disposal": k * v(disposal),
+            "Product_credits": -k * v(product), "Fertilizer_credits": -k * v(fert)}
 
 
 # cost_variables lives in the grid cell of the notebook, which is not part of model_core
