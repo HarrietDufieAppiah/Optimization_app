@@ -1,0 +1,1174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ECO-FAST | Rowan University</title>
+  <meta name="description" content="ECO-FAST: find the best treatment pathway for a food waste stream.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="assets/rowan_torch.png">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: #fff; color: #1B2420; font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 16px; line-height: 1.5; }
+    a { color: inherit; text-decoration: none; }
+
+    /* Top bar */
+    .topbar { display: flex; align-items: center; gap: 50px; height: 84px; padding: 0 27px; background: #561B29; }
+    .rowan-logo { width: 66px; height: 66px; display: block; }
+    .top-name { color: #fff; font-weight: 700; font-size: 24.5px; letter-spacing: -0.01em; }
+
+    /* Layout */
+    .layout { display: grid; grid-template-columns: 244px minmax(0, 1fr); min-height: calc(100vh - 84px);
+      background: linear-gradient(to right, #F5F7F7 243px, #E3E8E6 243px, #E3E8E6 244px, #fff 244px); }
+    .sidebar { position: sticky; top: 0; align-self: start; padding: 14px 12px; }
+    .nav-item { display: flex; align-items: center; gap: 20px; height: 54px; padding: 0 15px; border-radius: 6px;
+      font-size: 15.5px; font-weight: 500; color: #28373D; }
+    .nav-item svg { width: 23px; height: 23px; flex: none; color: #1D2D3F; }
+    .nav-item:hover { background: #ECF2EF; }
+    .nav-item.active { background: #D8E5E0; color: #023335; font-weight: 600; }
+    .nav-item.active svg { color: #0E4A42; }
+
+    /* Hero */
+    .home-hero { position: relative; height: 282px; background: #F4F7F6; border-bottom: 1px solid #E3E8E6; overflow: hidden; }
+    .hh-text { position: relative; z-index: 1; padding: 44px 0 0 41px; max-width: 640px; }
+    .eyebrow { font-size: 13.4px; font-weight: 600; letter-spacing: .19em; color: #0F5145; }
+    .hh-title { margin: 2px 0 14px; font-size: 53.5px; line-height: 1.05; font-weight: 800; letter-spacing: -0.025em; color: #0B2E2D; }
+    .hh-lead { margin: 0; font-size: 21.3px; line-height: 32px; color: #0F3B3A; max-width: 570px; }
+    .hh-photo { position: absolute; top: 0; right: 0; bottom: 0; width: 54%;
+      background: url('assets/home_hero.jpg') center / cover no-repeat;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 26%); mask-image: linear-gradient(to right, transparent 0%, #000 26%); }
+
+    /* Body */
+    .home-body { display: grid; grid-template-columns: minmax(0, 1fr) clamp(300px, 24vw, 392px); column-gap: 33px; row-gap: 20px; padding: 22px 30px 22px 38px; align-items: stretch; }
+    .home-main { padding-top: 0; }
+    .hb-title { margin: 0; font-size: 25.3px; font-weight: 800; letter-spacing: -0.01em; color: #052E2C; }
+    .hb-sub { margin: -2px 0 20px; font-size: 17.1px; color: #25585C; }
+    .goal-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .goal { position: relative; display: flex; flex-direction: column; align-items: flex-start; height: 242px; padding: 18px 10px 22px 22px;
+      background: linear-gradient(160deg, #F8FBFA 0%, #EEF5F2 100%); border: 1px solid #DBEAE5; border-radius: 10px; }
+    .goal:hover { border-color: #9FC3B7; box-shadow: 0 6px 18px rgba(14,74,66,.08); }
+    .g-ico { width: 66px; height: 66px; border-radius: 50%; background: #0E4A42; display: grid; place-items: center; }
+    .g-ico svg { width: 40px; height: 40px; }
+    .g-title { margin-top: 12px; font-size: 18.5px; font-weight: 700; line-height: 1.3; color: #0B2E2D; }
+    .g-desc { margin-top: 7px; font-size: 14.6px; line-height: 20.5px; color: #375652; white-space: nowrap; }
+    .goal .arr { position: absolute; left: 24px; bottom: 18px; width: 22px; height: 22px; color: #003333; }
+    .wide-card { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; height: 80px; padding: 0 26px 0 28px; background: #fff;
+      border: 1px solid #D9E3E0; border-radius: 8px; }
+    .wide-card:hover { border-color: #9FC3B7; }
+    .wc-ico { width: 50px; height: 50px; margin-left: -8px; color: #034339; flex: none; }
+    .wc-text { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+    .wc-title { font-size: 16px; font-weight: 700; color: #00322A; }
+    .wc-sub { font-size: 14.5px; color: #6C7485; }
+    .wide-card .arr { width: 24px; height: 24px; color: #003333; }
+
+    /* About panel */
+    .about { background: #F5F8F7; border-radius: 10px; padding: 15px 28px 16px 30px; }
+    .ab-title { margin: 0 0 3px; font-size: 17px; font-weight: 700; color: #00332D; }
+    .ab-text { margin: 0; font-size: 15.2px; line-height: 20.5px; color: #365963; }
+    .about hr { border: none; border-top: 1px solid #E1E8EC; margin: 10px -12px 9px; }
+    .ab-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
+    .ab-list li { display: flex; align-items: center; gap: 18px; font-size: 14.8px; color: #2E5A5E; }
+    .ab-list svg { width: 25px; height: 25px; color: #064542; flex: none; }
+
+    @media (max-width: 1450px) { .g-desc { white-space: normal; } .g-desc br { display: none; } .ab-text { max-width: none; } }
+    @media (max-width: 1200px) { .home-body { grid-template-columns: 1fr; } .about { max-width: 720px; } }
+    /* Phones and small tablets */
+    @media (max-width: 899px) {
+      .g-desc { white-space: normal; } .g-desc br { display: none; }
+      .home-body { grid-template-columns: 1fr; } .about { max-width: 720px; } .ab-text { max-width: none; }
+      .goal-cards { grid-template-columns: 1fr; } .goal { height: auto; min-height: 0; padding-bottom: 60px; }
+      .layout { grid-template-columns: 1fr; background: #fff; }
+      .sidebar { position: static; display: flex; flex-wrap: wrap; background: #F5F7F7; border-bottom: 1px solid #E3E8E6; padding: 8px; }
+      .sidebar nav { display: flex; flex-wrap: wrap; }
+      .nav-item { height: 42px; gap: 10px; padding: 0 12px; font-size: 14px; }
+      .home-hero { height: auto; } .hh-photo { display: none; }
+      .hh-text { padding: 32px 20px; } .hh-title { font-size: 40px; } .hh-lead { font-size: 18px; line-height: 27px; }
+      .home-body { padding-left: 20px; padding-right: 20px; }
+    }
+    @media (max-width: 640px) { .topbar { height: 64px; gap: 18px; padding: 0 14px; } .rowan-logo { width: 48px; height: 48px; } .top-name { font-size: 20px; } }
+
+
+    /* ---------- Placeholder pages ---------- */
+    .hidden { display: none !important; }
+    .page-wrap { padding: 44px 30px 40px 41px; max-width: 1100px; }
+    .pg-eyebrow { font-size: 13.4px; font-weight: 600; letter-spacing: .19em; color: #0F5145; }
+    .pg-title { margin: 2px 0 10px; font-size: 44px; line-height: 1.05; font-weight: 800; letter-spacing: -0.025em; color: #0B2E2D; }
+    .pg-sub { margin: 0 0 30px; font-size: 17.1px; color: #25585C; max-width: 720px; }
+    .soon { display: flex; align-items: center; gap: 20px; max-width: 720px; padding: 26px 28px; border-radius: 10px;
+      background: linear-gradient(160deg, #F8FBFA 0%, #EEF5F2 100%); border: 1px solid #DBEAE5; }
+    .soon .g-ico { flex: none; }
+    .soon-t { font-size: 18.5px; font-weight: 700; color: #0B2E2D; }
+    .soon-d { margin-top: 4px; font-size: 14.8px; line-height: 21px; color: #375652; }
+    .back { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-size: 15.5px; font-weight: 700; color: #0E4A42; }
+    .back svg { width: 20px; height: 20px; }
+    @media (max-width: 640px) { .page-wrap { padding: 28px 16px 56px; } .pg-title { font-size: 32px; } }
+
+    /* ---------- New Analysis: step tabs ---------- */
+    .na-wrap { padding: 36px 30px 48px 41px; max-width: 1200px; }
+    .na-title { margin: 2px 0 4px; font-size: 40px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #0B2E2D; }
+    .na-sub { margin: 4px 0 22px; font-size: 17.1px; color: #25585C; }
+    .steps { display: flex; align-items: center; padding: 14px 18px; background: #F5F8F7; border: 1px solid #E3E8E6; border-radius: 10px; margin-bottom: 22px; overflow-x: auto; }
+    .step { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border: none; background: none; font: inherit; cursor: pointer; border-radius: 8px; white-space: nowrap; color: #4B6B6E; }
+    .step:hover { background: #EAF1EE; }
+    .step .num { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 700; border: 1.5px solid #AFC3BC; color: #4B6B6E; background: #fff; flex: none; }
+    .step .lbl { font-size: 15px; font-weight: 600; }
+    .step.active .num { background: #0E4A42; border-color: #0E4A42; color: #fff; }
+    .step.active .lbl { color: #0B2E2D; font-weight: 700; }
+    .step.done .num { background: #D8E5E0; border-color: #D8E5E0; color: #0E4A42; }
+    .step-line { flex: 1; min-width: 18px; height: 2px; background: #D3DEDA; margin: 0 6px; }
+    .step-panel { background: #fff; border: 1px solid #DBEAE5; border-radius: 10px; padding: 24px 26px 26px; }
+    .step-panel h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; color: #052E2C; letter-spacing: -0.01em; }
+    .step-panel .p-sub { margin: 0 0 18px; font-size: 15.5px; color: #4B6B6E; }
+    .step-empty { padding: 34px 22px; border-radius: 10px; background: #F5F8F7; border: 1px dashed #B9CCC5; color: #4B6B6E; font-size: 15px; text-align: center; }
+    .nav-btns { display: flex; justify-content: space-between; gap: 12px; margin-top: 20px; }
+    .btn-back { height: 48px; padding: 0 20px; border-radius: 6px; border: 1px solid #CCD2E0; background: #fff; font: inherit; font-size: 15.5px; font-weight: 600; color: #0E3A3A; cursor: pointer; }
+    .btn-next { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 22px; border: none; border-radius: 6px; background: #114D47; color: #fff; font: inherit; font-size: 15.5px; font-weight: 700; cursor: pointer; }
+    .btn-next:hover { background: #0C3D38; }
+    .btn-next svg { width: 20px; height: 20px; }
+    @media (max-width: 899px) { .na-wrap { padding: 24px 16px 48px; } .na-title { font-size: 30px; } }
+
+    /* ---------- New Analysis: header + chevron steps ---------- */
+    .na-wrap { max-width: 1340px; }
+    .na-h1 { margin: 0; font-size: 30px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; color: #0B2E2D; }
+    .na-sub { margin: 4px 0 18px; font-size: 16px; color: #25585C; }
+    .steps { display: flex; padding: 0; background: #F5F8F7; border: 1px solid #DCE6E2; border-radius: 8px; margin-bottom: 20px; overflow: hidden; gap: 0; }
+    .step { position: relative; flex: 1 1 auto; display: flex; align-items: center; gap: 12px; height: 46px; padding: 0 18px 0 30px; border-radius: 0; background: transparent;
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); margin-right: -14px; }
+    .step:first-child { padding-left: 16px; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); }
+    .step:last-child { margin-right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+    .step:hover { background: #EAF1EE; }
+    .step .num { width: 28px; height: 28px; font-size: 14px; }
+    .step .lbl { font-size: 14.5px; }
+    .step.active { background: #0E4A42; }
+    .step.active .num { background: #fff; border-color: #fff; color: #0E4A42; }
+    .step.active .lbl { color: #fff; }
+    .step.done { background: #E3EEEA; }
+    .step-line { display: none; }
+
+    /* ---------- Feedstock step ---------- */
+    .fs-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) 280px; grid-template-areas: "a b i" "c d i"; gap: 20px; align-items: start; }
+    .fs-a { grid-area: a; } .fs-b { grid-area: b; } .fs-c { grid-area: c; } .fs-d { grid-area: d; } .fs-i { grid-area: i; }
+    .fs-a, .fs-b { align-self: stretch; }
+    .card { background: #fff; border: 1px solid #DCE6E2; border-radius: 8px; overflow: hidden; }
+    .card-h { padding: 12px 16px; background: #F5F8F7; border-bottom: 1px solid #E3EAE7; }
+    .card-h h3 { margin: 0; font-size: 16.5px; font-weight: 700; color: #0B2E2D; }
+    .card-h small { display: block; font-size: 12.5px; color: #6C7485; margin-top: 1px; }
+    .card-b { padding: 14px 16px 16px; }
+    .f { margin-bottom: 14px; }
+    .f:last-child { margin-bottom: 0; }
+    .f > label, .lbl-s { display: block; font-size: 14px; font-weight: 600; color: #1C2A3A; margin-bottom: 6px; }
+    .req { color: #B42318; }
+    .fin { width: 100%; height: 40px; padding: 0 12px; border: 1px solid #CCD2E0; border-radius: 5px; background: #fff; font: inherit; font-size: 14.5px; color: #13242D; outline: none; }
+    textarea.fin { height: 80px; padding: 9px 12px; resize: vertical; line-height: 1.45; }
+    select.fin { appearance: none; padding-right: 32px; cursor: pointer;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%233C4757' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 10px center / 16px no-repeat; }
+    .fin:focus { border-color: #0E4A42; box-shadow: 0 0 0 3px rgba(14,74,66,.13); }
+    .fin[readonly] { background: #F5F8F7; color: #4B6B6E; }
+    .pair { display: grid; grid-template-columns: minmax(0, 1fr) 100px; gap: 8px; }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .pct { position: relative; }
+    .pct .fin { padding-right: 30px; }
+    .pct span { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); font-size: 13.5px; color: #4B6B6E; pointer-events: none; }
+    .sub-h { margin: 18px 0 8px; font-size: 15px; font-weight: 700; color: #0B2E2D; }
+    .lbl-s { font-size: 13.2px; }
+    .hint-s { display: block; margin-top: 4px; font-size: 12.2px; color: #6C7485; }
+
+    .ctbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .ctbl th { text-align: left; font-size: 13px; font-weight: 700; color: #1C2A3A; padding: 8px 10px; background: #F5F8F7; border-bottom: 1px solid #E3EAE7; }
+    .ctbl th.n { text-align: center; }
+    .ctbl td { padding: 4px 6px; border-bottom: 1px solid #EEF2F0; }
+    .ctbl td:first-child { padding-left: 10px; font-weight: 600; color: #1C2A3A; width: 34%; }
+    .ctbl .fin { height: 34px; text-align: center; padding: 0 8px; }
+    .ctbl tfoot td { font-weight: 700; color: #0B2E2D; text-align: center; background: #F5F8F7; padding: 9px 6px; }
+    .ctbl tfoot td:first-child { text-align: left; }
+    .verify { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 14px; font-weight: 600; color: #1F7A4A; }
+    .verify.bad { color: #9A6200; }
+    .verify svg { width: 20px; height: 20px; flex: none; }
+
+    .adata { display: grid; grid-template-columns: 130px minmax(0, 150px) auto; gap: 8px 12px; align-items: center; }
+    .adata label { font-size: 14px; color: #1C2A3A; }
+    .adata .fin { height: 34px; }
+    .adata .u { font-size: 13.5px; color: #4B6B6E; }
+    .adata select.fin { width: 96px; }
+    .btn-add { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; height: 38px; padding: 0 14px; border: 1px solid #CCD2E0; border-radius: 6px; background: #fff;
+      font: inherit; font-size: 14.2px; font-weight: 600; color: #0E4A42; cursor: pointer; }
+    .btn-add:hover { border-color: #0E4A42; }
+    .btn-add svg { width: 18px; height: 18px; }
+    .x { border: none; background: none; color: #8A949E; cursor: pointer; font-size: 18px; line-height: 1; padding: 4px; }
+
+    .fs-i { background: #F2F7F5; border: 1px solid #DCE6E2; border-radius: 8px; padding: 18px 20px 20px; }
+    .fs-i .ih { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .fs-i .ih svg { width: 24px; height: 24px; color: #0E4A42; flex: none; }
+    .fs-i h4 { margin: 0; font-size: 16px; font-weight: 700; color: #0B2E2D; }
+    .fs-i p { margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid #DCE6E2; font-size: 13.6px; line-height: 20px; color: #4B6B6E; }
+    .fs-i h5 { margin: 12px 0 6px; font-size: 15px; font-weight: 700; color: #0B2E2D; }
+    .fs-i ul { margin: 0; padding-left: 20px; font-size: 14px; line-height: 22px; color: #2E5A5E; }
+
+    .fs-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid #E3EAE7; }
+    .btn-draft { display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 18px; border-radius: 6px; border: 1px solid #CCD2E0; background: #fff;
+      font: inherit; font-size: 15px; font-weight: 600; color: #0E3A3A; cursor: pointer; }
+    .btn-draft svg { width: 20px; height: 20px; }
+    .saved { margin-left: 12px; font-size: 13.5px; color: #1F7A4A; }
+
+    @media (max-width: 1300px) { .fs-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "a b" "c d" "i i"; } }
+    @media (max-width: 899px) {
+      .fs-grid { grid-template-columns: 1fr; grid-template-areas: "a" "b" "c" "d" "i"; }
+      .steps { flex-direction: column; } .step, .step:first-child, .step:last-child { clip-path: none; margin: 0; padding-left: 16px; }
+      .three { grid-template-columns: 1fr; }
+    }
+
+    /* Analysis summary panel */
+    .fs-i { background: #fff; padding: 0; overflow: hidden; }
+    .sum-h { display: flex; align-items: center; gap: 12px; padding: 14px 18px; background: #F2F7F5; border-bottom: 1px solid #DCE6E2; }
+    .sum-ico { width: 36px; height: 36px; border-radius: 8px; background: #0E4A42; display: grid; place-items: center; flex: none; }
+    .sum-ico svg { width: 21px; height: 21px; }
+    .sum-h h4 { margin: 0; font-size: 18px; font-weight: 800; color: #0B2E2D; }
+    .sum-b { padding: 6px 18px 16px; }
+    .sr { display: grid; grid-template-columns: 112px 1fr; gap: 10px; padding: 9px 0; font-size: 14px; }
+    .sr span:first-child { color: #4B6B6E; }
+    .sr span:last-child { color: #0B2E2D; font-weight: 600; word-break: break-word; }
+    .sum-sep { border: none; border-top: 1px solid #E3EAE7; margin: 8px 0 12px; }
+    .sum-t { font-size: 14.5px; font-weight: 700; color: #0B2E2D; margin-bottom: 6px; }
+    .sum-t small { font-weight: 400; color: #4B6B6E; font-size: 13.5px; }
+    .cr { display: flex; justify-content: space-between; padding: 4px 0; font-size: 14px; color: #1C2A3A; }
+    .cr b { font-weight: 600; color: #0B2E2D; }
+    .muted { color: #8A949E !important; font-weight: 500 !important; }
+
+    /* ===== New Analysis: match the mockup (Inter font, mockup shapes) ===== */
+    #page-new { --ink: #0F2E2B; --muted: #5A6B70; --line: #D7E2DE; --tint: #F2F7F5; --g: #0E4A42; }
+    #page-new, #page-new button, #page-new input, #page-new select, #page-new textarea { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+    #page-new .na-wrap { max-width: none; padding: 20px 22px 0 22px; }
+    #page-new .na-h1 { font-size: 25px; font-weight: 700; letter-spacing: -0.015em; color: var(--ink); }
+    #page-new .na-sub { margin: 2px 0 16px; font-size: 14px; color: var(--muted); letter-spacing: .005em; }
+
+    /* chevron step bar: only the active step is filled, the rest are split by thin chevron lines */
+    #page-new .steps { height: 46px; background: var(--tint); border: 1px solid var(--line); border-radius: 6px; margin-bottom: 22px; }
+    #page-new .step { flex: 1 1 0; height: 44px; gap: 12px; padding: 0 20px 0 34px; margin-right: -16px; background: var(--line);
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%); }
+    #page-new .step::before { content: ""; position: absolute; inset: 0; background: var(--tint);
+      clip-path: polygon(0 0, calc(100% - 17.5px) 0, calc(100% - 1.5px) 50%, calc(100% - 17.5px) 100%, 0 100%, 16px 50%); }
+    #page-new .step:first-of-type { padding-left: 14px; clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%); }
+    #page-new .step:first-of-type::before { clip-path: polygon(0 0, calc(100% - 17.5px) 0, calc(100% - 1.5px) 50%, calc(100% - 17.5px) 100%, 0 100%); }
+    #page-new .step:last-of-type { margin-right: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+    #page-new .step:last-of-type::before { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 16px 50%); }
+    #page-new .step:nth-of-type(1) { z-index: 5; } #page-new .step:nth-of-type(2) { z-index: 4; } #page-new .step:nth-of-type(3) { z-index: 3; } #page-new .step:nth-of-type(4) { z-index: 2; } #page-new .step:nth-of-type(5) { z-index: 1; }
+    #page-new .step > span { position: relative; }
+    #page-new .step:hover::before { background: #E8F0EC; }
+    #page-new .step .num { width: 26px; height: 26px; font-size: 13.5px; font-weight: 600; border: 1.5px solid #6F8C86; color: var(--ink); background: transparent; }
+    #page-new .step .lbl { font-size: 13.5px; font-weight: 500; color: var(--ink); }
+    #page-new .step.done, #page-new .step { background: var(--line); }
+    #page-new .step.done .num { background: transparent; border-color: #6F8C86; color: var(--ink); }
+    #page-new .step.active, #page-new .step.active::before { background: var(--g); }
+    #page-new .step.active .num { background: #fff; border-color: #fff; color: var(--g); }
+    #page-new .step.active .lbl { color: #fff; font-weight: 600; }
+
+    /* cards */
+    #page-new .fs-grid { grid-template-columns: minmax(0, 432fr) minmax(0, 510fr) minmax(250px, 277fr); gap: 20px 22px; }
+    #page-new .card { border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 2px rgba(16,40,36,.04); }
+    #page-new .card-h { padding: 11px 14px 9px; background: var(--tint); border-bottom: 1px solid #E6EDEA; }
+    #page-new .card-h h3 { font-size: 16px; font-weight: 600; color: var(--ink); letter-spacing: -0.005em; }
+    #page-new .card-h small { font-size: 11.5px; color: var(--muted); margin-top: 0; }
+    #page-new .card-b { padding: 13px 14px 16px; }
+    #page-new .f { margin-bottom: 13px; }
+    #page-new .f > label, #page-new .lbl-s { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+    #page-new .fin { height: 34px; padding: 0 11px; border: 1px solid #CFDCD8; border-radius: 4px; font-size: 13.5px; color: var(--ink); }
+    #page-new textarea.fin { height: 80px; padding: 8px 11px; }
+    #page-new select.fin { background-size: 14px; background-position: right 9px center; padding-right: 30px; }
+    #page-new .fin[readonly] { background: #fff; color: var(--ink); }
+    #page-new .fin::placeholder { color: #9AA6A3; }
+    #page-new .pair { grid-template-columns: minmax(0, 1fr) 102px; gap: 8px; }
+    #page-new .two { gap: 18px; }
+    #page-new .three { gap: 14px; }
+    #page-new .sub-h { margin: 14px 0 8px; font-size: 14px; font-weight: 600; color: var(--ink); }
+    #page-new .hint-s { font-size: 11.5px; }
+    #page-new .pct span { font-size: 13px; color: var(--ink); }
+
+    /* composition table: boxed grid */
+    #page-new .fs-c .card-b { padding: 8px 14px 14px !important; }
+    #page-new .ctbl { border: 1px solid #E1E9E6; border-radius: 6px; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 13px; }
+    #page-new .ctbl th { font-size: 12.5px; font-weight: 600; color: var(--ink); padding: 8px 12px; background: #F2F7F5; border-bottom: 1px solid #E1E9E6; }
+    #page-new .ctbl th + th, #page-new .ctbl td + td { border-left: 1px solid #E1E9E6; }
+    #page-new .ctbl td { padding: 3px 4px; border-bottom: 1px solid #E8EEEC; }
+    #page-new .ctbl td:first-child { padding-left: 12px; font-weight: 600; font-size: 12.8px; color: var(--ink); }
+    #page-new .ctbl .fin { height: 31px; font-size: 13px; }
+    #page-new .ctbl tfoot td { background: #F2F7F5; padding: 9px 4px; font-size: 13px; font-weight: 700; border-bottom: none; }
+    #page-new .verify { margin: 12px 0 0 2px !important; font-size: 13px; font-weight: 500; color: #1E8A4C; }
+    #page-new .verify svg { width: 19px; height: 19px; }
+
+    /* additional data */
+    #page-new .adata { grid-template-columns: 150px minmax(0, 145px) auto; gap: 8px 14px; }
+    #page-new .adata label { font-size: 13px; color: var(--ink); }
+    #page-new .adata .fin { height: 30px; }
+    #page-new .adata .u { font-size: 13px; color: var(--ink); }
+    #page-new .adata select.fin { width: 90px; }
+    #page-new .btn-add { height: 38px; border-radius: 6px; border-color: #CFDCD8; font-size: 13.5px; font-weight: 500; color: var(--g); background: #fff; }
+
+    /* Analysis Summary (matches the summary mockup) */
+    #page-new .fs-i { border-radius: 8px; }
+    #page-new .sum-h { padding: 16px 16px 14px; background: var(--tint); border-bottom: 1px solid #E6EDEA; gap: 12px; }
+    #page-new .sum-ico { width: 30px; height: 34px; border-radius: 6px; background: #1C5A48; }
+    #page-new .sum-ico svg { width: 18px; height: 18px; }
+    #page-new .sum-h h4 { font-size: 18px; font-weight: 700; color: #134B3E; letter-spacing: -0.01em; }
+    #page-new .sum-b { padding: 8px 14px 14px; }
+    #page-new .sr { grid-template-columns: 102px 1fr; gap: 12px; padding: 8px 0; font-size: 13px; }
+    #page-new .sr span:first-child { color: #44535A; }
+    #page-new .sr span:last-child { color: #1C2A30; font-weight: 400; }
+    #page-new .sum-sep { margin: 8px 0 12px; border-top-color: #E3EAE7; }
+    #page-new .sum-t { font-size: 13.5px; font-weight: 600; color: #1C2A30; margin-bottom: 8px; }
+    #page-new .sum-t small { font-size: 13px; font-weight: 400; color: #44535A; }
+    #page-new .cr { padding: 3px 0; font-size: 13px; color: #1C2A30; }
+    #page-new .cr b { font-weight: 400; color: #1C2A30; }
+    #page-new .muted { color: #9AA6A3 !important; }
+
+    /* footer band */
+    #page-new .fs-foot { margin: 22px -22px 0; padding: 16px 22px 18px; background: #F7FAF9; border-top: 1px solid #E3EAE7; }
+    #page-new .btn-draft { height: 46px; padding: 0 22px; border-radius: 6px; border-color: #CFDCD8; background: #F2F7F5; font-size: 14px; font-weight: 500; color: var(--ink); }
+    #page-new .btn-next { height: 46px; padding: 0 24px; border-radius: 6px; font-size: 14.5px; font-weight: 600; background: var(--g); }
+    #page-new .nav-btns { margin-top: 22px; }
+    #page-new .step-panel { border-radius: 6px; }
+    @media (max-width: 899px) { #page-new .step, #page-new .step::before { clip-path: none !important; margin: 0; } #page-new .steps { height: auto; } }
+
+    /* ===== Pathways step ===== */
+    #page-new { --s1: #1F8A5B; --s1t: #E7F5EE; --s2: #6A3D9A; --s2t: #F2ECF9; --s3: #C0561B; --s3t: #FCEFE6; }
+    #page-new .pw-map { margin-bottom: 20px; }
+    #page-new .pw-map .card-h { padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    #page-new .pw-count { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink); }
+    #page-new .pw-count b { display: inline-grid; place-items: center; min-width: 34px; height: 26px; padding: 0 8px; border-radius: 13px; background: #0E4A42; color: #fff; font-size: 13px; }
+    #page-new .pw-ctl { display: inline-flex; gap: 4px; margin-left: 6px; }
+    #page-new .pw-ctl button { width: 30px; height: 30px; border: 1px solid #CFDCD8; border-radius: 6px; background: #fff; color: var(--ink); cursor: pointer; display: grid; place-items: center; }
+    #page-new .pw-ctl button:hover { border-color: var(--g); }
+    #page-new .pw-ctl svg { width: 14px; height: 14px; }
+    #page-new .pw-map .card-b { padding: 10px 14px 14px; }
+    #page-new .pw-map svg.map { display: block; width: 100%; max-width: 1000px; height: auto; margin: 0 auto; }
+    #page-new .map text { font-family: 'Inter', sans-serif; }
+    #page-new .map .flow { stroke-dasharray: 2 12; stroke-linecap: round; animation: pwflow .7s linear infinite; }
+    @keyframes pwflow { to { stroke-dashoffset: -14; } }
+    #page-new .map .glow { animation: pwglow 1.4s ease-in-out infinite; }
+    @keyframes pwglow { 50% { opacity: .55; } }
+    @media (prefers-reduced-motion: reduce) { #page-new .map .flow, #page-new .map .glow { animation: none; } }
+    #page-new .route { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; min-height: 34px; margin: 6px auto 0; max-width: 1000px; padding: 6px 10px; border-radius: 8px; background: #F7FAF9; font-size: 12.5px; color: var(--muted); }
+    #page-new .route .rl { font-weight: 600; color: var(--ink); margin-right: 4px; }
+    #page-new .route .rc { display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 12px; font-weight: 600; font-size: 12px; color: #fff; }
+    #page-new .route .ra { color: #9AA6A3; }
+    #page-new .legend { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-top: 10px; font-size: 12px; color: var(--muted); }
+    #page-new .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    #page-new .legend i { width: 14px; height: 10px; border-radius: 2px; display: inline-block; }
+
+    #page-new .fs-foot .right { display: flex; gap: 10px; }
+    #page-new .pw-nom { display: grid; grid-template-columns: 1.2fr 1.3fr 1.3fr; }
+    #page-new .nom { padding: 10px 14px 12px; border-top: 3px solid var(--c); }
+    #page-new .nom + .nom { border-left: 1px solid var(--line); }
+    #page-new .nom-h { margin-bottom: 6px; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--c); }
+    #page-new .nom-l { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; }
+    #page-new .ni { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--ink); white-space: nowrap; min-width: 0; }
+    #page-new .ni b { display: inline-grid; place-items: center; width: 36px; height: 20px; border-radius: 4px; background: var(--c); color: #fff; font-size: 10.5px; font-weight: 700; flex: none; }
+    #page-new .ni.byp { color: var(--muted); }
+    #page-new .ni.byp svg { width: 36px; flex: none; }
+    #page-new .btn-back { height: 46px; padding: 0 20px; border-radius: 6px; border: 1px solid #CFDCD8; background: #fff; font-size: 14px; font-weight: 500; color: var(--ink); }
+    @media (max-width: 1100px) { #page-new .pw-nom { grid-template-columns: 1fr; } #page-new .nom + .nom { border-left: none; } }
+
+    /* ===== Cost Assumptions step ===== */
+    #page-new .ca-card .card-b { padding: 18px 20px 22px; }
+    #page-new .ca-tabs { display: flex; align-items: flex-end; gap: 4px; padding: 0 14px; background: var(--tint); border-bottom: 1px solid var(--line); }
+    #page-new .ca-tab { position: relative; height: 46px; padding: 0 14px; border: none; background: none; font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer; }
+    #page-new .ca-tab:hover { color: var(--ink); }
+    #page-new .ca-tab.on { color: var(--g); font-weight: 600; }
+    #page-new .ca-tab.on::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--g); }
+    #page-new .ca-tab i { display: inline-block; width: 7px; height: 7px; margin-left: 6px; border-radius: 50%; background: #E8B62C; vertical-align: 2px; font-style: normal; }
+    #page-new .ca-right { margin-left: auto; display: flex; align-items: center; gap: 10px; padding-bottom: 7px; font-size: 12.5px; color: var(--muted); }
+    #page-new .ca-reset { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; border: 1px solid #CFDCD8; border-radius: 6px; background: #fff; font-size: 12.5px; font-weight: 500; color: var(--ink); cursor: pointer; }
+    #page-new .ca-reset:hover { border-color: var(--g); }
+    #page-new .ca-reset svg { width: 14px; height: 14px; }
+    #page-new .ca-reset:disabled { opacity: .45; cursor: default; }
+    #page-new .ca-wrap { max-width: 980px; }
+    #page-new .ca-pick { max-width: 480px; margin-bottom: 16px; }
+    #page-new .ca-tech { display: flex; align-items: center; gap: 14px; padding: 12px 16px; margin-bottom: 18px; border-radius: 6px; border-left: 4px solid var(--c); background: var(--ct); }
+    #page-new .ca-tech b { display: inline-grid; place-items: center; width: 46px; height: 30px; border-radius: 5px; background: var(--c); color: #fff; font-size: 12px; font-weight: 700; flex: none; }
+    #page-new .ca-tech .tn { font-size: 15px; font-weight: 600; color: var(--ink); }
+    #page-new .ca-tech .ts { font-size: 12.5px; color: var(--muted); }
+    #page-new .ca-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 28px; }
+    #page-new .ca-f label { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 13px; font-weight: 600; color: var(--ink); }
+    #page-new .ca-f label .q { display: inline-grid; place-items: center; width: 15px; height: 15px; border-radius: 50%; border: 1.3px solid #8FA39E; color: #6F8C86; font-size: 10px; font-weight: 700; cursor: help; }
+    #page-new .ca-in { position: relative; }
+    #page-new .ca-in .fin { padding-right: 90px; }
+    #page-new .ca-in .u { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--muted); pointer-events: none; }
+    #page-new .fin.chg { background: #FFF7E3; border-color: #E8B62C; }
+    #page-new .fin.bad { background: #FDF0EE; border-color: #B42318; }
+    #page-new .fin.ro { background: #F5F8F7 !important; color: var(--muted); }
+    #page-new .ca-sec { grid-column: 1 / -1; margin: 6px 0 -4px; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+    #page-new .ca-fields.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 24px; }
+    @media (max-width: 1100px) { #page-new .ca-fields.c3 { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 760px) { #page-new .ca-fields, #page-new .ca-fields.c3 { grid-template-columns: 1fr; } #page-new .ca-tabs { flex-wrap: wrap; } #page-new .ca-right { margin-left: 0; width: 100%; } }
+
+    /* ===== Environmental Assumptions step ===== */
+    #page-new .ea-tbl { width: 100%; max-width: 980px; border: 1px solid #E1E9E6; border-radius: 6px; border-collapse: separate; border-spacing: 0; overflow: hidden; font-size: 13px; table-layout: fixed; }
+    #page-new .ea-tbl th { text-align: left; padding: 9px 12px; background: #F2F7F5; border-bottom: 1px solid #E1E9E6; font-size: 12.5px; font-weight: 600; color: var(--ink); }
+    #page-new .ea-tbl th small { display: block; font-weight: 400; color: var(--muted); font-size: 11.5px; }
+    #page-new .ea-tbl th.ghg { border-top: 3px solid #C0561B; }
+    #page-new .ea-tbl th.ep { border-top: 3px solid #1D6FB8; }
+    #page-new .ea-tbl td { padding: 6px 12px; border-bottom: 1px solid #EDF2F0; vertical-align: middle; color: var(--ink); }
+    #page-new .ea-tbl tr:last-child td { border-bottom: none; }
+    #page-new .ea-tbl td .nm { font-weight: 600; }
+    #page-new .ea-tbl td .nt { display: block; font-size: 11.5px; color: var(--muted); }
+    #page-new .ea-tbl td.b { font-size: 12px; color: var(--muted); white-space: nowrap; }
+    #page-new .ea-tbl .fin { height: 32px; width: 150px; text-align: right; }
+    #page-new .ea-tbl .na { color: #9AA6A3; font-size: 12px; }
+    #page-new .ea-gap { height: 18px; }
+    #page-new .ea-tbl .fin { max-width: 100%; }
+    @media (max-width: 760px) { main { min-width: 0; } #page-new .ea-scroll { overflow-x: auto; } #page-new .ea-tbl { min-width: 560px; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <img src="assets/rowan_torch.png" alt="Rowan University" class="rowan-logo">
+    <span class="top-name">ECO-FAST</span>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <nav>
+        <a href="#home" class="nav-item active" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h4.5v-6h4v6h4.5V9"/></g></svg><span>Home</span></a>
+        <a href="#new" class="nav-item" data-page="new"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></g></svg><span>New Analysis</span></a>
+        <a href="#projects" class="nav-item" data-page="projects"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/><path d="M3 10h18"/></g></svg><span>My Projects</span></a>
+        <a href="#results" class="nav-item" data-page="results"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5h16"/><path d="M6.5 20v-6M11 20V9M15.5 20v-8M20 20V5" stroke-width="2.2"/></g></svg><span>Results</span></a>
+        <a href="#resources" class="nav-item" data-page="resources"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3.5 4.8v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.7V4.8C17 4.5 14 5 12 6.5z"/><path d="M12 6.5V20"/></g></svg><span>Resources</span></a>
+        <a href="#settings" class="nav-item" data-page="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></g></svg><span>Settings</span></a>
+      </nav>
+    </aside>
+
+    <main>
+      <div id="page-home" class="page">
+      <section class="home-hero">
+        <div class="hh-text">
+          <div class="eyebrow">FOOD WASTE OPTIMIZATION TOOL</div>
+          <h1 class="hh-title">Welcome to ECO-FAST</h1>
+          <p class="hh-lead">Describe your food waste stream and let our optimization model find the best treatment pathway: lowest cost, lowest environmental impact, or the best balance of both.</p>
+        </div>
+        <div class="hh-photo" aria-hidden="true"></div>
+      </section>
+
+      <section class="home-body">
+        <div class="home-main">
+          <h2 class="hb-title">Start a New Analysis</h2>
+          <p class="hb-sub">Provide details about your food waste stream and choose your optimization goal.</p>
+          <div class="goal-cards">
+              <a href="#new" class="goal" data-page="new" data-goal="cost"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><ellipse cx="12" cy="6.5" rx="6.5" ry="2.6"/><path d="M5.5 6.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 10.5v4c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-4"/><path d="M5.5 14.5v3c0 1.4 2.9 2.6 6.5 2.6s6.5-1.2 6.5-2.6v-3"/></g></svg></span><span class="g-title">Lowest Cost</span><span class="g-desc">Find the treatment pathway<br>with the lowest net annualized<br>cost.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new" data-goal="env"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 4.5C10 4.5 5 9 5 15.5c0 1.4.3 2.6.8 3.6 1 .3 2 .4 3 .4 6.5 0 10.7-5 10.7-15z"/><path d="M5.6 19.4 14 11"/></g></svg></span><span class="g-title">Lowest Environmental Impact</span><span class="g-desc">Find the pathway with the lowest<br>overall environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+              <a href="#new" class="goal" data-page="new" data-goal="balance"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5v16M7.5 20.5h9M4.5 7h15"/><circle cx="12" cy="4" r=".6"/><path d="M6.5 7 3.5 13.5h6z"/><path d="M17.5 7l-3 6.5h6z"/><path d="M3.5 13.5a3 2 0 0 0 6 0M14.5 13.5a3 2 0 0 0 6 0"/></g></svg></span><span class="g-title">Best Balance</span><span class="g-desc">Find the pathway that balances<br>cost and environmental impact.</span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+            </div>
+        </div>
+
+        <aside class="about">
+          <h3 class="ab-title">About ECO-FAST</h3>
+          <p class="ab-text">ECO-FAST is a research tool from the Department of Chemical Engineering at Rowan University. It uses an optimization model to help users make data-driven decisions for food waste treatment.</p>
+          <hr>
+          <h3 class="ab-title">Who Uses It?</h3>
+          <ul class="ab-list"><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6.5L5 19a1.5 1.5 0 0 0 1.3 2h11.4A1.5 1.5 0 0 0 19 19l-5-9.5V3"/><path d="M7.5 15h9"/></g></svg><span>Researchers</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/><circle cx="12" cy="12" r="6.3"/></g></svg><span>Engineers</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 4l9 5.5"/><path d="M4 21h16M5 18h14"/><path d="M6.5 10.5v7M10 10.5v7M14 10.5v7M17.5 10.5v7"/><path d="M4 9.5h16"/></g></svg><span>Municipal planners</span></li><li><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5h11v9.5h-11z"/><path d="M13.5 9.5h4l3 3.5v3h-7"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></g></svg><span>Waste management companies</span></li></ul>
+        </aside>
+
+        <a class="wide-card" href="#projects" data-page="projects"><svg class="wc-ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4.5" y="2.5" width="15" height="19" rx="2.2"/><path d="M8.5 8h7M8.5 12h7M8.5 16h7"/></g></svg><span class="wc-text"><span class="wc-title">View My Projects</span><span class="wc-sub">Check the status of your past analyses and view results.</span></span><svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></g></svg></a>
+      </section>
+      </div>
+
+      <div id="page-new" class="page hidden">
+        <div class="na-wrap">
+          <h1 class="na-h1">New Analysis</h1>
+          <p class="na-sub" id="na-sub">Define the feedstock that will be evaluated by ECO-FAST.</p>
+          <div class="steps">
+            <button type="button" class="step active" data-step="0"><span class="num">1</span><span class="lbl">Feedstock</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="1"><span class="num">2</span><span class="lbl">Pathways</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="2"><span class="num">3</span><span class="lbl">Cost Assumptions</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="3"><span class="num">4</span><span class="lbl">Environmental Assumptions</span></button>
+            <span class="step-line"></span>
+            <button type="button" class="step" data-step="4"><span class="num">5</span><span class="lbl">Review &amp; Run</span></button>
+          </div>
+          <div class="step-body" data-body="0">
+            <div class="fs-grid">
+              <section class="card fs-a">
+                <div class="card-h"><h3>1. Analysis Information</h3></div>
+                <div class="card-b">
+                  <div class="f"><label for="fs-name">Analysis Name <span class="req">*</span></label><input class="fin" id="fs-name" placeholder="e.g. Campus Food Waste Study"></div>
+                  <div class="f"><label for="fs-desc">Description</label><textarea class="fin" id="fs-desc" placeholder="What is this analysis for?"></textarea></div>
+                  <div class="f"><label for="fs-loc">Location</label><input class="fin" id="fs-loc" placeholder="City, state or zip code"></div>
+                </div>
+              </section>
+
+              <section class="card fs-b">
+                <div class="card-h"><h3>2. Feedstock Characteristics</h3></div>
+                <div class="card-b">
+                  <div class="f"><label for="fs-type">Feedstock Type <span class="req">*</span></label>
+                    <select class="fin" id="fs-type"><option value="">Select a feedstock type</option><option>Household</option><option>Restaurant</option><option>Institutional</option><option>Retail</option><option>Market</option></select>
+                    <span class="hint-s">Fills in typical values below. You can change any of them.</span></div>
+                  <div class="two">
+                    <div class="f"><label for="fs-rate">Feed Rate <span class="req">*</span></label><div class="pair"><input class="fin" type="number" min="0" step="any" id="fs-rate" value="10000"><select class="fin" id="fs-rateu"><option value="kghr">kg/hr</option><option value="tday">tonne/day</option></select></div></div>
+                    <div class="f"><label for="fs-hours">Operating Hours <span class="req">*</span></label><div class="pair"><input class="fin" type="number" min="0" max="8760" step="any" id="fs-hours" value="7920"><select class="fin" id="fs-hoursu"><option>hr/year</option></select></div></div>
+                  </div>
+                  <div class="sub-h">Physical Properties</div>
+                  <div class="three">
+                    <div><label class="lbl-s" for="fs-moist">Moisture Content</label><div class="pct"><input class="fin" type="number" step="0.01" min="0" max="100" id="fs-moist"><span>%</span></div></div>
+                    <div><label class="lbl-s" for="fs-ts">Total Solids (TS)</label><div class="pct"><input class="fin" type="number" step="0.01" min="0" max="100" id="fs-ts"><span>%</span></div></div>
+                    <div><label class="lbl-s" for="fs-vs">Volatile Solids (VS)</label><div class="pct"><input class="fin" type="number" step="0.01" min="0" max="100" id="fs-vs"><span>%</span></div><span class="hint-s">% of total solids</span></div>
+                  </div>
+                </div>
+              </section>
+
+              <aside class="card fs-i">
+                <div class="sum-h"><span class="sum-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="M12 10.5v6M9 13.5h6"/></g></svg></span><h4>Analysis Summary</h4></div>
+                <div class="sum-b">
+                  <div class="sr"><span>Analysis Name</span><span id="s-name"></span></div>
+                  <div class="sr"><span>Feedstock</span><span id="s-type"></span></div>
+                  <div class="sr"><span>Location</span><span id="s-loc"></span></div>
+                  <div class="sr"><span>Objective</span><span id="s-goal"></span></div>
+                  <div class="sr"><span>Feed Rate</span><span id="s-rate"></span></div>
+                  <div class="sr"><span>Operating Hours</span><span id="s-hours"></span></div>
+                  <hr class="sum-sep">
+                  <div class="sum-t">Composition <small>(wet basis)</small></div>
+                  <div id="s-comp"></div>
+                </div>
+              </aside>
+
+              <section class="card fs-c">
+                <div class="card-h"><h3>3. Feedstock Composition</h3><small>Enter the dry-basis values. The wet basis is calculated from the moisture content.</small></div>
+                <div class="card-b" style="padding:0 0 14px">
+                  <table class="ctbl"><thead><tr><th>Component</th><th class="n">% (Wet Basis)</th><th class="n">% (Dry Basis)</th></tr></thead>
+                    <tbody><tr><td>Water</td><td><input class="fin" readonly id="w-WATER" tabindex="-1"></td><td><input class="fin" readonly value="&#8212;" tabindex="-1"></td></tr><tr><td>Carbohydrates</td><td><input class="fin" readonly id="w-CBH" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-CBH" data-k="CBH"></td></tr><tr><td>Proteins</td><td><input class="fin" readonly id="w-PRT" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-PRT" data-k="PRT"></td></tr><tr><td>Fats</td><td><input class="fin" readonly id="w-FAT" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-FAT" data-k="FAT"></td></tr><tr><td>Ash</td><td><input class="fin" readonly id="w-ASH" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-ASH" data-k="ASH"></td></tr><tr><td>Fixed carbon</td><td><input class="fin" readonly id="w-FC" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-FC" data-k="FC"></td></tr><tr><td>Other organics</td><td><input class="fin" readonly id="w-OTH" tabindex="-1"></td><td><input class="fin dry-in" type="number" step="0.01" min="0" max="100" id="d-OTH" data-k="OTH"></td></tr></tbody>
+                    <tfoot><tr><td>Total</td><td id="w-tot">&#8212;</td><td id="d-tot">&#8212;</td></tr></tfoot></table>
+                  <div class="verify" id="fs-verify" style="margin-left:14px"></div>
+                </div>
+              </section>
+
+              <section class="card fs-d">
+                <div class="card-h"><h3>4. Additional Feedstock Data</h3><small>(Optional)</small></div>
+                <div class="card-b">
+                  <div class="adata" id="fs-adata"><label for="x-C">Carbon (C)</label><input class="fin" type="number" step="any" id="x-C"><span class="u">%</span><label for="x-H">Hydrogen (H)</label><input class="fin" type="number" step="any" id="x-H"><span class="u">%</span><label for="x-O">Oxygen (O)</label><input class="fin" type="number" step="any" id="x-O"><span class="u">%</span><label for="x-N">Nitrogen (N)</label><input class="fin" type="number" step="any" id="x-N"><span class="u">%</span><label for="x-S">Sulfur (S)</label><input class="fin" type="number" step="any" id="x-S"><span class="u">%</span><label for="x-pH">pH</label><input class="fin" type="number" step="any" id="x-pH"><span class="u"></span><label for="x-HHV">Heating value</label><input class="fin" type="number" step="any" id="x-HHV"><select class="fin" id="x-HHVu"><option>MJ/kg</option></select></div>
+                  <div class="adata" id="fs-extra" style="margin-top:8px"></div>
+                  <button type="button" class="btn-add" id="fs-add"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></g></svg>Add Property</button>
+                </div>
+              </section>
+            </div>
+            <div class="fs-foot"><div><button type="button" class="btn-draft" id="fs-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="fs-saved"></span></div><button type="button" class="btn-next" data-go="1">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+          </div>
+          <div class="step-body hidden" data-body="1">
+            <section class="card pw-map">
+              <div class="card-h"><h3>Pathway Map</h3>
+                <div class="pw-count"><b id="pw-n">0</b>possible pathways
+                  <span class="pw-ctl"><button type="button" id="pw-prev" title="Previous pathway"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button type="button" id="pw-play" title="Pause"></button><button type="button" id="pw-nextr" title="Next pathway"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button></span></div></div>
+              <div class="card-b"><div id="pw-svg"></div>
+                <div class="route" id="pw-route"></div>
+                <div class="legend"><span><i style="background:#1F8A5B"></i>Pretreatment</span><span><i style="background:#6A3D9A"></i>Conversion</span><span><i style="background:#C0561B"></i>Recovery</span><span><i style="background:#1D6FB8"></i>Product</span><span><i style="background:none;border-top:2px dashed #6F8C86;height:0"></i>Bypass</span><span><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="6" fill="#fff" stroke="#0F2E2B" stroke-width="1.4"/><path d="M3.5 3.5l7 7M10.5 3.5l-7 7" stroke="#0F2E2B" stroke-width="1.4"/></svg>Splitter</span><span><svg width="14" height="14" viewBox="0 0 14 14"><path d="M7 1l6 6-6 6-6-6z" fill="#0F2E2B"/></svg>Mixer</span></div>
+              </div>
+            </section>
+            <section class="card pw-nom">
+              <div class="nom" style="--c:#1F8A5B"><div class="nom-h">Stage I &middot; Pretreatment</div><div class="nom-l" id="pw-pre"></div></div>
+              <div class="nom" style="--c:#6A3D9A"><div class="nom-h">Stage II &middot; Conversion</div><div class="nom-l" id="pw-conv"></div></div>
+              <div class="nom" style="--c:#C0561B"><div class="nom-h">Stage III &middot; Recovery &amp; Upgrading</div><div class="nom-l" id="pw-rec"></div></div>
+            </section>
+            <div class="fs-foot"><div></div><div class="right"><button type="button" class="btn-back" data-go="0">Back</button><button type="button" class="btn-next" id="pw-next" data-go="2">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+          </div>
+          <div class="step-body hidden" data-body="2">
+            <section class="card ca-card">
+              <div class="ca-tabs" id="ca-tabs">
+                <button type="button" class="ca-tab on" data-tab="tech">Technology Capital &amp; Labor</button>
+                <button type="button" class="ca-tab" data-tab="global">Global Assumptions</button>
+                <button type="button" class="ca-tab" data-tab="prod">Product Prices &amp; Fees</button>
+                <button type="button" class="ca-tab" data-tab="disp">Disposal Costs</button>
+                <div class="ca-right"><span id="ca-count"></span><button type="button" class="ca-reset" id="ca-reset-all"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/></g></svg>Reset to defaults</button></div>
+              </div>
+              <div class="card-b"><div class="ca-wrap" id="ca-panel"></div></div>
+            </section>
+            <div class="fs-foot"><div><button type="button" class="btn-draft" id="ca-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="ca-saved"></span></div><div class="right"><button type="button" class="btn-back" data-go="1">Back</button><button type="button" class="btn-next" data-go="3">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+          </div>
+          <div class="step-body hidden" data-body="3">
+            <section class="card ca-card">
+              <div class="ca-tabs">
+                <button type="button" class="ca-tab ea-tab on" data-tab="impact">Impact Factors</button>
+                <button type="button" class="ca-tab ea-tab" data-tab="inputs">Utilities &amp; Inputs</button>
+                <button type="button" class="ca-tab ea-tab" data-tab="process">Process Emissions</button>
+                <button type="button" class="ca-tab ea-tab" data-tab="credits">Product Credits</button>
+                <div class="ca-right"><span id="ea-count"></span><button type="button" class="ca-reset" id="ea-reset-all"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4.5v4h4"/></g></svg>Reset to defaults</button></div>
+              </div>
+              <div class="card-b"><div class="ca-wrap" id="ea-panel"></div></div>
+            </section>
+            <div class="fs-foot"><div><button type="button" class="btn-draft" id="ea-save"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2.8h8l4 4v14.4H6z"/><path d="M14 2.8v4h4M9 12.5h6M9 16h6"/></g></svg>Save Draft</button><span class="saved" id="ea-saved"></span></div><div class="right"><button type="button" class="btn-back" data-go="2">Back</button><button type="button" class="btn-next" data-go="4">Next <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+          </div>
+          <div class="step-body hidden" data-body="4">
+            <section class="step-panel">
+              <h2>5. Review &amp; Run</h2>
+              <p class="p-sub">Check your setup and run the optimization.</p>
+              <div class="step-empty">Content for this step will go here.</div>
+            </section>
+            <div class="nav-btns"><button type="button" class="btn-back" data-go="3">Back</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-projects" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">MY PROJECTS</div>
+          <h1 class="pg-title">My Projects</h1>
+          <p class="pg-sub">Your saved analyses in one place.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">Your past analyses and their results will be listed here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+
+      <div id="page-results" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">RESULTS</div>
+          <h1 class="pg-title">Results</h1>
+          <p class="pg-sub">See the best treatment pathway for your analysis.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M4.5 20h15"/><path d="M7 19v-5M11 19V9M15 19v-7M19 19V5"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">The recommended pathway, cost, and environmental impact will be shown here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+
+      <div id="page-resources" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">RESOURCES</div>
+          <h1 class="pg-title">Resources</h1>
+          <p class="pg-sub">Learn how ECO-FAST works.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3.5 4.8v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.7V4.8C17 4.5 14 5 12 6.5z"/><path d="M12 6.5V20"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">The processing pipeline, the treatment technologies, and what the model balances will be explained here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+
+      <div id="page-settings" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">SETTINGS</div>
+          <h1 class="pg-title">Settings</h1>
+          <p class="pg-sub">Adjust the model assumptions.</p>
+          <div class="soon"><span class="g-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8"/></g></svg></span><div><div class="soon-t">Coming soon</div><div class="soon-d">Cost data, product prices, and disposal fees you can change will be here.</div></div></div>
+          <a href="#home" class="back" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H5M10.5 6.5 5 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to Home</a>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    // Switch pages using the link after # (for example #results)
+    (function () {
+      var pages = ["home", "new", "projects", "results", "resources", "settings"];
+      function show() {
+        var id = (location.hash || "#home").slice(1);
+        if (pages.indexOf(id) < 0) id = "home";
+        pages.forEach(function (p) { document.getElementById("page-" + p).classList.toggle("hidden", p !== id); });
+        document.querySelectorAll(".nav-item").forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-page") === id); });
+        window.scrollTo(0, 0);
+      }
+      window.addEventListener("hashchange", show);
+      show();
+
+      // New Analysis: step tabs
+      function goStep(n) {
+        document.querySelectorAll("#page-new .step").forEach(function (b, i) {
+          b.classList.toggle("active", i === n);
+          b.classList.toggle("done", i < n);
+        });
+        document.querySelectorAll("#page-new .step-body").forEach(function (b, i) { b.classList.toggle("hidden", i !== n); });
+        window.scrollTo(0, 0);
+      }
+      document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.step)); }); });
+      document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { goStep(Number(b.dataset.go)); }); });
+
+      // Subtitle for each step
+      var SUBS = ["Define the feedstock that will be evaluated by ECO-FAST.", "See the treatment pathways ECO-FAST will evaluate.", "Review or change the cost values used by the model.", "Review or change the environmental factors used by the model.", "Check your setup and run the optimization."];
+      var _goStep = goStep;
+      goStep = function (n) { _goStep(n); document.getElementById("na-sub").textContent = SUBS[n]; };
+      document.querySelectorAll("#page-new .step").forEach(function (b) { b.addEventListener("click", function () { document.getElementById("na-sub").textContent = SUBS[Number(b.dataset.step)]; }); });
+      document.querySelectorAll("#page-new [data-go]").forEach(function (b) { b.addEventListener("click", function () { document.getElementById("na-sub").textContent = SUBS[Number(b.dataset.go)]; }); });
+
+      // ---------- Feedstock step ----------
+      // Typical values per feedstock type (from feedstock_composition.csv), all dry basis except moisture
+      var FEED = {
+        Household:     { moist: 72.52, vm: 82.39, ash: 5.58,  fc: 12.03, cbh: 12.5,  prt: 13.53, fat: 10.6,  C: 48.76, H: 6.29, N: 3.85, O: 40.69, S: 0.41, hhv: 18.65 },
+        Restaurant:    { moist: 75.7,  vm: 81.72, ash: 6.11,  fc: 12.17, cbh: 35.33, prt: 21.39, fat: 25.0,  C: 48.63, H: 6.5,  N: 3.41, O: 41.17, S: 0.29, hhv: 20.23 },
+        Institutional: { moist: 60.85, vm: 84.31, ash: 5.01,  fc: 10.68, cbh: 42.11, prt: 18.9,  fat: 13.58, C: 46.72, H: 6.28, N: 3.7,  O: 42.93, S: 0.37, hhv: 22.69 },
+        Retail:        { moist: 61.08, vm: 80.79, ash: 7.73,  fc: 11.48, cbh: 11.57, prt: 25.51, fat: 31.57, C: 50.09, H: 6.58, N: 4.09, O: 38.89, S: 0.35, hhv: 24.74 },
+        Market:        { moist: 89.18, vm: 75.14, ash: 12.0,  fc: 12.86, cbh: 52.94, prt: 12.37, fat: 3.0,   C: 46.07, H: 5.7,  N: 2.86, O: 44.91, S: 0.46, hhv: 13.5 }
+      };
+      var DRY = ["CBH", "PRT", "FAT", "ASH", "FC", "OTH"];
+      function el(id) { return document.getElementById(id); }
+      function val(id) { var v = el(id).value; return v === "" ? NaN : Number(v); }
+      function r2(x) { return Math.round(x * 100) / 100; }
+      var OK_ICO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#1F7A4A"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var WARN_ICO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#E8B62C"/><path d="M12 7v6.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="17" r="1.4" fill="#fff"/></svg>';
+
+      function fillType(t) {
+        var f = FEED[t]; if (!f) return;
+        el("fs-moist").value = f.moist; el("fs-ts").value = r2(100 - f.moist); el("fs-vs").value = f.vm;
+        var d = { CBH: f.cbh, PRT: f.prt, FAT: f.fat, ASH: f.ash, FC: f.fc, OTH: r2(f.vm - f.cbh - f.prt - f.fat) };
+        DRY.forEach(function (k) { el("d-" + k).value = d[k]; });
+        ["C", "H", "O", "N", "S"].forEach(function (k) { el("x-" + k).value = f[k]; });
+        el("x-HHV").value = f.hhv; el("x-pH").value = "";
+        updateComp();
+      }
+      function updateComp() {
+        var m = val("fs-moist"), dsum = 0, wsum = 0, have = false;
+        DRY.forEach(function (k) { var v = val("d-" + k); if (isFinite(v)) { dsum += v; have = true; } });
+        DRY.forEach(function (k) {
+          var v = val("d-" + k);
+          el("w-" + k).value = isFinite(v) && isFinite(m) ? r2(v * (100 - m) / 100).toFixed(2) : "";
+          if (isFinite(v) && isFinite(m)) wsum += v * (100 - m) / 100;
+        });
+        el("w-WATER").value = isFinite(m) ? r2(m).toFixed(2) : "";
+        if (isFinite(m)) wsum += m;
+        el("d-tot").textContent = have ? dsum.toFixed(2) : "\u2014";
+        el("w-tot").textContent = have && isFinite(m) ? wsum.toFixed(2) : "\u2014";
+        var v = el("fs-verify");
+        if (!have) { v.innerHTML = ""; return; }
+        var ok = Math.abs(dsum - 100) <= 0.5;
+        v.className = "verify" + (ok ? "" : " bad");
+        v.innerHTML = (ok ? OK_ICO : WARN_ICO) + (ok ? "Composition verified (" + dsum.toFixed(1) + "%)" : "Dry basis adds up to " + dsum.toFixed(2) + "%. It should add up to 100%.");
+      }
+      el("fs-type").addEventListener("change", function (e) { fillType(e.target.value); });
+      el("fs-moist").addEventListener("input", function () { var m = val("fs-moist"); el("fs-ts").value = isFinite(m) ? r2(100 - m) : ""; updateComp(); });
+      el("fs-ts").addEventListener("input", function () { var t = val("fs-ts"); el("fs-moist").value = isFinite(t) ? r2(100 - t) : ""; updateComp(); });
+      document.querySelectorAll("#page-new .dry-in").forEach(function (i) { i.addEventListener("input", updateComp); });
+
+      // feed rate unit switch (kg/hr <-> tonne/day), converts the number
+      var rateUnit = "kghr";
+      el("fs-rateu").addEventListener("change", function (e) {
+        var v = val("fs-rate"), u = e.target.value;
+        if (isFinite(v) && u !== rateUnit) el("fs-rate").value = u === "tday" ? r2(v * 24 / 1000) : r2(v * 1000 / 24);
+        rateUnit = u;
+      });
+
+      // add custom property rows
+      el("fs-add").addEventListener("click", function () {
+        var box = el("fs-extra");
+        var row = document.createElement("div"); row.style.display = "contents";
+        row.innerHTML = '<input class="fin" placeholder="Property name"><input class="fin" placeholder="Value"><span style="display:flex;gap:6px;align-items:center"><input class="fin" placeholder="Unit" style="width:70px"><button type="button" class="x" title="Remove">&times;</button></span>';
+        row.querySelector(".x").addEventListener("click", function () { row.remove(); });
+        box.appendChild(row);
+      });
+
+      // Save Draft (kept in this browser only)
+      var FIELDS = ["fs-name", "fs-desc", "fs-loc", "fs-type", "fs-rate", "fs-rateu", "fs-hours", "fs-moist", "fs-ts", "fs-vs", "x-C", "x-H", "x-O", "x-N", "x-S", "x-pH", "x-HHV"].concat(DRY.map(function (k) { return "d-" + k; }));
+      el("fs-save").addEventListener("click", function () {
+        var d = {}; FIELDS.forEach(function (id) { d[id] = el(id).value; });
+        try { localStorage.setItem("ecofast_feedstock_draft", JSON.stringify(d)); el("fs-saved").textContent = "Draft saved"; }
+        catch (e) { el("fs-saved").textContent = "Could not save in this browser"; }
+        setTimeout(function () { el("fs-saved").textContent = ""; }, 2500);
+      });
+      try {
+        var saved = JSON.parse(localStorage.getItem("ecofast_feedstock_draft") || "null");
+        if (saved) { FIELDS.forEach(function (id) { if (saved[id] != null) el(id).value = saved[id]; }); rateUnit = el("fs-rateu").value; }
+      } catch (e) {}
+      updateComp();
+
+      // ---------- Analysis Summary (updates as you type) ----------
+      var GOALS = { cost: "Lowest Cost", env: "Lowest Environmental Impact", balance: "Best Balance" }, goal = null;
+      try { goal = sessionStorage.getItem("ecofast_goal"); } catch (e) {}
+      document.querySelectorAll("#page-home .goal").forEach(function (a) {
+        a.addEventListener("click", function () { goal = a.getAttribute("data-goal"); try { sessionStorage.setItem("ecofast_goal", goal); } catch (e) {} renderSummary(); });
+      });
+      var COMP_LBL = [["CBH", "Carbohydrates (CBH)"], ["PRT", "Protein (PRT)"], ["FAT", "Fat (FAT)"], ["ASH", "Ash"], ["FC", "Fixed carbon"], ["OTH", "Other organics"], ["WATER", "Moisture"]];
+      function setTxt(id, t) { var e = el(id); if (t) { e.textContent = t; e.classList.remove("muted"); } else { e.textContent = "Not set"; e.classList.add("muted"); } }
+      function renderSummary() {
+        setTxt("s-name", el("fs-name").value.trim());
+        setTxt("s-type", el("fs-type").value);
+        setTxt("s-loc", el("fs-loc").value.trim());
+        setTxt("s-goal", goal ? GOALS[goal] : "");
+        var r = val("fs-rate"), hr = val("fs-hours");
+        setTxt("s-rate", isFinite(r) ? r.toLocaleString() + " " + el("fs-rateu").selectedOptions[0].text : "");
+        setTxt("s-hours", isFinite(hr) ? hr.toLocaleString() + " hr/yr" : "");
+        el("s-comp").innerHTML = COMP_LBL.map(function (c) {
+          var v = el("w-" + c[0]).value;
+          return '<div class="cr"><span>' + c[1] + "</span><b>" + (v === "" ? "\u2014" : Number(v).toFixed(1) + "%") + "</b></div>";
+        }).join("");
+      }
+      document.querySelectorAll("#page-new [data-body='0'] input, #page-new [data-body='0'] select, #page-new [data-body='0'] textarea").forEach(function (i) {
+        i.addEventListener("input", function () { setTimeout(renderSummary, 0); });
+        i.addEventListener("change", function () { setTimeout(renderSummary, 0); });
+      });
+      renderSummary();
+
+      // ---------- Pathways step ----------
+      // [code, name, short description, stage, group, needs (any of these conversion codes)]
+      var TECH = [
+        ["SHR", "Shredder", "Cuts waste into small pieces", "pre", "Mechanical"],
+        ["MCR", "Macerator", "Grinds waste into a slurry", "pre", "Mechanical"],
+        ["AER", "Aerobic digester", "Breaks down organics with air", "pre", "Biological"],
+        ["ENZ", "Enzymatic hydrolysis", "Enzymes break down organics", "pre", "Biological"],
+        ["HTL", "Hydrothermal liquefaction", "Heat and pressure make biocrude", "conv", ""],
+        ["AND", "Anaerobic digestion", "Microbes make biogas", "conv", ""],
+        ["SLF", "Sanitary landfill", "Landfill with gas capture", "conv", ""],
+        ["CMP", "Composting", "Turns waste into compost", "conv", ""],
+        ["WWT", "Wastewater treatment", "Treats wet waste into biosolids", "conv", ""],
+        ["INC", "Incineration", "Burns waste to recover energy", "conv", ""],
+        ["CEN", "Centrifuge", "Separates biocrude by spinning", "rec", "After HTL", ["HTL"]],
+        ["FLT", "Membrane filtration", "Separates biocrude with a membrane", "rec", "After HTL", ["HTL"]],
+        ["ABS", "Amine absorption", "Removes CO2 from biogas", "rec", "After AND or SLF", ["AND", "SLF"]],
+        ["PSA", "Pressure swing adsorption", "Upgrades biogas to biomethane", "rec", "After AND or SLF", ["AND", "SLF"]],
+        ["STB", "Steam turbine", "Makes electricity from heat", "rec", "After INC", ["INC"]]
+      ];
+      var SCOL = { pre: "#1F8A5B", conv: "#6A3D9A", rec: "#C0561B" };
+      var PCOL = { P1: "#9A5B13", P2: "#1D6FB8", P3: "#5E7D1F", P4: "#6B5847", P5: "#C98F00" };
+      var ON = {}; TECH.forEach(function (t) { ON[t[0]] = true; });
+      var BYPASS = true;
+      function tech(code) { return TECH.filter(function (x) { return x[0] === code; })[0]; }
+      function avail(t) { return !t[5] || t[5].some(function (c) { return ON[c]; }); }
+      function isOn(code) { return ON[code] && avail(tech(code)); }
+      function buildTiles() {
+        ["pre", "conv", "rec"].forEach(function (st) {
+          var html = TECH.filter(function (t) { return t[3] === st; }).map(function (t) {
+            return '<span class="ni" title="' + t[2] + '"><b>' + t[0] + "</b>" + t[1] + "</span>";
+          }).join("");
+          if (st === "pre") html += '<span class="ni byp" title="Waste can also skip either pretreatment step"><svg width="22" height="8" viewBox="0 0 22 8"><path d="M1 4h20" stroke="#1F8A5B" stroke-width="2" stroke-dasharray="4 3"/></svg>Bypass</span>';
+          el("pw-" + st).innerHTML = html;
+        });
+      }
+
+      // ----- Superstructure map (same layout as the model: splitters, mixers, bypasses), left to right -----
+      var NODE = { FW: [58, 165, 96, "Food Waste"], SHR: [205, 105], MCR: [205, 225], AER: [340, 105], ENZ: [340, 225],
+        HTL: [480, 40], AND: [480, 90], SLF: [480, 140], CMP: [480, 190], WWT: [480, 240], INC: [480, 290],
+        CEN: [610, 20], FLT: [610, 62], ABS: [610, 97], PSA: [610, 135], STB: [610, 290],
+        P1: [810, 40, 112, "Biocrude"], P2: [810, 116, 112, "Biomethane"], P3: [810, 190, 112, "Compost"], P4: [810, 240, 112, "Biosolids"], P5: [810, 290, 112, "Electricity"] };
+      // stream pieces used to build each full pathway (points in flow order)
+      var SEG = {
+        mech: { SHR: [[135, 165], [135, 105], [262, 105], [262, 165]], MCR: [[135, 165], [135, 225], [262, 225], [262, 165]], BYP: [[135, 165], [262, 165]] },
+        bio: { AER: [[283, 165], [283, 105], [384, 105], [384, 165]], ENZ: [[283, 165], [283, 225], [384, 225], [384, 165]], BYP: [[283, 165], [384, 165]] }
+      };
+      function convPts(k) { var y = NODE[k][1]; return [[384, 165], [436, 165], [436, y], [508, y]]; }
+      var ROUTES_DEF = [
+        ["HTL", "CEN", "P1"], ["HTL", "FLT", "P1"], ["AND", "ABS", "P2"], ["AND", "PSA", "P2"], ["SLF", "ABS", "P2"], ["SLF", "PSA", "P2"],
+        ["CMP", null, "P3"], ["WWT", null, "P4"], ["INC", "STB", "P5"]
+      ];
+      function tailPts(c, r, p) {
+        if (c === "HTL") { var y = NODE[r][1]; return [[508, 40], [552, 40], [552, y], [656, y], [656, 40], [754, 40]]; }
+        if (c === "AND" || c === "SLF") { var y1 = NODE[c][1], y2 = NODE[r][1]; return [[508, y1], [524, y1], [524, 116], [556, 116], [556, y2], [656, y2], [656, 116], [754, 116]]; }
+        var yy = NODE[c][1]; return [[508, yy], [754, yy]];
+      }
+      function routes() {
+        var mech = ["SHR", "MCR"].filter(function (k) { return ON[k]; }), bio = ["AER", "ENZ"].filter(function (k) { return ON[k]; });
+        if (BYPASS) { mech.push("BYP"); bio.push("BYP"); }
+        var tails = ROUTES_DEF.filter(function (d) { return ON[d[0]] && (!d[1] || isOn(d[1])); });
+        var out = [];
+        mech.forEach(function (m) { bio.forEach(function (b) { tails.forEach(function (t) { out.push([m, b, t[0], t[1], t[2]]); }); }); });
+        // spread them out so the next pathway usually ends in a different product
+        return out;
+      }
+      function routePts(r) {
+        return [[106, 165]].concat(SEG.mech[r[0]], [[283, 165]], SEG.bio[r[1]], convPts(r[2]).slice(1), tailPts(r[2], r[3], r[4]).slice(1));
+      }
+
+      function drawMap() {
+        var OFF = "#D3DCD9", base = "", sym = "", nodes = "";
+        function line(pts, on, col, dash) {
+          base += '<polyline points="' + pts.map(function (q) { return q.join(","); }).join(" ") + '" fill="none" stroke="' + (on ? col : OFF) + '" stroke-width="' + (on ? 2 : 1.3) + '"' + (dash ? ' stroke-dasharray="6 4"' : "") + (on ? ' opacity=".55"' : "") + "/>";
+        }
+        function split(x, y, on) { var c = on ? "#0F2E2B" : OFF; sym += '<circle cx="' + x + '" cy="' + y + '" r="7.5" fill="#fff" stroke="' + c + '" stroke-width="1.6"/><path d="M' + (x - 4.2) + " " + (y - 4.2) + "l8.4 8.4M" + (x + 4.2) + " " + (y - 4.2) + 'l-8.4 8.4" stroke="' + c + '" stroke-width="1.6"/>'; }
+        function mix(x, y, on) { sym += '<path d="M' + x + " " + (y - 7.5) + "l7.5 7.5-7.5 7.5-7.5-7.5z" + '" fill="' + (on ? "#0F2E2B" : OFF) + '"/>'; }
+        function box(k, on) {
+          var n = NODE[k], w = n[2] || 56, h = 28, x = n[0] - w / 2, y = n[1] - h / 2, lbl = n[3] || k, prod = /^P\d$/.test(k), t = prod || k === "FW" ? null : tech(k);
+          var col = k === "FW" ? "#0F2E2B" : prod ? PCOL[k] : SCOL[t[3]];
+          var fill = k === "FW" ? "#0F2E2B" : prod ? (on ? col : "#F4F6F5") : (on ? col : "#fff");
+          var stroke = on || k === "FW" ? col : OFF, tc = on || k === "FW" ? "#fff" : "#9AA6A3";
+          nodes += '<g id="nd-' + k + '"' + ">" + (t ? "<title>" + t[1] + " (" + k + ")</title>" : "") +
+            '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="6" fill="' + fill + '" stroke="' + stroke + '" data-s="' + stroke + '" stroke-width="1.4"/>' +
+            '<text x="' + n[0] + '" y="' + (n[1] + 4.5) + '" text-anchor="middle" font-size="12.5" font-weight="600" fill="' + tc + '"' + (on || k === "FW" ? "" : ' text-decoration="line-through"') + ">" + lbl + "</text></g>";
+        }
+        var bands = "";
+        [["STAGE I  PRETREATMENT", 112, 396, "#E7F5EE", "#1F8A5B"], ["STAGE II  CONVERSION", 440, 520, "#F2ECF9", "#6A3D9A"], ["STAGE III  RECOVERY", 566, 692, "#FCEFE6", "#C0561B"], ["PRODUCTS", 746, 874, "#F1F5F9", "#44535A"]].forEach(function (b) {
+          bands += '<rect x="' + b[1] + '" y="0" width="' + (b[2] - b[1]) + '" height="310" fill="' + b[3] + '" rx="8"/><text x="' + ((b[1] + b[2]) / 2) + '" y="-8" text-anchor="middle" font-size="10" font-weight="700" fill="' + b[4] + '" letter-spacing=".06em">' + b[0] + "</text>";
+        });
+        var S1 = SCOL.pre, S2 = SCOL.conv, S3 = SCOL.rec;
+        var mech = ON.SHR || ON.MCR, bio = ON.AER || ON.ENZ, m1 = mech || BYPASS, m2 = (bio || BYPASS) && m1;
+        var bc = isOn("CEN") || isOn("FLT"), gas = ON.AND || ON.SLF, bm = isOn("ABS") || isOn("PSA");
+        line([[106, 165], [127, 165]], true, S1);
+        line([[135, 157], [135, 105], [177, 105]], ON.SHR, S1); line([[233, 105], [262, 105], [262, 157]], ON.SHR, S1);
+        line([[135, 173], [135, 225], [177, 225]], ON.MCR, S1); line([[233, 225], [262, 225], [262, 173]], ON.MCR, S1);
+        line([[143, 165], [254, 165]], BYPASS, S1, true);
+        line([[270, 165], [275, 165]], m1, S1);
+        line([[283, 157], [283, 105], [312, 105]], ON.AER && m1, S1); line([[368, 105], [384, 105], [384, 157]], ON.AER && m1, S1);
+        line([[283, 173], [283, 225], [312, 225]], ON.ENZ && m1, S1); line([[368, 225], [384, 225], [384, 173]], ON.ENZ && m1, S1);
+        line([[291, 165], [376, 165]], BYPASS && m1, S1, true);
+        line([[392, 165], [410, 165]], m2, S2);
+        ["HTL", "AND", "SLF", "CMP", "WWT", "INC"].forEach(function (k) { line([[426, 165], [436, 165], [436, NODE[k][1]], [452, NODE[k][1]]], ON[k] && m2, S2); });
+        line([[508, 40], [530, 40]], ON.HTL && m2, S3);
+        line([[538, 40], [552, 40], [552, 20], [582, 20]], isOn("CEN") && m2, S3); line([[538, 40], [552, 40], [552, 62], [582, 62]], isOn("FLT") && m2, S3);
+        line([[638, 20], [656, 20], [656, 32]], isOn("CEN") && m2, S3); line([[638, 62], [656, 62], [656, 48]], isOn("FLT") && m2, S3);
+        line([[663, 40], [754, 40]], bc && m2, PCOL.P1);
+        line([[508, 90], [524, 90], [524, 108]], ON.AND && m2, S3); line([[508, 140], [524, 140], [524, 124]], ON.SLF && m2, S3);
+        line([[531, 116], [538, 116]], gas && m2, S3);
+        line([[546, 116], [556, 116], [556, 97], [582, 97]], isOn("ABS") && m2, S3); line([[546, 116], [556, 116], [556, 135], [582, 135]], isOn("PSA") && m2, S3);
+        line([[638, 97], [656, 97], [656, 108]], isOn("ABS") && m2, S3); line([[638, 135], [656, 135], [656, 124]], isOn("PSA") && m2, S3);
+        line([[663, 116], [754, 116]], bm && m2, PCOL.P2);
+        line([[508, 190], [754, 190]], ON.CMP && m2, PCOL.P3); line([[508, 240], [754, 240]], ON.WWT && m2, PCOL.P4);
+        line([[508, 290], [582, 290]], isOn("STB") && m2, S3); line([[638, 290], [754, 290]], isOn("STB") && m2, PCOL.P5);
+        split(135, 165, true); mix(262, 165, m1); split(283, 165, m1); mix(384, 165, m2); split(418, 165, m2);
+        split(538, 40, ON.HTL && m2); mix(656, 40, bc && m2); mix(524, 116, gas && m2); split(546, 116, gas && m2); mix(656, 116, bm && m2);
+        box("FW", true);
+        TECH.forEach(function (t) { box(t[0], isOn(t[0])); });
+        box("P1", bc && m2); box("P2", bm && m2); box("P3", ON.CMP && m2); box("P4", ON.WWT && m2); box("P5", isOn("STB") && m2);
+        el("pw-svg").innerHTML = '<svg class="map" viewBox="0 -24 880 340" role="img" aria-label="Pathway map">' + bands + base + '<g id="pw-hl"></g>' + sym + nodes + "</svg>";
+      }
+
+      // ----- Animation: walk through every possible pathway, one at a time -----
+      var RT = [], ri = 0, playing = true, timer = null;
+      var NAME = { BYP: "Bypass", P1: "Biocrude", P2: "Biomethane", P3: "Compost", P4: "Biosolids", P5: "Electricity" };
+      var PLAY_ICO = '<svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>', PAUSE_ICO = '<svg viewBox="0 0 24 24"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>';
+      function showRoute() {
+        var hl = el("pw-hl"); if (!hl) return;
+        if (!RT.length) { hl.innerHTML = ""; el("pw-route").innerHTML = '<span class="rl">No complete pathway.</span>Turn on more technologies.'; return; }
+        ri = (ri + RT.length) % RT.length;
+        var r = RT[ri], pts = routePts(r), col = PCOL[r[4]], P = pts.map(function (q) { return q.join(","); }).join(" ");
+        var d = "M" + pts.map(function (q) { return q.join(" "); }).join(" L");
+        hl.innerHTML = '<polyline class="glow" points="' + P + '" fill="none" stroke="' + col + '" stroke-width="9" stroke-linejoin="round" opacity=".22"/>' +
+          '<polyline points="' + P + '" fill="none" stroke="' + col + '" stroke-width="3" stroke-linejoin="round"/>' +
+          '<polyline class="flow" points="' + P + '" fill="none" stroke="#fff" stroke-width="2.4"/>' +
+          '<circle r="6" fill="' + col + '" stroke="#fff" stroke-width="2"><animateMotion dur="2.2s" repeatCount="indefinite" path="' + d + '"/></circle>';
+        // light up the nodes on this pathway
+        el("pw-svg").querySelectorAll("g[id^=nd-] rect").forEach(function (rc) { rc.setAttribute("stroke", rc.getAttribute("data-s")); rc.setAttribute("stroke-width", "1.4"); });
+        [r[0], r[1], r[2], r[3], r[4]].forEach(function (k) { var g = k && el("nd-" + k); if (g) { var rc = g.querySelector("rect"); rc.setAttribute("stroke", "#0F2E2B"); rc.setAttribute("stroke-width", "2.6"); } });
+        var chips = ["Food Waste", r[0], r[1], r[2], r[3], r[4]].filter(Boolean).map(function (k, i) {
+          var c = k === "Food Waste" ? "#0F2E2B" : k === "BYP" ? "#8A9A97" : /^P\d$/.test(k) ? PCOL[k] : SCOL[tech(k)[3]];
+          var label = NAME[k] || (k === "Food Waste" ? k : tech(k)[1]);
+          if (k === "BYP") label = i === 1 ? "Skip mechanical" : "Skip biological";
+          return '<span class="rc" style="background:' + c + '">' + label + "</span>";
+        }).join('<span class="ra">&#8250;</span>');
+        el("pw-route").innerHTML = '<span class="rl">Pathway ' + (ri + 1) + " of " + RT.length + ":</span>" + chips;
+      }
+      function step(n) { ri += n; showRoute(); }
+      function setPlay(p) {
+        playing = p; el("pw-play").innerHTML = p ? PAUSE_ICO : PLAY_ICO; el("pw-play").title = p ? "Pause" : "Play";
+        clearInterval(timer); if (p) timer = setInterval(function () { if (!document.querySelector("#page-new [data-body='1']").classList.contains("hidden")) step(1); }, 2200);
+      }
+      el("pw-play").addEventListener("click", function () { setPlay(!playing); });
+      el("pw-prev").addEventListener("click", function () { setPlay(false); step(-1); });
+      el("pw-nextr").addEventListener("click", function () { setPlay(false); step(1); });
+
+      function renderPathways() {
+        drawMap();
+        RT = routes(); ri = ri % RT.length;
+        el("pw-n").textContent = RT.length;
+        showRoute();
+      }
+      buildTiles();
+      renderPathways();
+
+      // ---------- Cost Assumptions step ----------
+      // Default values come from the ECO-FAST model (app.py / notebook).
+      // Technology: [code, purchase cost $, reference capacity, capacity unit, specific power kW per unit capacity, operators per unit capacity, stage label]
+      var CA_TECH = [
+        ["SHR", 111000, 10000, "kg/h throughput", 0.02, 0.1, "Mechanical pretreatment"], ["MCR", 111000, 60000, "kg/h throughput", 0.10, 0.1, "Mechanical pretreatment"],
+        ["AER", 882000, 15000, "m3 vessel volume", 0.04, 0.5, "Biological pretreatment"], ["ENZ", 882000, 15000, "m3 vessel volume", 0.04, 0.5, "Biological pretreatment"],
+        ["HTL", 645000, 40, "m3 reactor volume", 2.0, 2.0, "Conversion"], ["AND", 594000, 1000, "m3 digester volume", 0.005, 0.02, "Conversion"],
+        ["SLF", 450000, 0.15, "acres of new land/yr", 0.5, 1.0, "Conversion"], ["CMP", 786000, 350, "m3 vessel volume", 0.02, 0.5, "Conversion"],
+        ["WWT", 8000000, 15000, "m3 aeration tank volume", 0.04, 0.5, "Conversion"], ["INC", 4700000, 8000, "kg/h throughput", 0.05, 1.0, "Conversion"],
+        ["CEN", 66000, 0.01, "m2, sigma factor", 0.1, 1.0, "Recovery & upgrading"], ["FLT", 39000, 80, "m2 membrane area", 0.1, 0.5, "Recovery & upgrading"],
+        ["ABS", 30000, 32, "Nm3/h biogas", 0.1, 0.01, "Recovery & upgrading"], ["PSA", 80000, 50, "Nm3/h biogas", 0.4, 0.01, "Recovery & upgrading"],
+        ["STB", 45000, 30000, "kW electric output", 0.02, 0.05, "Recovery & upgrading"]
+      ];
+      // [label, key, default, unit, note]  (null label = section heading)
+      var CA_LISTS = {
+        global: [
+          [null, "Economics"],
+          ["Cost exponent", "nc", 0.67, "", "Six-tenths rule, applied to the capacity ratio for all technologies"],
+          ["Bare-module multiplier", "bmc", 5.4, "x", "Installed cost / purchase cost"],
+          ["Capital recovery factor", "crf", 0.11, "1/yr", "Annualizes installed capital"],
+          ["Working capital", "wc", 15.0, "% of FCI", "FCI = fixed capital investment"],
+          ["Insurance & property tax", "ins", 1.0, "% of FCI/yr", ""],
+          ["Facility overhead", "fac", 6.0, "% of FCI/yr", "Maintenance, factory overhead, local taxes"],
+          ["Labor rate", "clbr", 30.0, "$/h", "Per operator"],
+          [null, "Utilities"],
+          ["Electricity", "celec", 0.10, "$/kWh", ""],
+          ["Process steam", "cstm", 0.012, "$/kg", ""],
+          ["Cooling water", "cpwt", 0.00005, "$/kg", ""],
+          ["Process water", "cwater", 0.0053, "$/kg", "Dilution water for MCR, HTL, AND, STB"],
+          ["Natural gas", "cng", 0.25, "$/kg", "Extra fuel for INC when the waste is too wet to burn on its own"]],
+        prod: [
+          ["Biomethane (CH4)", "ch4", 0.55, "$/kg", "From AND or SLF biogas, after upgrading"],
+          ["Biocrude", "biocrude", 0.48, "$/kg", "HTL product"],
+          ["Compost", "compost", 0.068, "$/kg", "CMP product"],
+          ["Electricity sold", "elec_price", 0.10, "$/kWh", "From the INC steam turbine"],
+          ["Biosolids", "biosolids", 0.05, "$/kg", "WWT product"],
+          ["Tipping fee received", "tip", 0.055, "$/kg feed", "Paid to accept the waste at the gate"]],
+        disp: [
+          ["Shredder reject", "disp_reject", 0.055, "$/kg", ""],
+          ["Aqueous phase (HTL/AND)", "disp_aq", 0.030, "$/kg", "High-strength organic wastewater that needs treatment"],
+          ["Char / cake", "disp_char", 0.055, "$/kg", "HTL solids residue"],
+          ["Landfill gate fee", "disp_land", 0.055, "$/kg", "Charged on the feed entering SLF"],
+          ["AD digestate", "disp_digestate", 0.005, "$/kg", "Land applied, not landfilled"]]
+      };
+      var CA_DEF = {}, CA_VAL = {}, CA_TAB_OF = {}, caTab = "tech", caTech = "SHR";
+      CA_TECH.forEach(function (t) { [["c0_", 1], ["wsp_", 4], ["nlbr_", 5]].forEach(function (p) { CA_DEF[p[0] + t[0]] = t[p[1]]; CA_TAB_OF[p[0] + t[0]] = "tech"; }); });
+      Object.keys(CA_LISTS).forEach(function (tab) { CA_LISTS[tab].forEach(function (r) { if (r[0]) { CA_DEF[r[1]] = r[2]; CA_TAB_OF[r[1]] = tab; } }); });
+      Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = CA_DEF[k]; });
+      try { var cd = JSON.parse(localStorage.getItem("ecofast_cost_draft") || "null"); if (cd) Object.keys(cd).forEach(function (k) { if (k in CA_DEF && isFinite(cd[k])) CA_VAL[k] = cd[k]; }); } catch (e) {}
+
+      function caFmt(v, money) { return !isFinite(v) ? "" : money ? Math.round(v).toLocaleString("en-US") : String(v); }
+      function caParse(s) { s = String(s).replace(/[,$\s]/g, ""); return s === "" ? NaN : Number(s); }
+      function caField(label, key, unit, note, money) {
+        return '<div class="ca-f"><label>' + label + (note ? '<span class="q" title="' + note + '">?</span>' : "") + '</label><div class="ca-in"><input class="fin" type="text" inputmode="decimal" data-k="' + key + '"' + (money ? ' data-m="1"' : "") + ' value="' + caFmt(CA_VAL[key], money) + '"><span class="u">' + unit + "</span></div></div>";
+      }
+      function caChanged(k) { return !isFinite(CA_VAL[k]) || Math.abs(CA_VAL[k] - CA_DEF[k]) > 1e-12; }
+      function caRender() {
+        var h = "";
+        if (caTab === "tech") {
+          var t = CA_TECH.filter(function (x) { return x[0] === caTech; })[0], tk = tech(caTech), col = SCOL[tk[3]];
+          h += '<div class="ca-pick f"><label for="ca-sel">Technology</label><select class="fin" id="ca-sel">' +
+            [["pre", "Stage I: Pretreatment"], ["conv", "Stage II: Conversion"], ["rec", "Stage III: Recovery & Upgrading"]].map(function (g) {
+              return '<optgroup label="' + g[1] + '">' + TECH.filter(function (x) { return x[3] === g[0]; }).map(function (x) {
+                var ch = ["c0_", "wsp_", "nlbr_"].some(function (p) { return caChanged(p + x[0]); });
+                return '<option value="' + x[0] + '"' + (x[0] === caTech ? " selected" : "") + ">" + x[1] + " (" + x[0] + ")" + (ch ? "  • edited" : "") + "</option>";
+              }).join("") + "</optgroup>";
+            }).join("") + "</select></div>";
+          h += '<div class="ca-tech" style="--c:' + col + ";--ct:" + ({ pre: "#E7F5EE", conv: "#F2ECF9", rec: "#FCEFE6" })[tk[3]] + '"><b>' + t[0] + '</b><div><div class="tn">' + tk[1] + '</div><div class="ts">' + t[6] + "</div></div></div>";
+          h += '<div class="ca-fields">' +
+            caField("Reference purchase cost", "c0_" + t[0], "$", "Purchase cost at the reference capacity. ECO-FAST scales it to your feed rate with the cost exponent.", true) +
+            '<div class="ca-f"><label>Reference capacity</label><div class="ca-in"><input class="fin ro" readonly value="' + t[2].toLocaleString("en-US") + '"><span class="u">' + t[3] + "</span></div></div>" +
+            caField("Specific power", "wsp_" + t[0], "kW per unit capacity", "Electricity used per unit of capacity", false) +
+            caField("Labor requirement", "nlbr_" + t[0], "operators per unit capacity", "Operators needed per unit of capacity", false) + "</div>";
+        } else {
+          h += '<div class="ca-fields c3">' + CA_LISTS[caTab].map(function (r) { return r[0] ? caField(r[0], r[1], r[3], r[4], false) : '<div class="ca-sec">' + r[1] + "</div>"; }).join("") + "</div>";
+        }
+        el("ca-panel").innerHTML = h;
+        if (el("ca-sel")) el("ca-sel").addEventListener("change", function (e) { caTech = e.target.value; caRender(); });
+        el("ca-panel").querySelectorAll("input[data-k]").forEach(function (i) {
+          i.addEventListener("input", function () { CA_VAL[i.dataset.k] = caParse(i.value); caMark(); });
+          i.addEventListener("blur", function () { if (isFinite(CA_VAL[i.dataset.k])) i.value = caFmt(CA_VAL[i.dataset.k], !!i.dataset.m); });
+        });
+        caMark();
+      }
+      function caMark() {
+        el("ca-panel").querySelectorAll("input[data-k]").forEach(function (i) {
+          var v = CA_VAL[i.dataset.k], bad = !isFinite(v) || v < 0;
+          i.classList.toggle("bad", bad); i.classList.toggle("chg", !bad && caChanged(i.dataset.k));
+        });
+        var n = 0, tabs = {};
+        Object.keys(CA_DEF).forEach(function (k) { if (caChanged(k)) { n++; tabs[CA_TAB_OF[k]] = true; } });
+        document.querySelectorAll("#ca-tabs .ca-tab").forEach(function (b) {
+          var dot = b.querySelector("i"); if (tabs[b.dataset.tab] && !dot) b.insertAdjacentHTML("beforeend", "<i></i>"); if (!tabs[b.dataset.tab] && dot) dot.remove();
+        });
+        el("ca-count").textContent = n ? n + " value" + (n > 1 ? "s" : "") + " changed" : "Model defaults";
+        el("ca-reset-all").disabled = !n;
+      }
+      document.querySelectorAll("#ca-tabs .ca-tab").forEach(function (b) {
+        b.addEventListener("click", function () { caTab = b.dataset.tab; document.querySelectorAll("#ca-tabs .ca-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); caRender(); });
+      });
+      el("ca-reset-all").addEventListener("click", function () { Object.keys(CA_DEF).forEach(function (k) { CA_VAL[k] = CA_DEF[k]; }); caRender(); });
+      el("ca-save").addEventListener("click", function () {
+        try { localStorage.setItem("ecofast_cost_draft", JSON.stringify(CA_VAL)); el("ca-saved").textContent = "Draft saved"; }
+        catch (e) { el("ca-saved").textContent = "Could not save in this browser"; }
+        setTimeout(function () { el("ca-saved").textContent = ""; }, 2500);
+      });
+      caRender();
+
+      // ---------- Environmental Assumptions step ----------
+      // Default values come from the ECO-FAST model notebook (optimization_31.ipynb). GHG in kg CO2e, eutrophication (EP) in kg N-eq.
+      // Field lists: [label, key, default, unit, note]  (null label = section heading)
+      var EA_LISTS = {
+        impact: [
+          [null, "Global warming"],
+          ["GWP of methane (CH4)", "GWP_CH4", 34.0, "kg CO2e/kg CH4", "Global warming potential of methane"],
+          ["GWP of nitrous oxide (N2O)", "GWP_N2O", 298.0, "kg CO2e/kg N2O", "Global warming potential of nitrous oxide"],
+          ["Fossil CO2 from burning natural gas", "EF_NG_fossil", 2.743, "kg CO2/kg gas", "Used for extra gas burned in INC and HTL"],
+          [null, "Marine eutrophication"],
+          ["Nitrogen to water", "CF_N_water", 0.297, "kg N-eq/kg N", "Characterization factor for waterborne nitrogen"],
+          ["NOx to air", "CF_NOx_marine_EF", 0.0902, "kg N-eq/kg NOx", "Characterization factor for NOx from incineration"]],
+        process: [
+          [null, "Composting (CMP)"],
+          ["CH4 emission", "EF_CH4_CMP_wet", 0.004, "kg/kg wet feed", ""],
+          ["N2O emission", "EF_N2O_CMP_wet", 0.00024, "kg/kg wet feed", ""],
+          ["Nitrogen leaching", "leach_frac_CMP", 0.0065, "fraction", ""],
+          [null, "Incineration (INC)"],
+          ["CH4 emission", "EF_CH4_INC_wet", 2e-7, "kg/kg wet feed", ""],
+          ["N2O emission", "EF_N2O_INC_wet", 5e-5, "kg/kg wet feed", ""],
+          ["NOx emission", "EF_NOx_INC_wet", 0.00183, "kg/kg wet feed", ""],
+          [null, "Sanitary landfill (SLF)"],
+          ["Methane capture", "CAP_SLF", 0.75, "fraction", "Share of landfill methane that is captured"],
+          ["Methane oxidation", "OX", 0.10, "fraction", "Share of uncaptured methane oxidized in the cover"],
+          ["Nitrogen leaching", "leach_frac_SLF", 0.01, "fraction", ""],
+          [null, "Wastewater treatment (WWT)"],
+          ["N2O emission", "EF_N2O_WWT", 0.016, "kg N2O-N/kg N", "Applied to the nitrogen entering WWT"],
+          ["Max methane capacity (B0)", "B0_WWT", 0.25, "", ""],
+          ["Methane correction factor", "MCF_WWT", 0.034, "fraction", ""],
+          [null, "Anaerobic digestion (AND) and HTL"],
+          ["AND nitrogen leaching", "leach_frac_AND", 0.194, "fraction", ""],
+          ["HTL gas vented", "HTL_gas_vent_frac", 0.10, "fraction", ""],
+          ["CH4 in HTL gas", "HTL_gas_CH4_frac", 0.08, "fraction", ""],
+          ["HTL nitrogen to aqueous phase", "HTL_N_to_AQ", 0.65, "fraction", "Model assumption, not validated for the base feed"]]
+      };
+      // Paired tables: [label, note, basis, GHG key, GHG default, EP key, EP default]
+      var EA_PAIRS = {
+        inputs: [
+          ["Electricity", "Grid power used by the plant", "per kWh", "EF_elec", 0.676, "EP_elec", 4.69e-5],
+          ["Steam", "", "per kg", "EF_stm", 0.2103, "EP_stm", 1.478e-6],
+          ["Natural gas supply", "Upstream burden of the gas used", "per kg", "EF_NG_sup", 0.7225, "EP_NG_sup", 1.202e-5],
+          ["Enzyme", "Used in ENZ", "per kg", "EF_enz", 7.18, "EP_enz", 8.06e-3],
+          ["Process water", "", "per kg", "EF_water", 5.63e-4, "EP_water", 2.27e-8]],
+        credits: [
+          ["Biomethane", "Replaces pipeline natural gas", "per kg CH4", "EF_CH4_disp", 3.466, "EP_CH4_disp", 1.202e-5],
+          ["Biocrude", "Replaces heavy fuel oil", "per kg", "EF_BIOCRUDE_disp", 3.203, "EP_BIOCRUDE_disp", 5.76e-5],
+          ["Electricity sold", "Replaces grid electricity", "per kWh", "EF_ELEC_disp", 0.676, "EP_ELEC_disp", 4.69e-5],
+          ["Nitrogen fertilizer", "Replaced by compost, digestate and biosolids", "per kg N", "EF_Nfert", 10.6, "EP_Nfert", 1.59e-4]],
+        burdens: [
+          ["Aqueous phase disposal", "HTL aqueous phase and ABS water", "per kg", "EF_AQ_disp", 5.78e-4, null, null],
+          ["Char / ash disposal", "HTL solids and INC ash", "per kg", "EF_CHAR_disp", 5.34e-3, "EP_CHAR_disp", 4.52e-8]]
+      };
+      var EA_MFE = [
+        ["Compost", "MFE_CMP", 0.20, "fraction", "Share of compost nitrogen that replaces fertilizer"],
+        ["Digestate", "MFE_AND", 0.50, "fraction", "Share of digestate nitrogen that replaces fertilizer"],
+        ["Biosolids", "MFE_WWT", 0.40, "fraction", "Share of biosolids nitrogen that replaces fertilizer"]];
+      var EA_DEF = {}, EA_VAL = {}, EA_TAB_OF = {}, eaTab = "impact";
+      Object.keys(EA_LISTS).forEach(function (t) { EA_LISTS[t].forEach(function (r) { if (r[0]) { EA_DEF[r[1]] = r[2]; EA_TAB_OF[r[1]] = t; } }); });
+      Object.keys(EA_PAIRS).forEach(function (t) { EA_PAIRS[t].forEach(function (r) { var tab = t === "burdens" ? "credits" : t; EA_DEF[r[3]] = r[4]; EA_TAB_OF[r[3]] = tab; if (r[5]) { EA_DEF[r[5]] = r[6]; EA_TAB_OF[r[5]] = tab; } }); });
+      EA_MFE.forEach(function (r) { EA_DEF[r[1]] = r[2]; EA_TAB_OF[r[1]] = "credits"; });
+      Object.keys(EA_DEF).forEach(function (k) { EA_VAL[k] = EA_DEF[k]; });
+      try { var ed = JSON.parse(localStorage.getItem("ecofast_env_draft") || "null"); if (ed) Object.keys(ed).forEach(function (k) { if (k in EA_DEF && isFinite(ed[k])) EA_VAL[k] = ed[k]; }); } catch (e) {}
+
+      function eaChanged(k) { return !isFinite(EA_VAL[k]) || Math.abs(EA_VAL[k] - EA_DEF[k]) > 1e-15; }
+      function eaInput(k) { return '<input class="fin" type="text" inputmode="decimal" data-ek="' + k + '" value="' + EA_VAL[k] + '">'; }
+      function eaField(r) {
+        return '<div class="ca-f"><label>' + r[0] + (r[4] ? '<span class="q" title="' + r[4] + '">?</span>' : "") + '</label><div class="ca-in">' + eaInput(r[1]) + '<span class="u">' + r[3] + "</span></div></div>";
+      }
+      function eaTable(rows, title) {
+        return '<div class="ea-scroll"><table class="ea-tbl"><colgroup><col style="width:38%"><col style="width:14%"><col style="width:24%"><col style="width:24%"></colgroup><thead><tr><th>' + title + '</th><th>Basis</th><th class="ghg">Greenhouse gas<small>kg CO2e</small></th><th class="ep">Marine eutrophication<small>kg N-eq</small></th></tr></thead><tbody>' +
+          rows.map(function (r) {
+            return '<tr><td><span class="nm">' + r[0] + "</span>" + (r[1] ? '<span class="nt">' + r[1] + "</span>" : "") + '</td><td class="b">' + r[2] + "</td><td>" + eaInput(r[3]) + "</td><td>" + (r[5] ? eaInput(r[5]) : '<span class="na">Not used</span>') + "</td></tr>";
+          }).join("") + "</tbody></table></div>";
+      }
+      function eaRender() {
+        var h = "";
+        if (eaTab === "inputs") h = eaTable(EA_PAIRS.inputs, "Utility or input");
+        else if (eaTab === "credits") h = eaTable(EA_PAIRS.credits, "Product credit") + '<div class="ea-gap"></div><div class="ca-fields c3"><div class="ca-sec">Fertilizer value (share of product nitrogen that replaces fertilizer)</div>' + EA_MFE.map(eaField).join("") + '</div><div class="ea-gap"></div>' + eaTable(EA_PAIRS.burdens, "Disposal burden");
+        else h = '<div class="ca-fields c3">' + EA_LISTS[eaTab].map(function (r) { return r[0] ? eaField(r) : '<div class="ca-sec">' + r[1] + "</div>"; }).join("") + "</div>";
+        el("ea-panel").innerHTML = h;
+        el("ea-panel").querySelectorAll("input[data-ek]").forEach(function (i) {
+          i.addEventListener("input", function () { EA_VAL[i.dataset.ek] = caParse(i.value); eaMark(); });
+        });
+        eaMark();
+      }
+      function eaMark() {
+        el("ea-panel").querySelectorAll("input[data-ek]").forEach(function (i) {
+          var v = EA_VAL[i.dataset.ek], bad = !isFinite(v) || v < 0;
+          i.classList.toggle("bad", bad); i.classList.toggle("chg", !bad && eaChanged(i.dataset.ek));
+        });
+        var n = 0, tabs = {};
+        Object.keys(EA_DEF).forEach(function (k) { if (eaChanged(k)) { n++; tabs[EA_TAB_OF[k]] = true; } });
+        document.querySelectorAll("#page-new .ea-tab").forEach(function (b) {
+          var dot = b.querySelector("i"); if (tabs[b.dataset.tab] && !dot) b.insertAdjacentHTML("beforeend", "<i></i>"); if (!tabs[b.dataset.tab] && dot) dot.remove();
+        });
+        el("ea-count").textContent = n ? n + " value" + (n > 1 ? "s" : "") + " changed" : "Model defaults";
+        el("ea-reset-all").disabled = !n;
+      }
+      document.querySelectorAll("#page-new .ea-tab").forEach(function (b) {
+        b.addEventListener("click", function () { eaTab = b.dataset.tab; document.querySelectorAll("#page-new .ea-tab").forEach(function (x) { x.classList.toggle("on", x === b); }); eaRender(); });
+      });
+      el("ea-reset-all").addEventListener("click", function () { Object.keys(EA_DEF).forEach(function (k) { EA_VAL[k] = EA_DEF[k]; }); eaRender(); });
+      el("ea-save").addEventListener("click", function () {
+        try { localStorage.setItem("ecofast_env_draft", JSON.stringify(EA_VAL)); el("ea-saved").textContent = "Draft saved"; }
+        catch (e) { el("ea-saved").textContent = "Could not save in this browser"; }
+        setTimeout(function () { el("ea-saved").textContent = ""; }, 2500);
+      });
+      eaRender();
+      setPlay(!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
+    })();
+  </script>
+</body>
+</html>
