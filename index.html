@@ -528,6 +528,86 @@
     .rs-gl dt { font-size: 14.5px; font-weight: 800; color: #0B2E2D; } .rs-gl dd { margin: 2px 0 0; font-size: 13.5px; line-height: 1.45; color: #4A6460; }
     @media (max-width: 1000px) { .rs-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .rs-goals { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 640px) { .rs-steps, .rs-goals, .rs-method, .rs-gl { grid-template-columns: 1fr; } .rs-src div { grid-template-columns: 1fr; gap: 2px; } }
+
+    /* ---------- Environmental Justice ---------- */
+    #page-ej .page-wrap { max-width: 1180px; }
+    #page-ej .pg-sub { margin-bottom: 16px; }
+    .ej-ctx { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 10px 14px; border-radius: 10px; background: #F2F7F5; font-size: 14px; color: #33413D; }
+    .ej-ctx-k { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #5A6B70; text-transform: uppercase; }
+    .ej-ctx .dot { width: 4px; height: 4px; border-radius: 50%; background: #9AAAA6; }
+    .ej-ctx a { color: #0E4A42; font-weight: 700; }
+    .ej-eq { display: grid; grid-template-columns: 1fr 34px 1fr 34px 1fr 34px 1.15fr; align-items: stretch; margin: 18px 0; }
+    .ej-op { display: grid; place-items: center; font-size: 30px; font-weight: 800; color: #9AAAA6; }
+    .ej-c { border-radius: 14px; padding: 14px 14px 12px; background: var(--t); border: 2px solid var(--c); text-align: center; }
+    .ej-c.yes { --c: #1F8A5B; --t: #E9F6EF; } .ej-c.wait { --c: #D9A200; --t: #FFF6DC; } .ej-c.no { --c: #9AAAA6; --t: #F1F4F3; } .ej-c.red { --c: #561B29; --t: #FBF0F2; }
+    .ej-ci { width: 48px; height: 48px; margin: 0 auto 8px; border-radius: 50%; background: var(--c); display: grid; place-items: center; }
+    .ej-ci svg { width: 30px; height: 30px; }
+    .ej-cl { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #4A6460; }
+    .ej-cv { margin-top: 2px; font-size: 19px; font-weight: 800; color: #0B2E2D; }
+    .ej-cs { margin-top: 6px; font-size: 13px; font-weight: 700; color: var(--c); filter: brightness(.8); }
+    .ej-v { border-radius: 14px; padding: 16px; display: flex; flex-direction: column; justify-content: center; text-align: center; color: #fff; background: #B07A00; }
+    .ej-v.yes { background: #561B29; } .ej-v.no { background: #1F8A5B; } .ej-v.gray { background: #5A6B70; }
+    .ej-vl { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .9; }
+    .ej-vv { font-size: 26px; font-weight: 800; margin: 2px 0; }
+    .ej-vs { font-size: 13px; opacity: .95; }
+    .ej-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ej-card { border: 1px solid #DDE5E2; border-radius: 14px; background: #fff; padding: 18px; min-width: 0; }
+    .ej-card.wide { grid-column: 1 / -1; }
+    .ej-card h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-size: 18px; font-weight: 800; color: #0B2E2D; }
+    .ej-n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: #561B29; color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 14px; }
+    .ej-p { margin: 0 0 12px; font-size: 14.5px; color: #4A6460; }
+    .ej-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 9px; border: 1.5px solid #0E4A42; background: #fff; color: #0E4A42; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; white-space: nowrap; }
+    .ej-btn svg { width: 18px; height: 18px; }
+    .ej-btn.pri { background: #0E4A42; color: #fff; }
+    .ej-find { display: flex; gap: 10px; margin-bottom: 14px; }
+    .ej-find .fin { flex: 1; min-width: 0; }
+    .ej-mapwrap { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; }
+    .ej-map { position: relative; height: 400px; border-radius: 12px; overflow: hidden; border: 1px solid #DDE5E2; background: #EEF0EA; }
+    #ej-map { position: absolute; inset: 0; z-index: 0; }
+    .ej-legend { position: absolute; left: 10px; bottom: 22px; z-index: 500; display: flex; flex-wrap: wrap; gap: 6px 14px; padding: 7px 11px; border-radius: 9px; background: rgba(255,255,255,.95); font-size: 12.5px; color: #33413D; box-shadow: 0 1px 4px rgba(0,0,0,.15); }
+    .ej-legend i { display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 6px; vertical-align: -2px; }
+    .ej-res { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .ej-badge { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; color: #fff; background: #561B29; }
+    .ej-badge.no { background: #1F8A5B; } .ej-badge.gray { background: #5A6B70; } .ej-badge.wait { background: #B07A00; }
+    .ej-badge svg { flex: none; width: 32px; height: 32px; }
+    .ej-badge b { display: block; font-size: 18px; } .ej-badge span { display: block; font-size: 13px; opacity: .92; }
+    .ej-dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 14px; }
+    .ej-dl .full { grid-column: 1 / -1; }
+    .ej-dl dt { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #6B7F7A; }
+    .ej-dl dd { margin: 1px 0 0; font-size: 15px; font-weight: 700; color: #0B2E2D; overflow-wrap: anywhere; }
+    .ej-bars { display: grid; gap: 10px; }
+    .ej-bar .t { display: flex; justify-content: space-between; gap: 8px; font-size: 13.5px; color: #33413D; }
+    .ej-bar .t b { font-size: 15px; color: #0B2E2D; }
+    .ej-bar .tr { position: relative; height: 10px; margin: 5px 0 3px; border-radius: 5px; background: #EEF1F0; }
+    .ej-bar .tr i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 5px; background: #9AAAA6; }
+    .ej-bar.met .tr i { background: #561B29; }
+    .ej-bar .tr em { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1px; border-radius: 2px; background: #0B2E2D; }
+    .ej-bar small { font-size: 12px; color: #6B7F7A; } .ej-bar.met small { color: #561B29; font-weight: 700; }
+    .ej-note { font-size: 13px; color: #4A6460; line-height: 1.45; }
+    .ej-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }
+    .ej-spin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid #D5E2DE; border-top-color: #0E4A42; animation: ejspin .8s linear infinite; flex: none; }
+    @keyframes ejspin { to { transform: rotate(360deg); } }
+    .ej-cov { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; }
+    .ej-cov .row { position: relative; display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 9px 12px; border-radius: 10px; background: #F6F9F8; border: 1.5px solid transparent; }
+    .ej-cov .tg { display: grid; place-items: center; height: 30px; border-radius: 7px; font-weight: 800; font-size: 13px; color: #fff; background: #6A3D9A; }
+    .ej-cov b { display: block; font-size: 14.5px; color: #0B2E2D; } .ej-cov small { display: block; font-size: 12.5px; color: #5A6B70; }
+    .ej-cov .st { padding: 4px 10px; border-radius: 99px; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+    .ej-cov .yes .st { background: #F6E3E7; color: #561B29; }
+    .ej-cov .cond .st { background: #FFF2D2; color: #8A5A00; }
+    .ej-cov .ask .st { background: #E9EEF0; color: #4A5763; }
+    .ej-cov .mine { border-color: #0E4A42; background: #EEF7F3; }
+    .ej-cov .you { position: absolute; top: -9px; right: 12px; padding: 1px 8px; border-radius: 99px; background: #0E4A42; color: #fff; font-size: 11px; font-weight: 800; }
+    .ej-fine { margin-top: 10px; font-size: 12.5px; color: #5A6B70; }
+    .ej-tl { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 14px; }
+    .ej-line { position: absolute; left: 12%; right: 12%; top: 34px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #561B29, #C0561B); }
+    .ej-st { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .ej-d { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #561B29; height: 18px; }
+    .ej-pt { width: 24px; height: 24px; margin: 4px 0 10px; border-radius: 50%; background: #fff; border: 5px solid #561B29; position: relative; z-index: 1; }
+    .ej-st.end .ej-pt { border-color: #C0561B; } .ej-st.end .ej-d { color: #C0561B; }
+    .ej-st b { font-size: 14.5px; color: #0B2E2D; } .ej-st small { margin-top: 3px; font-size: 12.5px; color: #5A6B70; line-height: 1.4; max-width: 230px; }
+    .ej-src { margin-top: 14px; font-size: 12.5px; color: #6B7F7A; }
+    @media (max-width: 1000px) { .ej-eq { grid-template-columns: 1fr; gap: 6px; } .ej-op { font-size: 22px; } .ej-grid, .ej-mapwrap, .ej-cov { grid-template-columns: 1fr; } .ej-map { height: 320px; } }
+    @media (max-width: 640px) { .ej-tl { grid-template-columns: 1fr; } .ej-line { display: none; } .ej-find { flex-direction: column; } }
   </style>
 </head>
 <body>
@@ -541,6 +621,7 @@
       <nav>
         <a href="#home" class="nav-item active" data-page="home"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h4.5v-6h4v6h4.5V9"/></g></svg><span>Home</span></a>
         <a href="#new" class="nav-item" data-page="new"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></g></svg><span>New Analysis</span></a>
+        <a href="#ej" class="nav-item" data-page="ej"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 21h14"/><path d="M4 7h16"/><path d="M6.5 7 3.5 13.5h6z"/><path d="M17.5 7l-3 6.5h6z"/><path d="M3.5 13.5a3 2 0 0 0 6 0M14.5 13.5a3 2 0 0 0 6 0"/></g></svg><span>Environmental Justice</span></a>
         <a href="#results" class="nav-item" data-page="results"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5h16"/><path d="M6.5 20v-6M11 20V9M15.5 20v-8M20 20V5" stroke-width="2.2"/></g></svg><span>Results</span></a>
         <a href="#projects" class="nav-item" data-page="projects"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.2l2 2.2h8.8A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/><path d="M3 10h18"/></g></svg><span>My Projects</span></a>
         <a href="#resources" class="nav-item" data-page="resources"><svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.5C10 5 7 4.5 3.5 4.8v13.5C7 18 10 18.5 12 20c2-1.5 5-2 8.5-1.7V4.8C17 4.5 14 5 12 6.5z"/><path d="M12 6.5V20"/></g></svg><span>Resources</span></a>
@@ -603,7 +684,7 @@
                 <div class="card-b">
                   <div class="f"><label for="fs-name">Analysis Name <span class="req">*</span></label><input class="fin" id="fs-name" placeholder="e.g. Campus Food Waste Study"></div>
                   <div class="f"><label for="fs-desc">Description</label><textarea class="fin" id="fs-desc" placeholder="What is this analysis for?"></textarea></div>
-                  <div class="f"><label for="fs-loc">Location</label><input class="fin" id="fs-loc" placeholder="City, state or zip code"></div>
+                  <div class="f"><label for="fs-loc">Site Address</label><input class="fin" id="fs-loc" placeholder="e.g. 201 Mullica Hill Rd, Glassboro, NJ 08028"><span class="hint-s">Street address of the planned site. Used for the environmental justice check.</span></div>
                 </div>
               </section>
 
@@ -631,7 +712,7 @@
                 <div class="sum-b">
                   <div class="sr"><span>Analysis Name</span><span id="s-name"></span></div>
                   <div class="sr"><span>Feedstock</span><span id="s-type"></span></div>
-                  <div class="sr"><span>Location</span><span id="s-loc"></span></div>
+                  <div class="sr"><span>Site address</span><span id="s-loc"></span></div>
                   <div class="sr"><span>Objective</span><span id="s-goal"></span></div>
                   <div class="sr"><span>Feed Rate</span><span id="s-rate"></span></div>
                   <div class="sr"><span>Operating Hours</span><span id="s-hours"></span></div>
@@ -732,6 +813,31 @@
         </div>
       </div>
 
+      <div id="page-ej" class="page hidden">
+        <div class="page-wrap">
+          <div class="pg-eyebrow">ENVIRONMENTAL JUSTICE</div>
+          <h1 class="pg-title">Environmental Justice</h1>
+          <p class="pg-sub">Does New Jersey's Environmental Justice Law apply to your design?</p>
+          <div class="ej-ctx" id="ej-ctx"></div>
+          <div class="ej-eq" id="ej-eq"></div>
+          <div class="ej-grid">
+            <section class="ej-card wide">
+              <h3>Is your site in an overburdened community?</h3>
+              <p class="ej-p">Checked from the site address, using NJDEP's official overburdened community map.</p>
+              <form class="ej-find" id="ej-find" autocomplete="off">
+                <input class="fin" id="ej-addr" placeholder="Street address of the planned site, e.g. 201 Mullica Hill Rd, Glassboro, NJ 08028">
+                <button type="submit" class="ej-btn pri">Check address</button>
+              </form>
+              <div class="ej-mapwrap">
+                <div class="ej-map"><div id="ej-map"></div><div class="ej-legend" id="ej-legend"><span><i style="background:#561B29"></i>Your block group</span><span><i style="background:#C98C98"></i>Overburdened</span><span><i style="background:#fff;border:1px solid #C9D0C7"></i>Not overburdened</span></div></div>
+                <div class="ej-res" id="ej-res"></div>
+              </div>
+            </section>
+          </div>
+          <div class="ej-src">Based on New Jersey P.L. 2020, c.92 (N.J.S.A. 13:1D-157 to 161) and N.J.A.C. 7:1C. Community data: NJDEP Overburdened Communities layer. A screening aid, not a legal determination.</div>
+        </div>
+      </div>
+
       <div id="page-results" class="page hidden">
         <div class="page-wrap">
           <div class="pg-eyebrow">RESULTS</div>
@@ -756,7 +862,7 @@
   <script>
     // Switch pages using the link after # (for example #results)
     (function () {
-      var pages = ["home", "new", "projects", "results", "resources"];
+      var pages = ["home", "new", "ej", "projects", "results", "resources"];
       function show() {
         var id = (location.hash || "#home").slice(1);
         if (pages.indexOf(id) < 0) id = "home";
@@ -1488,5 +1594,225 @@
     })();
   </script>
   <script src="ecofast_run.js?v=23"></script>
+  <script>
+    // ---------- Environmental Justice: NJ overburdened community check ----------
+    (function () {
+      var LEAF = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/";
+      var OBC = "https://services1.arcgis.com/QWdNfRs7lkPq4g4Q/arcgis/rest/services/Overburdened_Communities_under_the_New_Jersey_Environmental_Justice_Law/FeatureServer/19/query";
+      var EJMAP = "https://experience.arcgis.com/experience/548632a2351b41b8a0443cfc3a9f4ef6";
+      var NAMES = { SLF: "Landfill", INC: "Incineration", AND: "Anaerobic digestion", CMP: "Composting", WWT: "Wastewater treatment", HTL: "Hydrothermal liquefaction" };
+      var COV = [
+        ["SLF", "Always a covered facility", "yes", "Covered"],
+        ["INC", "Incinerator or resource recovery facility", "yes", "Covered"],
+        ["AND", "Solid waste or recycling facility, 100 t/day or more", "cond", "If 100 t/day+"],
+        ["CMP", "Solid waste or recycling facility, 100 t/day or more", "cond", "If 100 t/day+"],
+        ["WWT", "Sewage plants above 50 million gallons per day", "cond", "If 50 MGD+"],
+        ["HTL", "Not named in the law", "ask", "Ask NJDEP"]
+      ];
+      function el(id) { return document.getElementById(id); }
+      function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+      function fmt(x, d) { return Number(x).toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: 0 }); }
+
+      // ----- what was run -----
+      var saved = null;
+      try { saved = JSON.parse(sessionStorage.getItem("ecofast_last_result") || "null"); } catch (e) {}
+      window.addEventListener("ecofast:result", function (e) { saved = e.detail; if (onPage()) render(); });
+      window.addEventListener("ecofast:show-result", function (e) { saved = e.detail; if (onPage()) render(); });
+
+      function feedTday() {
+        var q = saved && saved.request, v, u;
+        if (q && q.feed_rate) { v = Number(q.feed_rate); u = q.feed_rate_unit; }
+        else { v = Number((el("fs-rate") || {}).value); u = (el("fs-rateu") || {}).value; }
+        if (!isFinite(v) || v <= 0) return null;
+        return u === "tday" ? v : v * 24 / 1000;
+      }
+      function design() {
+        var r = saved && saved.result; if (!r) return null;
+        var split = r.conversion_split || {}, codes = Object.keys(split);
+        if (!codes.length && r.pathway && r.pathway.conversion) codes = String(r.pathway.conversion).match(/[A-Z]{3}/g) || [];
+        var t = feedTday(), list = codes.filter(function (c) { return NAMES[c]; }).map(function (c) {
+          var share = split[c] != null ? split[c] : 1 / codes.length, tday = t == null ? null : t * share, st;
+          if (c === "SLF" || c === "INC") st = "yes";
+          else if (c === "AND" || c === "CMP") st = tday == null ? "maybe" : (tday >= 100 ? "yes" : "no");
+          else st = "maybe";
+          return { code: c, tday: tday, st: st };
+        });
+        var st = list.some(function (x) { return x.st === "yes"; }) ? "yes" : list.some(function (x) { return x.st === "maybe"; }) ? "maybe" : "no";
+        return { list: list, st: st, tday: t };
+      }
+
+      // ----- location lookup -----
+      var look = { addr: "", state: "idle" }, reqId = 0;
+      function getJSON(url) { return fetch(url).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); }); }
+      function geocode(a) {
+        var u1 = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?f=json&maxLocations=1&countryCode=USA&outFields=Match_addr,RegionAbbr&SingleLine=" + encodeURIComponent(a);
+        return getJSON(u1).then(function (j) {
+          var c = j.candidates && j.candidates[0]; if (!c || c.score < 75) throw new Error("none");
+          return { lat: c.location.y, lon: c.location.x, label: c.attributes.Match_addr || c.address, st: c.attributes.RegionAbbr || "" };
+        }).catch(function () {
+          var u2 = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=us&addressdetails=1&q=" + encodeURIComponent(a);
+          return getJSON(u2).then(function (j) {
+            var c = j && j[0]; if (!c) throw new Error("notfound");
+            var iso = (c.address && c.address["ISO3166-2-lvl4"]) || "";
+            return { lat: Number(c.lat), lon: Number(c.lon), label: c.display_name, st: iso.replace("US-", "") };
+          });
+        });
+      }
+      function obcAt(lat, lon) {
+        var u = OBC + "?f=geojson&outFields=*&returnGeometry=true&outSR=4326&inSR=4326&geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&geometry=" + encodeURIComponent(lon + "," + lat);
+        return getJSON(u).then(function (j) { if (j.error) throw new Error("obc"); return (j.features || [])[0] || null; });
+      }
+      function obcNear(lat, lon) {
+        var dx = 0.05, dy = 0.035, env = [lon - dx, lat - dy, lon + dx, lat + dy].join(",");
+        var u = OBC + "?f=geojson&outFields=GEOID,OVERBURDENED_COMMUNITY_CRITERI&returnGeometry=true&outSR=4326&inSR=4326&geometryPrecision=5&geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&geometry=" + encodeURIComponent(env);
+        return getJSON(u).then(function (j) { return j.features || []; }).catch(function () { return []; });
+      }
+      function check(a) {
+        a = (a || "").trim(); var my = ++reqId;
+        if (!a) { look = { addr: "", state: "idle" }; render(); return; }
+        if (a === look.addr && (look.state === "done" || look.state === "busy")) { render(); return; }
+        look = { addr: a, state: "busy" }; render();
+        geocode(a).then(function (g) {
+          if (my !== reqId) return;
+          if (g.st !== "NJ") { look = { addr: a, state: "done", g: g, nj: false }; render(); return; }
+          return obcAt(g.lat, g.lon).then(function (f) {
+            if (my !== reqId) return;
+            look = { addr: a, state: "done", g: g, nj: true, f: f, near: [] }; render();
+            obcNear(g.lat, g.lon).then(function (fs) { if (my === reqId) { look.near = fs; drawMap(); } });
+          }, function () { if (my === reqId) { look = { addr: a, state: "err", g: g, msg: "NJDEP's map service did not answer. Try again in a moment, or open the NJDEP map." }; render(); } });
+        }).catch(function () { if (my === reqId) { look = { addr: a, state: "err", msg: "That address could not be found. Add the street, town, state and zip code." }; render(); } });
+      }
+
+      // ----- map -----
+      var map = null, layers = null, leafP = null;
+      function leaflet() {
+        if (window.L) return Promise.resolve();
+        if (leafP) return leafP;
+        leafP = new Promise(function (ok, bad) {
+          var c = document.createElement("link"); c.rel = "stylesheet"; c.href = LEAF + "leaflet.min.css"; document.head.appendChild(c);
+          var s = document.createElement("script"); s.src = LEAF + "leaflet.min.js"; s.onload = ok; s.onerror = function () { leafP = null; bad(); }; document.head.appendChild(s);
+        });
+        return leafP;
+      }
+      function drawMap() {
+        leaflet().then(function () {
+          if (!map) {
+            map = L.map("ej-map", { scrollWheelZoom: false }).setView([40.07, -74.56], 7);
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "&copy; OpenStreetMap contributors | Communities: NJDEP" }).addTo(map);
+            layers = L.layerGroup().addTo(map);
+          }
+          map.invalidateSize(); layers.clearLayers();
+          var g = look.g; if (!g) return;
+          var mine = look.f && look.f.properties && look.f.properties.GEOID;
+          (look.near || []).forEach(function (f) {
+            if (f.properties && f.properties.GEOID === mine) return;
+            L.geoJSON(f, { style: { color: "#fff", weight: 1, fillColor: "#C98C98", fillOpacity: .55 } }).addTo(layers);
+          });
+          if (look.f) {
+            var b = L.geoJSON(look.f, { style: { color: "#3A1220", weight: 3, dashArray: "7 4", fillColor: "#561B29", fillOpacity: .45 } }).addTo(layers);
+            map.fitBounds(b.getBounds().pad(0.6), { maxZoom: 16 });
+          } else map.setView([g.lat, g.lon], look.nj ? 15 : 13);
+          L.marker([g.lat, g.lon], { icon: L.divIcon({ className: "", iconSize: [36, 46], iconAnchor: [18, 44], html: '<svg width="36" height="46" viewBox="-20 -42 40 48"><path d="M0 0C-4-10-18-20-18-33a18 18 0 0 1 36 0C18-20 4-10 0 0Z" fill="#0E4A42" stroke="#fff" stroke-width="3"/><circle cx="0" cy="-33" r="6.5" fill="#fff"/></svg>' }) }).addTo(layers);
+        }).catch(function () { el("ej-map").innerHTML = '<div class="ej-note" style="padding:16px">The map could not load. The check on the right still works.</div>'; });
+      }
+
+      // ----- panel and verdict -----
+      function pct(p) {
+        var a = [p.LOW_INCOME_PCT, p.MINORITY_PCT, p.PCTLINGUAGEISO].map(Number);
+        var frac = a.every(function (x) { return !isFinite(x) || x <= 1; });
+        return a.map(function (x) { return isFinite(x) ? (frac ? x * 100 : x) : null; });
+      }
+      function bar(lbl, v, lim) {
+        var met = v != null && v >= lim, w = v == null ? 0 : Math.min(100, v);
+        return '<div class="ej-bar' + (met ? " met" : "") + '"><div class="t"><span>' + lbl + "</span><b>" + (v == null ? "n/a" : fmt(v, 1) + "%") + '</b></div><div class="tr"><i style="width:' + w + '%"></i><em style="left:' + lim + '%"></em></div><small>Limit ' + lim + "%. " + (met ? "Met" : "Not met") + "</small></div>";
+      }
+      var ICO_SHIELD = '<svg viewBox="0 0 24 24"><path d="M12 2 3 6v6c0 5 3.8 9.4 9 10 5.2-.6 9-5 9-10V6z" fill="#fff"/><path d="M12 7v6" stroke="#561B29" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="16.6" r="1.5" fill="#561B29"/></svg>';
+      var ICO_OK = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#1F8A5B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var ICO_INFO = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff"/><path d="M12 11v6" stroke="#5A6B70" stroke-width="2.6" stroke-linecap="round"/><circle cx="12" cy="7.4" r="1.5" fill="#5A6B70"/></svg>';
+      var BTN_MAP = '<a class="ej-btn" href="' + EJMAP + '" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Open NJDEP EJ map</a>';
+      function panel() {
+        var s = look.state, h;
+        if (s === "idle") return '<div class="ej-badge gray">' + ICO_INFO + '<div><b>No site address yet</b><span>Type it above, or add it in step 1 of New Analysis</span></div></div><div class="ej-note">ECO-FAST finds the address on the map and checks it against NJDEP\'s list of overburdened communities.</div><div class="ej-acts">' + BTN_MAP + "</div>";
+        if (s === "busy") return '<div class="ej-badge gray"><span class="ej-spin" style="border-color:rgba(255,255,255,.35);border-top-color:#fff"></span><div><b>Checking the address</b><span>' + esc(look.addr) + "</span></div></div>";
+        if (s === "err") return '<div class="ej-badge wait">' + ICO_INFO + '<div><b>Could not check</b><span>' + esc(look.msg) + '</span></div></div><div class="ej-acts">' + BTN_MAP + "</div>";
+        var g = look.g;
+        if (!look.nj) return '<div class="ej-badge gray">' + ICO_INFO + '<div><b>Outside New Jersey</b><span>' + esc(g.label) + '</span></div></div><div class="ej-note">The automatic check covers New Jersey only. EPA removed its national screening tools (EJScreen and the Climate and Economic Justice Screening Tool) in 2025. Check with the environmental agency of the state where the site is.</div>';
+        var f = look.f;
+        if (!f) return '<div class="ej-badge no">' + ICO_OK + '<div><b>Not an overburdened community</b><span>NJDEP lists no overburdened block group at this address</span></div></div><dl class="ej-dl"><div class="full"><dt>Address found</dt><dd>' + esc(g.label) + '</dd></div></dl><div class="ej-note">NJDEP publishes figures only for overburdened block groups, so none are shown here.</div><div class="ej-acts">' + BTN_MAP + "</div>";
+        var p = f.properties || {}, c = p.OVERBURDENED_COMMUNITY_CRITERI || "", v = pct(p);
+        var adj = /adjacent/i.test(c), n = [v[0] >= 35, v[1] >= 40, v[2] >= 40].filter(Boolean).length;
+        h = '<div class="ej-badge">' + ICO_SHIELD + '<div><b>Overburdened community</b><span>' + (adj ? "Adjacent block group with no residents" : "Criteria: " + esc(c || (n + " of 3"))) + '</span></div></div>';
+        h += '<dl class="ej-dl"><div><dt>Municipality</dt><dd>' + esc(p.NAME || "n/a") + '</dd></div><div><dt>County</dt><dd>' + esc(p.COUNTY || "n/a") + '</dd></div><div class="full"><dt>Census block group</dt><dd>' + esc(p.GEOID || "n/a") + "</dd></div></dl>";
+        if (adj) h += '<div class="ej-note">NJDEP includes block groups with no residents that border an overburdened community.</div>';
+        else h += '<div class="ej-bars">' + bar("Low income households", v[0], 35) + bar("Minority or tribal residents", v[1], 40) + bar("Limited English households", v[2], 40) + "</div>";
+        return h + '<div class="ej-acts">' + BTN_MAP + "</div>";
+      }
+      function cell(cls, icon, label, value, sub) {
+        return '<div class="ej-c ' + cls + '"><div class="ej-ci">' + icon + '</div><div class="ej-cl">' + label + '</div><div class="ej-cv">' + value + '</div><div class="ej-cs">' + sub + "</div></div>";
+      }
+      var I_FAC = '<svg viewBox="0 0 48 48"><path d="M8 40V22l10-6v6l10-6v6l10-6v24z" fill="#fff" opacity=".95"/><rect x="31" y="6" width="5" height="12" fill="#fff"/></svg>';
+      var I_SIZE = '<svg viewBox="0 0 48 48"><path d="M24 6a18 18 0 1 0 18 18" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M24 24l10-10" stroke="#fff" stroke-width="4" stroke-linecap="round"/><circle cx="24" cy="24" r="4" fill="#fff"/></svg>';
+      var I_PIN = '<svg viewBox="0 0 48 48"><path d="M24 44s-14-12-14-24a14 14 0 0 1 28 0c0 12-14 24-14 24z" fill="#fff"/><circle cx="24" cy="20" r="5" fill="currentColor"/></svg>';
+      function equation(d) {
+        var h = "", fac, size, loc, ver;
+        if (!d || !d.list.length) {
+          fac = cell("no", I_FAC, "Covered facility", "No run yet", "Run an analysis to check");
+          size = cell("no", I_SIZE, "Size", d && d.tday != null ? fmt(d.tday, 1) + " t/day" : "n/a", "Feed rate from step 1");
+        } else {
+          var main = d.list.slice().sort(function (a, b) { return (b.tday || 0) - (a.tday || 0); });
+          var names = main.map(function (x) { return NAMES[x.code]; }).join(" + ");
+          var hit = main.filter(function (x) { return x.st === "yes"; })[0], mb = main.filter(function (x) { return x.st === "maybe"; })[0];
+          fac = cell(d.st === "yes" ? "yes" : d.st === "maybe" ? "wait" : "no", I_FAC, "Covered facility", esc(names), hit ? "&#10003; " + (hit.code === "SLF" ? "Landfill" : hit.code === "INC" ? "Incinerator" : "Solid waste or recycling facility") : mb ? "Ask NJDEP" : "Below the size limit");
+          var sz = d.tday == null ? "n/a" : fmt(d.tday, 1) + " t/day", big = d.tday != null && d.tday >= 100;
+          size = cell(big ? "yes" : "no", I_SIZE, "Size", sz, big ? "&#10003; At least 100 t/day" : "Under 100 t/day");
+        }
+        var s = look.state;
+        if (s === "done" && !look.nj) loc = cell("no", I_PIN.replace("currentColor", "#9AAAA6"), "Overburdened community", "Outside NJ", "NJ law does not apply");
+        else if (s === "done" && look.f) loc = cell("red", I_PIN.replace("currentColor", "#561B29"), "Overburdened community", "Yes", "From the NJDEP map");
+        else if (s === "done") loc = cell("yes", I_PIN.replace("currentColor", "#1F8A5B"), "Overburdened community", "No", "From the NJDEP map");
+        else loc = cell("wait", I_PIN.replace("currentColor", "#B07A00"), "Overburdened community", s === "busy" ? "Checking" : "Not checked", s === "err" ? "Lookup failed" : "Add the site address");
+        var F = d && d.list.length ? d.st : null, O = s === "done" ? (!look.nj ? "out" : look.f ? "yes" : "no") : null;
+        if (O === "out") ver = ["gray", "Does not apply", "The site is outside New Jersey"];
+        else if (F === "no") ver = ["no", "Likely does not apply", "The design is not a covered facility at this size"];
+        else if (O === "no") ver = ["no", "Likely does not apply", "The site is not in an overburdened community"];
+        else if (F === "yes" && O === "yes") ver = ["yes", "Likely applies", "Confirm with NJDEP before applying for a permit"];
+        else if (F === null) ver = ["wait", "Not known yet", "Run an analysis to check the facility"];
+        else if (F === "maybe" && O === "yes") ver = ["wait", "Ask NJDEP", "The technology is not clearly named in the law"];
+        else ver = ["wait", "Not known yet", "Check the site address"];
+        return fac + '<div class="ej-op">+</div>' + size + '<div class="ej-op">+</div>' + loc + '<div class="ej-op">=</div><div class="ej-v ' + ver[0] + '"><div class="ej-vl">NJ EJ Law</div><div class="ej-vv">' + ver[1] + '</div><div class="ej-vs">' + ver[2] + "</div></div>";
+      }
+      function coverage(d) {
+        var mine = {}; (d ? d.list : []).forEach(function (x) { mine[x.code] = true; });
+        return COV.map(function (c) {
+          return '<div class="row ' + c[2] + (mine[c[0]] ? " mine" : "") + '"><span class="tg">' + c[0] + "</span><div><b>" + NAMES[c[0]] + "</b><small>" + c[1] + '</small></div><span class="st">' + c[3] + "</span>" + (mine[c[0]] ? '<span class="you">In your design</span>' : "") + "</div>";
+        }).join("");
+      }
+      function render() {
+        var d = design(), ctx = '<span class="ej-ctx-k">Checking</span>';
+        if (saved) ctx += "<b>" + esc(saved.name || "Untitled analysis") + "</b>";
+        else ctx += '<span>No analysis run yet. <a href="#new">Start one in New Analysis</a></span>';
+        if (look.addr) ctx += '<span class="dot"></span>' + esc(look.addr);
+        el("ej-ctx").innerHTML = ctx;
+        el("ej-eq").innerHTML = equation(d);
+        el("ej-res").innerHTML = panel();
+        drawMap();
+      }
+      function onPage() { return (location.hash || "").slice(1) === "ej"; }
+      function enter() {
+        if (!onPage()) return;
+        var a = ((el("fs-loc") || {}).value || "").trim();
+        if (document.activeElement !== el("ej-addr")) el("ej-addr").value = a;
+        check(a);
+      }
+      el("ej-find").addEventListener("submit", function (e) {
+        e.preventDefault();
+        var a = el("ej-addr").value.trim(), loc = el("fs-loc");
+        if (loc && loc.value !== a) { loc.value = a; loc.dispatchEvent(new Event("input", { bubbles: true })); }
+        check(a);
+      });
+      window.addEventListener("hashchange", enter);
+      enter();
+    })();
+  </script>
 </body>
 </html>
