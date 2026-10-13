@@ -556,7 +556,7 @@
     var tCost = '<div class="rs-tile" style="--c:#9A5B13"><div class="k">Net annual cost</div><div class="v">' + (o.NAC_MUSD_per_yr < 0 ? "-$" : "$") + fmt(Math.abs(o.NAC_MUSD_per_yr), 2) + 'M</div><div class="u">per year</div>' + (o.NAC_MUSD_per_yr < 0 ? '<span class="tag">Net profit</span>' : "") + "</div>";
     var tGhg = '<div class="rs-tile" style="--c:#1F8A5B"><div class="k">Greenhouse gas</div><div class="v">' + fmt(o.GHG_tCO2e_per_yr, 0) + '</div><div class="u">t CO2-eq per year</div>' + (o.GHG_tCO2e_per_yr < 0 ? '<span class="tag">Net reduction</span>' : "") + "</div>";
     var tEp = '<div class="rs-tile" style="--c:#1D6FB8"><div class="k">Marine eutrophication</div><div class="v">' + fmt(o.EP_tN_eq_per_yr, 2) + '</div><div class="u">t N-eq per year</div></div>';
-    h += '<div class="rs-tiles' + (show.bal ? "" : " one") + '">' + (show.cost ? tCost : show.ghg ? tGhg : show.ep ? tEp : tCost + tGhg + tEp) + "</div>";
+    if (show.bal) h += '<div class="rs-tiles">' + tCost + tGhg + tEp + "</div>";
     var halves = 0;
 
     h += '<div class="rs-grid">';
