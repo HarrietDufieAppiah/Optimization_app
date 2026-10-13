@@ -476,6 +476,8 @@
     .pj-goal { padding: 2px 9px; border-radius: 99px; background: var(--gt); color: var(--gc); font-weight: 700; }
     .pj-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border: 1.5px solid #0E4A42; border-radius: 8px; background: #fff; color: #0E4A42; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
     .pj-card.done .pj-btn { background: #0E4A42; color: #fff; }
+    .pj-pdf { flex: none; display: inline-flex; align-items: center; gap: 5px; height: 36px; padding: 0 12px; border: 1.5px solid #CFDCD8; border-radius: 8px; background: #fff; color: #0B2E2D; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .pj-pdf:hover { border-color: #561B29; color: #561B29; } .pj-pdf svg { width: 16px; height: 16px; } .pj-pdf:disabled { opacity: .6; cursor: wait; }
     .pj-btn:hover { filter: brightness(.95); } .pj-btn svg { width: 16px; height: 16px; }
     .pj-empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px 20px; border: 2px dashed #CFDCD8; border-radius: 14px; background: #FAFCFB; }
     .pj-eico { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #E3F1EC; color: #0E4A42; }
@@ -1292,10 +1294,22 @@
       function pjCurId() { try { return sessionStorage.getItem(PJ_CUR); } catch (e) { return null; } }
       function pjSetCur(id) { try { if (id) sessionStorage.setItem(PJ_CUR, id); else sessionStorage.removeItem(PJ_CUR); } catch (e) {} }
       function pjDiff(DEF, VAL) { var o = {}; Object.keys(DEF).forEach(function (k) { if (VAL[k] !== DEF[k]) o[k] = VAL[k]; }); return o; }
+      var PJ_LBL = {};                                                        // readable names for the PDF report
+      CA_TECH.forEach(function (t) { PJ_LBL["c0_" + t[0]] = t[0] + " purchase cost ($)"; PJ_LBL["wsp_" + t[0]] = t[0] + " specific power"; PJ_LBL["nlbr_" + t[0]] = t[0] + " labor requirement"; });
+      Object.keys(CA_LISTS).forEach(function (k) { CA_LISTS[k].forEach(function (r) { if (r[0]) PJ_LBL[r[1]] = r[0] + (r[3] ? " (" + r[3] + ")" : ""); }); });
+      Object.keys(EA_LISTS).forEach(function (k) { EA_LISTS[k].forEach(function (r) { if (r[0]) PJ_LBL[r[1]] = r[0] + (r[3] ? " (" + r[3] + ")" : ""); }); });
+      Object.keys(EA_PAIRS).forEach(function (k) { EA_PAIRS[k].forEach(function (r) { PJ_LBL[r[3]] = r[0] + ", GHG " + r[2]; if (r[5]) PJ_LBL[r[5]] = r[0] + ", EP " + r[2]; }); });
+      EA_MFE.forEach(function (r) { PJ_LBL[r[1]] = r[0] + " fertilizer value (" + r[3] + ")"; });
+      function pjChanged() {
+        var out = [];
+        Object.keys(CA_DEF).forEach(function (k) { if (CA_VAL[k] !== CA_DEF[k]) out.push(["Cost Assumptions", PJ_LBL[k] || k, CA_DEF[k], CA_VAL[k]]); });
+        Object.keys(EA_DEF).forEach(function (k) { if (EA_VAL[k] !== EA_DEF[k]) out.push(["Environmental Assumptions", PJ_LBL[k] || k, EA_DEF[k], EA_VAL[k]]); });
+        return out;
+      }
       function pjSnapshot() {
         var f = {}; FIELDS.forEach(function (id) { f[id] = el(id).value; });
         return { name: el("fs-name").value.trim() || "Untitled analysis", desc: el("fs-desc").value.trim(), loc: el("fs-loc").value.trim(),
-          type: el("fs-type").value, form: f, cost: pjDiff(CA_DEF, CA_VAL), env: pjDiff(EA_DEF, EA_VAL), goal: goal, step: curStep };
+          type: el("fs-type").value, form: f, cost: pjDiff(CA_DEF, CA_VAL), env: pjDiff(EA_DEF, EA_VAL), changed: pjChanged(), goal: goal, step: curStep };
       }
       function pjSave(extra) {
         var list = pjLoad(), id = pjCurId(), now = new Date().toISOString();
@@ -1405,6 +1419,7 @@
           }
           h += '<div class="pj-foot"><span class="pj-meta">' + (g ? '<span class="pj-goal" style="--gc:' + g[1] + ";--gt:" + g[2] + '">' + (done && r ? PJ_OBJ[r.objective] || g[0] : g[0]) + "</span>" : "") +
             "Edited " + pjDate(p.updated) + "</span>" +
+            (done ? '<button type="button" class="pj-pdf" data-act="pdf" title="Download a PDF report">' + PJ_DL + "PDF</button>" : "") +
             (done ? '<button type="button" class="pj-btn" data-act="results">View results ' + PJ_ARR + "</button>" : '<button type="button" class="pj-btn" data-act="open">Continue ' + PJ_ARR + "</button>") + "</div>";
           return h + "</article>";
         }).join("");
@@ -1414,7 +1429,8 @@
             b.addEventListener("click", function (e) {
               e.stopPropagation(); var a = b.dataset.act;
               if (a === "menu") { var open = c.classList.contains("menu"); document.querySelectorAll(".pj-card.menu").forEach(function (x) { x.classList.remove("menu"); }); if (!open) c.classList.add("menu"); return; }
-              if (a === "results") pjOpen(id, "results");
+              if (a === "pdf") { var pp = pjLoad().filter(function (x) { return x.id === id; })[0]; if (pp && window.ECOFAST_PDF) window.ECOFAST_PDF(pp, b); }
+              else if (a === "results") pjOpen(id, "results");
               else if (a === "open") pjOpen(id, "step");
               else if (a === "edit") pjOpen(id, "start");
               else if (a === "dup") {
@@ -1433,6 +1449,7 @@
       }
       var PJ_PLUS = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
       var PJ_ARR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6.5 18.5 12 13 17.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var PJ_DL = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></g></svg>';
       var PJ_DOTS = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></g></svg>';
       var PJ_PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></g></svg>';
       el("pj-search").addEventListener("input", function (e) { pjQuery = e.target.value; pjRender(); });
@@ -1481,6 +1498,6 @@
       setPlay(!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches));
     })();
   </script>
-  <script src="ecofast_run.js?v=21"></script>
+  <script src="ecofast_run.js?v=22"></script>
 </body>
 </html>
